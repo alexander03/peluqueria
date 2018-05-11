@@ -32,6 +32,22 @@ Route::group(['middleware' => 'auth'], function () {
         return View::make('dashboard.home');
     });
 
+    Route::post('categoria/buscar','CategoriaController@buscar')->name('categoria.buscar');
+    Route::get('categoria/eliminar/{id}/{listarluego}','CategoriaController@eliminar')->name('categoria.eliminar');
+    Route::resource('categoria', 'CategoriaController', array('except' => array('show')));
+
+    Route::post('unidad/buscar','UnidadController@buscar')->name('unidad.buscar');
+    Route::get('unidad/eliminar/{id}/{listarluego}','UnidadController@eliminar')->name('unidad.eliminar');
+    Route::resource('unidad', 'UnidadController', array('except' => array('show')));
+
+    Route::post('producto/buscar','ProductoController@buscar')->name('producto.buscar');
+    Route::get('producto/eliminar/{id}/{listarluego}','ProductoController@eliminar')->name('producto.eliminar');
+    Route::resource('producto', 'ProductoController', array('except' => array('show')));
+
+    Route::post('marca/buscar','MarcaController@buscar')->name('marca.buscar');
+    Route::get('marca/eliminar/{id}/{listarluego}','MarcaController@eliminar')->name('marca.eliminar');
+    Route::resource('marca', 'MarcaController', array('except' => array('show')));
+
     Route::post('categoriaopcionmenu/buscar', 'CategoriaopcionmenuController@buscar')->name('categoriaopcionmenu.buscar');
     Route::get('categoriaopcionmenu/eliminar/{id}/{listarluego}', 'CategoriaopcionmenuController@eliminar')->name('categoriaopcionmenu.eliminar');
     Route::resource('categoriaopcionmenu', 'CategoriaopcionmenuController', array('except' => array('show')));
@@ -58,7 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
     /* CUSTOMERS */
     Route::post('customer/search', 'CustomerController@search')->name('customer.search');
     Route::get('customer/eliminar/{id}/{listarluego}', 'CustomerController@eliminar')->name('customer.eliminar');
-    Route::resource('customer', 'CustomerController', array('except' => array('show')));
+    Route::resource('customer', 'CustomerController', array('except' => array('show'))); 
 
     /* PROVIDERS */
     Route::post('provider/search', 'ProviderController@search')->name('provider.search');
