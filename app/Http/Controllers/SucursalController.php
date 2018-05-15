@@ -9,6 +9,7 @@ use App\Sucursal;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SucursalController extends Controller
 {
@@ -95,8 +96,7 @@ class SucursalController extends Controller
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array('direccion' => 'required|max:100',
-                            'telefono' => 'required|max:15',
-                            'empresa_id' => 'required|integer|exists:empresa,id,deleted_at,NULL',);
+                            'telefono' => 'required|max:15');
         $mensajes   = array();
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -106,13 +106,8 @@ class SucursalController extends Controller
             $sucursal       = new Sucursal();
             $sucursal->direccion = $request->input('direccion');
             $sucursal->telefono = $request->input('telefono');
-            /*
-             *
-             * 
-             * Sacar id_empresa de la sesion
-             * 
-             * 
-             */
+            $user = Auth::user();
+            $sucursal->empresa_id = $user->empresa_id;
             $sucursal->save();
         });
         return is_null($error) ? "OK" : $error;
