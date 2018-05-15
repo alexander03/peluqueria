@@ -14,7 +14,8 @@
     </div>
 </div>
 
-<div class="row">
+
+<div class="row" style="background: rgba(51,122,183,0.10);">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
 
@@ -24,8 +25,8 @@
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 					<div class="form-group">
-						{!! Form::label('nombres', 'Nombre:') !!}
-						{!! Form::text('nombres', '', array('class' => 'form-control input-xs', 'id' => 'nombres')) !!}
+						{!! Form::label('direccion', 'Direccion:') !!}
+						{!! Form::text('direccion', '', array('class' => 'form-control input-xs', 'id' => 'direccion')) !!}
 					</div>
 					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
@@ -34,7 +35,7 @@
 					{!! Form::button('<i class="glyphicon glyphicon-search"></i> Buscar', array('class' => 'btn btn-success waves-effect waves-light m-l-10 btn-md', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 					{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Nuevo', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 					{!! Form::close() !!}
-                </div>
+		 		</div>
             </div>
 
 			<div id="listado{{ $entidad }}"></div>
@@ -48,7 +49,7 @@
 	$(document).ready(function () {
 		buscar('{{ $entidad }}');
 		init(IDFORMBUSQUEDA+'{{ $entidad }}', 'B', '{{ $entidad }}');
-		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="name"]').keyup(function (e) {
+		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="direccion"]').keyup(function (e) {
 			var key = window.event ? e.keyCode : e.which;
 			if (key == '13') {
 				buscar('{{ $entidad }}');

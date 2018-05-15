@@ -30,7 +30,7 @@ class Persona extends Model
         return $query->where(function($subquery) use($name)
 		            {
 		            	if (!is_null($name)) {
-		            		$subquery->where(DB::raw('CONCAT(lastname," ",firstname)'), 'LIKE', '%'.$name.'%')->orWhere('bussinesname','LIKE','%'.$name.'%');
+		            		$subquery->where(DB::raw('CONCAT(apellidos," ",nombres)'), 'LIKE', '%'.$name.'%')->orWhere('razonsocial','LIKE','%'.$name.'%');
 		            	}
 		            })
         			->where(function($subquery) use($type)
@@ -39,6 +39,6 @@ class Persona extends Model
 		            		$subquery->where('type', '=', $type);
 		            	}
 		            })
-        			->orderBy('firstname', 'ASC')->orderBy('lastname', 'ASC')->orderBy('bussinesname', 'ASC');
+        			->orderBy('nombres', 'ASC')->orderBy('apellidos', 'ASC')->orderBy('razonsocial', 'ASC');
     }*/
 }

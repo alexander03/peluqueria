@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Requests;
-use App\Persona;
+use App\Personamaestro;
 use App\Departamento;
 use App\Provincia;
 use App\Distrito;
@@ -19,9 +19,9 @@ class CustomerController extends Controller
 {
     protected $folderview      = 'app.customer';
     protected $tituloAdmin     = 'Clientes';
-    protected $tituloRegistrar = 'Registrar ciente';
-    protected $tituloModificar = 'Modificar ciente';
-    protected $tituloEliminar  = 'Eliminar ciente';
+    protected $tituloRegistrar = 'Registrar cliente';
+    protected $tituloModificar = 'Modificar cliente';
+    protected $tituloEliminar  = 'Eliminar cliente';
     protected $rutas           = array('create' => 'customer.create', 
             'edit'   => 'customer.edit', 
             'delete' => 'customer.eliminar',
@@ -50,7 +50,7 @@ class CustomerController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Customer';
         $name             = Libreria::getParam($request->input('name'));
-        $resultado        = Person::listar($name, 'C');
+        $resultado        = Personamaestro::listar($name, 'C');
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');

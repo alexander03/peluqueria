@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-05-2018 a las 23:23:10
+-- Tiempo de generación: 15-05-2018 a las 20:07:04
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -95,6 +95,13 @@ CREATE TABLE `departamento` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `departamento`
+--
+
+INSERT INTO `departamento` (`id`, `nombre`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Lambayeque', '2018-05-14 05:00:00', '2018-05-14 05:00:00', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -109,6 +116,13 @@ CREATE TABLE `distrito` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `distrito`
+--
+
+INSERT INTO `distrito` (`id`, `nombre`, `provincia_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Saña', 1, '2018-05-14 05:00:00', '2018-05-14 05:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -193,7 +207,8 @@ INSERT INTO `menuoption` (`id`, `name`, `link`, `order`, `icon`, `menuoptioncate
 (10, 'Tipo trabajador', 'workertype', 1, 'glyphicon glyphicon-expand', 2, '2017-07-23 22:17:30', '2017-07-23 22:17:30', NULL),
 (11, 'Clientes', 'customer', 2, 'glyphicon glyphicon-expand', 2, '2017-07-23 22:17:30', '2018-05-11 17:02:38', NULL),
 (12, 'Proveedores', 'provider', 3, 'glyphicon glyphicon-expand', 2, '2017-07-23 22:17:30', '2017-07-23 22:17:30', NULL),
-(13, 'Trabajadores', 'employee', 4, 'glyphicon glyphicon-expand', 2, '2017-07-23 22:17:30', '2017-07-23 22:17:30', NULL);
+(13, 'Trabajadores', 'employee', 4, 'glyphicon glyphicon-expand', 2, '2017-07-23 22:17:30', '2017-07-23 22:17:30', NULL),
+(14, 'Sucursal', 'sucursal', 1, 'glyphicon glyphicon-expand', 1, '2018-05-15 15:50:57', '2018-05-15 16:20:54', NULL);
 
 -- --------------------------------------------------------
 
@@ -256,7 +271,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (15, '2018_05_10_115933_crear_tabla_categoria', 4),
 (16, '2018_05_11_083449_crear_tabla_marca', 4),
 (17, '2018_05_11_084049_crear_tabla_unidad', 4),
-(18, '2018_05_11_084238_crear_tabla_producto', 4);
+(18, '2018_05_11_084238_crear_tabla_producto', 4),
+(20, '2018_05_15_103607_crear_tabla_sucursal', 5);
 
 -- --------------------------------------------------------
 
@@ -279,22 +295,23 @@ CREATE TABLE `permission` (
 INSERT INTO `permission` (`id`, `usertype_id`, `menuoption_id`, `created_at`, `updated_at`) VALUES
 (14, 2, 11, '2017-07-23 22:17:31', '2017-07-23 22:17:31'),
 (15, 2, 4, '2017-07-23 22:17:31', '2017-07-23 22:17:31'),
-(21, 1, 6, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(22, 1, 7, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(23, 1, 8, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(24, 1, 9, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(25, 1, 10, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(26, 1, 11, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(27, 1, 12, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(28, 1, 13, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(29, 1, 1, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(30, 1, 2, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(31, 1, 3, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
-(32, 1, 4, '2017-09-09 20:40:44', '2017-09-09 20:40:44'),
 (33, 3, 6, '2017-09-09 20:44:05', '2017-09-09 20:44:05'),
 (34, 3, 7, '2017-09-09 20:44:05', '2017-09-09 20:44:05'),
 (35, 3, 8, '2017-09-09 20:44:05', '2017-09-09 20:44:05'),
-(36, 3, 9, '2017-09-09 20:44:05', '2017-09-09 20:44:05');
+(36, 3, 9, '2017-09-09 20:44:05', '2017-09-09 20:44:05'),
+(37, 1, 14, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(38, 1, 6, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(39, 1, 7, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(40, 1, 8, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(41, 1, 9, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(42, 1, 10, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(43, 1, 11, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(44, 1, 12, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(45, 1, 13, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(46, 1, 1, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(47, 1, 2, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(48, 1, 3, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(49, 1, 4, '2018-05-15 15:51:44', '2018-05-15 15:51:44');
 
 -- --------------------------------------------------------
 
@@ -350,7 +367,7 @@ CREATE TABLE `personamaestro` (
 --
 
 INSERT INTO `personamaestro` (`id`, `nombres`, `apellidos`, `razonsocial`, `dni`, `ruc`, `direccion`, `telefono`, `celular`, `email`, `fechanacimiento`, `distrito_id`, `observation`, `type`, `secondtype`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Principal', 'Administrador', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2017-07-23 22:17:30', '2017-07-23 22:17:30', NULL);
+(1, 'Luis Edgardo', 'Acuña Guevara', NULL, '76665698', NULL, 'Calle 7 de Junio #106', '074 311203', '942952225', 'luis@gmail.com', '1998-05-22', 1, NULL, 'C', NULL, '2017-07-23 22:17:30', '2017-07-23 22:17:30', NULL);
 
 -- --------------------------------------------------------
 
@@ -393,6 +410,13 @@ CREATE TABLE `provincia` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `provincia`
+--
+
+INSERT INTO `provincia` (`id`, `nombre`, `departamento_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Chiclayo', 1, '2018-05-14 05:00:00', '2018-05-14 05:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -445,6 +469,29 @@ INSERT INTO `rolpersona` (`id`, `empresa_id`, `persona_id`, `rol_id`, `created_a
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `sucursal`
+--
+
+CREATE TABLE `sucursal` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `direccion` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `telefono` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `empresa_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `sucursal`
+--
+
+INSERT INTO `sucursal` (`id`, `direccion`, `telefono`, `empresa_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Av. Luis Gonzales #1420', '074-485976', 1, '2018-05-15 05:00:00', '2018-05-15 16:49:07', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `unidad`
 --
 
@@ -490,7 +537,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `login`, `password`, `state`, `usertype_id`, `persona_id`, `empresa_id`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'admin', '$2y$10$Lnq4K5KFkhR1uoQjtxbKTefiePia77Zu59YVYBMbdwoU1Ks7IsixW', 'H', 1, 1, 1, 'wL6hp8InprWHWCPZehSwU58tPu4SvQXE7BpUKLtKD0629J4VUa0RBQfByCiZ', '2017-07-23 22:17:32', '2017-07-23 22:17:32', NULL);
+(1, 'admin', '$2y$10$Lnq4K5KFkhR1uoQjtxbKTefiePia77Zu59YVYBMbdwoU1Ks7IsixW', 'H', 1, 1, 1, 'NvxxdKbGebCSsNAs2bHIXI3iZetiUDPAyjcv691nmOap9qxiyQgO35wWB1H9', '2017-07-23 22:17:32', '2017-07-23 22:17:32', NULL);
 
 -- --------------------------------------------------------
 
@@ -635,6 +682,13 @@ ALTER TABLE `rolpersona`
   ADD KEY `rolpersona_rol_id_foreign` (`rol_id`);
 
 --
+-- Indices de la tabla `sucursal`
+--
+ALTER TABLE `sucursal`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sucursal_empresa_id_foreign` (`empresa_id`);
+
+--
 -- Indices de la tabla `unidad`
 --
 ALTER TABLE `unidad`
@@ -674,12 +728,12 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `departamento`
 --
 ALTER TABLE `departamento`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `distrito`
 --
 ALTER TABLE `distrito`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
@@ -694,7 +748,7 @@ ALTER TABLE `marca`
 -- AUTO_INCREMENT de la tabla `menuoption`
 --
 ALTER TABLE `menuoption`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT de la tabla `menuoptioncategory`
 --
@@ -709,7 +763,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT de la tabla `permission`
 --
 ALTER TABLE `permission`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 --
 -- AUTO_INCREMENT de la tabla `persona`
 --
@@ -729,7 +783,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `provincia`
 --
 ALTER TABLE `provincia`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `rol`
 --
@@ -740,6 +794,11 @@ ALTER TABLE `rol`
 --
 ALTER TABLE `rolpersona`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `sucursal`
+--
+ALTER TABLE `sucursal`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `unidad`
 --
@@ -830,6 +889,12 @@ ALTER TABLE `rolpersona`
   ADD CONSTRAINT `rolpersona_empresa_id_foreign` FOREIGN KEY (`empresa_id`) REFERENCES `empresa` (`id`),
   ADD CONSTRAINT `rolpersona_persona_id_foreign` FOREIGN KEY (`persona_id`) REFERENCES `persona` (`id`),
   ADD CONSTRAINT `rolpersona_rol_id_foreign` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`);
+
+--
+-- Filtros para la tabla `sucursal`
+--
+ALTER TABLE `sucursal`
+  ADD CONSTRAINT `sucursal_empresa_id_foreign` FOREIGN KEY (`empresa_id`) REFERENCES `empresa` (`id`);
 
 --
 -- Filtros para la tabla `user`

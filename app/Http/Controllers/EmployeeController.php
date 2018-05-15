@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use Validator;
 use App\Http\Requests;
-use App\Persona;
+use App\Personamaestro;
 use App\Departamento;
 use App\Provincia;
 use App\Distrito;
@@ -51,7 +51,7 @@ class EmployeeController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Employee';
         $name             = Libreria::getParam($request->input('name'));
-        $resultado        = Person::listar($name, 'C');
+        $resultado        = Personamaestro::listar($name, 'E');
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');

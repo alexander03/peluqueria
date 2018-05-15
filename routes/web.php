@@ -32,6 +32,10 @@ Route::group(['middleware' => 'auth'], function () {
         return View::make('dashboard.home');
     });
 
+    Route::post('sucursal/buscar','SucursalController@buscar')->name('sucursal.buscar');
+    Route::get('sucursal/eliminar/{id}/{listarluego}','SucursalController@eliminar')->name('sucursal.eliminar');
+    Route::resource('sucursal', 'SucursalController', array('except' => array('show')));
+
     Route::post('categoria/buscar','CategoriaController@buscar')->name('categoria.buscar');
     Route::get('categoria/eliminar/{id}/{listarluego}','CategoriaController@eliminar')->name('categoria.eliminar');
     Route::resource('categoria', 'CategoriaController', array('except' => array('show')));

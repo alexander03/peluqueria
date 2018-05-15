@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Requests;
-use App\Person;
+use App\Personamaestro;
 use App\Departamento;
 use App\Provincia;
 use App\Distrito;
@@ -50,7 +50,7 @@ class ProviderController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Provider';
         $name             = Libreria::getParam($request->input('name'));
-        $resultado        = Person::listar($name, 'P');
+        $resultado        = Personamaestro::listar($name, 'P');
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
