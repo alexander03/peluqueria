@@ -25,8 +25,8 @@
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 					<div class="form-group">
-						{!! Form::label('direccion', 'Direccion:') !!}
-						{!! Form::text('direccion', '', array('class' => 'form-control input-xs', 'id' => 'direccion')) !!}
+						{!! Form::label('nombre', 'Nombre:') !!}
+						{!! Form::text('nombre', '', array('class' => 'form-control input-xs', 'id' => 'nombre')) !!}
 					</div>
 					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
