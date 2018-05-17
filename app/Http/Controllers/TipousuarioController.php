@@ -8,6 +8,7 @@ use Validator;
 use App\Http\Requests;
 use App\Usertype;
 use App\Permission;
+use App\PermisoOperacion;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +28,7 @@ class TipousuarioController extends Controller
             'search'   => 'tipousuario.buscar',
             'index'    => 'tipousuario.index',
             'permisos' => 'tipousuario.obtenerpermisos',
+            'operaciones' => 'tipousuario.obteneroperaciones',
         );
 
     /**
@@ -281,6 +283,48 @@ class TipousuarioController extends Controller
                     $permiso = new Permission();
                     $permiso->usertype_id = $id;
                     $permiso->menuoption_id = $idopcionmenus[$i];
+                    $permiso->save();
+                }
+            }
+        });
+        return is_null($error) ? "OK" : $error;  
+    }
+
+    public function obteneroperaciones($listarParam, $id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'usertype');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar = "NO";
+        $entidad = 'Operacion';
+        if (isset($listarParam)) {
+            $listar = $listarParam;
+        }
+        $tipousuario = Usertype::find($id);
+        return view($this->folderview.'.operaciones')->with(compact('tipousuario', 'listar', 'entidad'));
+    }
+
+    public function guardaroperaciones(Request $request, $id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'usertype');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar        = Libreria::getParam($request->input('listar'), 'NO');
+        $estados       = $request->input('estado');
+        $idoperacionmenus = $request->input('idoperacionmenu');
+        $cantAux       = count($estados);
+        $respuesta     = true;
+        $error         = DB::transaction(function() use ($id, $idoperacionmenus, $estados, $cantAux)
+        {
+            PermisoOperacion::where('usertype_id', '=', $id)->delete();
+            for ($i=0; $i < $cantAux; $i++) {
+                $exito = true;
+                if($estados[$i] === 'H'){
+                    $permiso = new PermisoOperacion();
+                    $permiso->usertype_id = $id;
+                    $permiso->operacionmenu_id = $idoperacionmenus[$i];
                     $permiso->save();
                 }
             }
