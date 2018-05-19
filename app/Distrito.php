@@ -10,4 +10,6 @@ class Distrito extends Model
 	use SoftDeletes;
     protected $table = 'distrito';
     protected $dates = ['deleted_at'];
+
+    
 }

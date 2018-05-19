@@ -32,6 +32,18 @@ Route::group(['middleware' => 'auth'], function () {
         return View::make('dashboard.home');
     });
 
+    Route::post('cliente/buscar','ClienteController@buscar')->name('cliente.buscar');
+    Route::get('cliente/eliminar/{id}/{listarluego}','ClienteController@eliminar')->name('cliente.eliminar');
+    Route::resource('cliente', 'ClienteController', array('except' => array('show')));
+
+    Route::post('proveedor/buscar','ProveedorController@buscar')->name('proveedor.buscar');
+    Route::get('proveedor/eliminar/{id}/{listarluego}','ProveedorController@eliminar')->name('proveedor.eliminar');
+    Route::resource('proveedor', 'ProveedorController', array('except' => array('show')));
+
+    Route::post('trabajador/buscar','TrabajadorController@buscar')->name('trabajador.buscar');
+    Route::get('trabajador/eliminar/{id}/{listarluego}','TrabajadorController@eliminar')->name('trabajador.eliminar');
+    Route::resource('trabajador', 'TrabajadorController', array('except' => array('show')));
+
     Route::post('sucursal/buscar','SucursalController@buscar')->name('sucursal.buscar');
     Route::get('sucursal/eliminar/{id}/{listarluego}','SucursalController@eliminar')->name('sucursal.eliminar');
     Route::resource('sucursal', 'SucursalController', array('except' => array('show')));

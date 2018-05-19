@@ -17,6 +17,7 @@ class Usertype extends Model
      * @param  string $name  nombre
      * @return sql        sql
      */
+	
     public function scopelistar($query, $name)
     {
         return $query->where(function($subquery) use($name)
