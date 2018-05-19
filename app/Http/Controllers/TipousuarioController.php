@@ -250,7 +250,7 @@ class TipousuarioController extends Controller
             return $existe;
         }
         $listar = "NO";
-        $entidad = 'Permiso';
+        $entidad = 'Tipousuario';
         if (isset($listarParam)) {
             $listar = $listarParam;
         }
@@ -297,7 +297,7 @@ class TipousuarioController extends Controller
             return $existe;
         }
         $listar = "NO";
-        $entidad = 'Operacion';
+        $entidad = 'Tipousuario';
         if (isset($listarParam)) {
             $listar = $listarParam;
         }

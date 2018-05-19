@@ -7,6 +7,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PermisoOperacion extends Model
 {
-    use SoftDeletes;
     protected $table = 'permiso_operacion';
 }
