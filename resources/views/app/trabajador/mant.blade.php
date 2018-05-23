@@ -2,6 +2,7 @@
 $documento = NULL;
 $observacion = NULL;
 $secondtype = 'N';
+$comision = "-1";
 if (!is_null($cliente)) {
 	$documento = $cliente->dni;
 	if(is_null($documento) || trim($documento) == ''){
@@ -9,6 +10,9 @@ if (!is_null($cliente)) {
 	}
 	$observacion = $cliente-> observation;
 	$secondtype = $cliente-> secondtype;
+	if(!is_null($cliente-> comision)){
+		$comision = $cliente-> comision;
+	}
 }
 @endphp
 <div id="divMensajeError{!! $entidad !!}"></div>
@@ -18,9 +22,9 @@ if (!is_null($cliente)) {
 	{!! Form::label('documento', 'N° Documento:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-4 col-xs-12">
 		@if(!is_null($cliente))
-			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11')) !!}
+			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '8')) !!}
 		@else
-			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11')) !!}
+			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '8')) !!}
 		@endif
 	</div>
 	{!! Form::label('es_proveedor', 'Es Cliente:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
@@ -46,12 +50,12 @@ if (!is_null($cliente)) {
 		{!! Form::text('apellidos', null, array('class' => 'form-control input-xs', 'id' => 'apellidos', 'placeholder' => 'Ingrese Apellidos', 'disabled' => 'disabled')) !!}
 	</div>
 </div>
-<div class="form-group col-xs-12">
+<!--div class="form-group col-xs-12">
 	{!! Form::label('razonsocial', 'Razón Social:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-9 col-xs-12">
 		{!! Form::text('razonsocial', null, array('class' => 'form-control input-xs', 'id' => 'razonsocial', 'placeholder' => 'Ingrese Razon Social', 'disabled' => 'disabled')) !!}
 	</div>
-</div>
+</div-->
 <div class="form-group col-xs-12">
 	{!! Form::label('celular', 'Cel/Telf:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-5 col-xs-12">
@@ -92,6 +96,20 @@ if (!is_null($cliente)) {
 		{!! Form::textArea('observacion', $observacion, array('class' => 'form-control input-xs', 'id' => 'observacion', 'placeholder' => 'Ingrese Observacion', 'rows' => '3', 'maxlength' => '100')) !!}
 	</div>
 </div>
+<div class="form-group col-sm-12">
+	{!! Form::label('comision', 'Comision:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="col-sm-9 col-xs-12">
+		<select id='cbocomision' name='cbocomision' class='form-control'>
+			<option value='-1'>Sin Comision</option>
+			<option value='1'>Comision 1</option>
+			<option value='2'>Comision 2</option>
+			<option value='3'>Comision 3</option>
+		</select>
+	</div>
+	@php
+		echo "<input type='hidden' id='value_comision' value='$comision'>"
+	@endphp
+</div>
 <div class="form-group">
 	<div class="col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
@@ -110,16 +128,16 @@ if (!is_null($cliente)) {
 			if(this.value.length===8){
 				$('#nombres').removeAttr('disabled');
 				$('#apellidos').removeAttr('disabled');
-				$('#razonsocial').val('');
-        		$('#razonsocial').attr('disabled','disabled');
+				//$('#razonsocial').val('');
+        		//$('#razonsocial').attr('disabled','disabled');
 				$('#nombres').focus();
 			}else if(this.value.length===11){
-				$('#razonsocial').removeAttr('disabled');
+				//$('#razonsocial').removeAttr('disabled');
 				$('#nombres').val('');
 				$('#apellidos').val('');
 				$('#nombres').attr('disabled','disabled');
 				$('#apellidos').attr('disabled','disabled');
-				$('#razonsocial').focus();
+				//$('#razonsocial').focus();
 			}
     	});
 
@@ -127,13 +145,14 @@ if (!is_null($cliente)) {
 			if($('#documento').val().length === 8){
 				$('#nombres').removeAttr('disabled');
 				$('#apellidos').removeAttr('disabled');
-				$('#razonsocial').attr('disabled','disabled');
+				//$('#razonsocial').attr('disabled','disabled');
 			}else{
-				$('#razonsocial').removeAttr('disabled');
+				//$('#razonsocial').removeAttr('disabled');
 				$('#nombres').attr('disabled','disabled');
 				$('#apellidos').attr('disabled','disabled');
 			}
 		}
 		$('#cbo_esproveedor').val($('#value_proveedor').val());
+		$('#cbocomision').val($('#value_comision').val());
 	}); 
 </script>

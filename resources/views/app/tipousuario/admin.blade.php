@@ -1,5 +1,4 @@
 <?php
-echo $entidad;
 ?>
 <!-- Page-Title -->
 <div class="row">

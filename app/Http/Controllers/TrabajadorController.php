@@ -126,7 +126,6 @@ class TrabajadorController extends Controller
                 'documento'       => 'required|max:8|unique:personamaestro,dni,NULL,id,deleted_at,NULL',
                 'nombres'    => 'required|max:100',
                 'apellidos'    => 'required|max:100',
-                'celular'    => 'required|max:15',
                 'distrito_id' => 'required|integer|exists:distrito,id,deleted_at,NULL',
                 );
         }else{
@@ -161,6 +160,9 @@ class TrabajadorController extends Controller
             $cliente->observation        = $request->input('observacion');
             $cliente->type        = 'T';
             $cliente->secondtype  = $request->input('cbo_esproveedor');//ES CLIENTE NO CAMBIE EL NOMBRE XD
+            if($request->input('cbocomision') != "-1"){
+                $cliente->comision = $request->input('cbocomision');
+            }
             $cliente->save();
             /*REGISTRAMOS LA PERSONA EN LA EMPRESA */
             $persona = new Persona();
@@ -224,14 +226,12 @@ class TrabajadorController extends Controller
                 'documento'       => 'required|max:8|unique:personamaestro,dni,'.$id.',id,deleted_at,NULL',
                 'nombres'    => 'required|max:100',
                 'apellidos'    => 'required|max:100',
-                'celular'    => 'required|max:15',
                 'distrito_id' => 'required|integer|exists:distrito,id,deleted_at,NULL',
                 );
         }else{
             $reglas = array(
             'documento'       => 'required|max:11|unique:personamaestro,ruc,'.$id.',id,deleted_at,NULL',
             'razonsocial'    => 'required|max:100',
-            'celular'    => 'required|max:15',
             'distrito_id' => 'required|integer|exists:distrito,id,deleted_at,NULL',
             );
         }
@@ -259,6 +259,9 @@ class TrabajadorController extends Controller
             $cliente->observation        = $request->input('observacion');
             $cliente->type        = 'T';
             $cliente->secondtype  = $request->input('cbo_esproveedor');//ES CLIENTE NO CAMBIE EL NOMBRE XD
+            if($request->input('cbocomision') != "-1"){
+                $cliente->comision = $request->input('cbocomision');
+            }
             $cliente->save();
         });
         return is_null($error) ? "OK" : $error;

@@ -79,8 +79,8 @@ operaciones
 					@else
 					{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Nuevo', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md btnNuevo', 'activo' => 'no' , 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 					@endif
-					{!! Form::button('<i class="glyphicon glyphicon-plus"></i> PDF', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnPDF', 'onclick' => 'pdf(\''.$entidad.'\')'))!!}
 					{!! Form::close() !!}
+					
 		 		</div>
             </div>
 
