@@ -31,9 +31,9 @@ class Sucursal extends Model
         return $query->where(function($subquery) use($descripcion)
 		            {
 		            	if (!is_null($descripcion)) {
-		            		$subquery->where('direccion', 'LIKE', '%'.$descripcion.'%');
+		            		$subquery->where('nombre', 'LIKE', '%'.$descripcion.'%');
 		            	}
 		            })
-        			->orderBy('direccion', 'ASC');
+        			->orderBy('nombre', 'ASC');
     }
 }

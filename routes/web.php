@@ -75,6 +75,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('tipousuario/buscar', 'TipousuarioController@buscar')->name('tipousuario.buscar');
     Route::get('tipousuario/obtenerpermisos/{listar}/{id}', 'TipousuarioController@obtenerpermisos')->name('tipousuario.obtenerpermisos');
     Route::post('tipousuario/guardarpermisos/{id}', 'TipousuarioController@guardarpermisos')->name('tipousuario.guardarpermisos');
+    Route::get('tipousuario/obteneroperaciones/{listar}/{id}', 'TipousuarioController@obteneroperaciones')->name('tipousuario.obteneroperaciones');
+    Route::post('tipousuario/guardaroperaciones/{id}', 'TipousuarioController@guardaroperaciones')->name('tipousuario.guardaroperaciones');
     Route::get('tipousuario/eliminar/{id}/{listarluego}', 'TipousuarioController@eliminar')->name('tipousuario.eliminar');
     Route::resource('tipousuario', 'TipousuarioController', array('except' => array('show')));
     Route::get('tipousuario/pdf', 'TipousuarioController@pdf')->name('tipousuario.pdf');

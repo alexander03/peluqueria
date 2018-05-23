@@ -36,11 +36,12 @@ class SucursalController extends Controller
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
         $entidad          = 'Sucursal';
-        $direccion        = Libreria::getParam($request->input('direccion'));
-        $resultado        = Sucursal::listar($direccion);
+        $nombre           = Libreria::getParam($request->input('nombre'));
+        $resultado        = Sucursal::listar($nombre);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Direccion', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Telefono', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
@@ -95,7 +96,8 @@ class SucursalController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('direccion' => 'required|max:100',
+        $reglas     = array('nombre' => 'required|max:50',
+                            'direccion' => 'required|max:100',
                             'telefono' => 'required|max:15');
         $mensajes   = array();
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -104,6 +106,7 @@ class SucursalController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $sucursal       = new Sucursal();
+            $sucursal->nombre = $request->input('nombre');
             $sucursal->direccion = $request->input('direccion');
             $sucursal->telefono = $request->input('telefono');
             $user = Auth::user();
@@ -158,7 +161,8 @@ class SucursalController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $reglas     = array('direccion' => 'required|max:100',
+        $reglas     = array('nombre' => 'required|max:50',
+                            'direccion' => 'required|max:100',
                             'telefono' => 'required|max:15');
         $mensajes   = array();
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -167,6 +171,7 @@ class SucursalController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $sucursal       = Sucursal::find($id);
+            $sucursal->nombre = $request->input('nombre');
             $sucursal->direccion = $request->input('direccion');
             $sucursal->telefono = $request->input('telefono');
             $sucursal->save();

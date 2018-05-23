@@ -54,4 +54,12 @@ class Usertype extends Model
 	public function menuoptions(){
 		return $this->belongsToMany('App\Menuoption', 'permission', 'usertype_id', 'menuoption_id');
 	}
+
+	/**
+	 * Método que hace una relación de muchos a muchos, y que devuelve todas las operaciones de menu de un tipo de usuario
+	 * @return sql sql
+	 */
+	public function operacionmenu(){
+		return $this->belongsToMany('App\OperacionMenu', 'permiso_operacion', 'usertype_id', 'operacionmenu_id');
+	}
 }

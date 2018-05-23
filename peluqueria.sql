@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-05-2018 a las 20:07:04
+-- Tiempo de generación: 19-05-2018 a las 17:29:44
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -272,7 +272,207 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2018_05_11_083449_crear_tabla_marca', 4),
 (17, '2018_05_11_084049_crear_tabla_unidad', 4),
 (18, '2018_05_11_084238_crear_tabla_producto', 4),
-(20, '2018_05_15_103607_crear_tabla_sucursal', 5);
+(20, '2018_05_15_103607_crear_tabla_sucursal', 5),
+(21, '2018_05_16_211523_crear_tabla_operacion', 6),
+(22, '2018_05_16_212332_crear_tabla_operacion_menu', 7),
+(24, '2018_05_16_213515_crear_tabla_permiso_operacion', 8);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `operacion`
+--
+
+CREATE TABLE `operacion` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `nombre` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `operacion`
+--
+
+INSERT INTO `operacion` (`id`, `nombre`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Nuevo', '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(2, 'Editar', '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(3, 'Eliminar', '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(4, 'Extornar', '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(5, 'Apertura de caja', '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(6, 'Cierre de caja', '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(7, 'Permisos', '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(8, 'Operaciones', '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `operacion_menu`
+--
+
+CREATE TABLE `operacion_menu` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `operacion_id` int(10) UNSIGNED NOT NULL,
+  `menuoption_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `operacion_menu`
+--
+
+INSERT INTO `operacion_menu` (`id`, `operacion_id`, `menuoption_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 1, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(2, 2, 1, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(3, 3, 1, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(4, 1, 2, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(5, 2, 2, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(6, 3, 2, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(7, 1, 3, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(8, 2, 3, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(9, 3, 3, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(10, 1, 4, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(11, 2, 4, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(12, 3, 4, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(13, 1, 5, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(14, 2, 5, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(15, 3, 5, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(16, 1, 6, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(17, 2, 6, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(18, 3, 6, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(19, 1, 7, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(20, 2, 7, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(21, 3, 7, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(22, 1, 8, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(23, 2, 8, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(24, 3, 8, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(25, 1, 9, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(26, 2, 9, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(27, 3, 9, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(28, 1, 10, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(29, 2, 10, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(30, 3, 10, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(31, 1, 11, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(32, 2, 11, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(33, 3, 11, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(34, 1, 12, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(35, 2, 12, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(36, 3, 12, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(37, 1, 13, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(38, 2, 13, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(39, 3, 13, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(40, 1, 14, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(41, 2, 14, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(42, 3, 14, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(43, 7, 3, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL),
+(44, 8, 3, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `permiso_operacion`
+--
+
+CREATE TABLE `permiso_operacion` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `operacionmenu_id` int(10) UNSIGNED NOT NULL,
+  `usertype_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `permiso_operacion`
+--
+
+INSERT INTO `permiso_operacion` (`id`, `operacionmenu_id`, `usertype_id`, `created_at`, `updated_at`) VALUES
+(220, 40, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(221, 41, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(222, 42, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(223, 16, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(224, 17, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(225, 18, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(226, 19, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(227, 20, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(228, 21, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(229, 22, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(230, 23, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(231, 24, 1, '2018-05-18 17:54:33', '2018-05-18 17:54:33'),
+(232, 25, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(233, 26, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(234, 27, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(235, 28, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(236, 29, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(237, 30, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(238, 31, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(239, 32, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(240, 33, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(241, 34, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(242, 35, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(243, 36, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(244, 37, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(245, 38, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(246, 39, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(247, 1, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(248, 2, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(249, 3, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(250, 4, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(251, 5, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(252, 6, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(253, 7, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(254, 8, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(255, 9, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(256, 43, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(257, 44, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(258, 10, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(259, 11, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(260, 12, 1, '2018-05-18 17:54:34', '2018-05-18 17:54:34'),
+(292, 16, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(293, 17, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(294, 18, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(295, 19, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(296, 20, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(297, 21, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(298, 22, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(299, 23, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(300, 24, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(301, 25, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(302, 26, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(303, 27, 3, '2018-05-18 17:54:43', '2018-05-18 17:54:43'),
+(411, 40, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(412, 41, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(413, 42, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(414, 25, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(415, 26, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(416, 27, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(417, 31, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(418, 32, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(419, 33, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(420, 34, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(421, 35, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(422, 36, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(423, 37, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(424, 38, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(425, 39, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(426, 10, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(427, 11, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(428, 12, 2, '2018-05-19 05:05:47', '2018-05-19 05:05:47'),
+(429, 16, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(430, 17, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(431, 25, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(432, 27, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(433, 38, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(434, 7, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(435, 8, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(436, 9, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(437, 43, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(438, 44, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(439, 10, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(440, 11, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04'),
+(441, 12, 4, '2018-05-19 05:06:04', '2018-05-19 05:06:04');
 
 -- --------------------------------------------------------
 
@@ -293,8 +493,6 @@ CREATE TABLE `permission` (
 --
 
 INSERT INTO `permission` (`id`, `usertype_id`, `menuoption_id`, `created_at`, `updated_at`) VALUES
-(14, 2, 11, '2017-07-23 22:17:31', '2017-07-23 22:17:31'),
-(15, 2, 4, '2017-07-23 22:17:31', '2017-07-23 22:17:31'),
 (33, 3, 6, '2017-09-09 20:44:05', '2017-09-09 20:44:05'),
 (34, 3, 7, '2017-09-09 20:44:05', '2017-09-09 20:44:05'),
 (35, 3, 8, '2017-09-09 20:44:05', '2017-09-09 20:44:05'),
@@ -311,7 +509,19 @@ INSERT INTO `permission` (`id`, `usertype_id`, `menuoption_id`, `created_at`, `u
 (46, 1, 1, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
 (47, 1, 2, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
 (48, 1, 3, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
-(49, 1, 4, '2018-05-15 15:51:44', '2018-05-15 15:51:44');
+(49, 1, 4, '2018-05-15 15:51:44', '2018-05-15 15:51:44'),
+(82, 4, 6, '2018-05-19 03:12:46', '2018-05-19 03:12:46'),
+(83, 4, 9, '2018-05-19 03:12:47', '2018-05-19 03:12:47'),
+(84, 4, 13, '2018-05-19 03:12:47', '2018-05-19 03:12:47'),
+(85, 4, 1, '2018-05-19 03:12:47', '2018-05-19 03:12:47'),
+(86, 4, 3, '2018-05-19 03:12:47', '2018-05-19 03:12:47'),
+(87, 4, 4, '2018-05-19 03:12:47', '2018-05-19 03:12:47'),
+(118, 2, 14, '2018-05-19 05:05:38', '2018-05-19 05:05:38'),
+(119, 2, 9, '2018-05-19 05:05:38', '2018-05-19 05:05:38'),
+(120, 2, 11, '2018-05-19 05:05:38', '2018-05-19 05:05:38'),
+(121, 2, 12, '2018-05-19 05:05:38', '2018-05-19 05:05:38'),
+(122, 2, 13, '2018-05-19 05:05:38', '2018-05-19 05:05:38'),
+(123, 2, 4, '2018-05-19 05:05:38', '2018-05-19 05:05:38');
 
 -- --------------------------------------------------------
 
@@ -333,7 +543,8 @@ CREATE TABLE `persona` (
 --
 
 INSERT INTO `persona` (`id`, `empresa_id`, `personamaestro_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 1, '2017-08-28 05:00:00', '2017-08-28 05:00:00', NULL);
+(1, 1, 1, '2017-08-28 05:00:00', '2017-08-28 05:00:00', NULL),
+(2, 1, 2, '2018-05-17 05:00:00', '2018-05-17 05:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -367,7 +578,8 @@ CREATE TABLE `personamaestro` (
 --
 
 INSERT INTO `personamaestro` (`id`, `nombres`, `apellidos`, `razonsocial`, `dni`, `ruc`, `direccion`, `telefono`, `celular`, `email`, `fechanacimiento`, `distrito_id`, `observation`, `type`, `secondtype`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Luis Edgardo', 'Acuña Guevara', NULL, '76665698', NULL, 'Calle 7 de Junio #106', '074 311203', '942952225', 'luis@gmail.com', '1998-05-22', 1, NULL, 'C', NULL, '2017-07-23 22:17:30', '2017-07-23 22:17:30', NULL);
+(1, 'Luis Edgardo', 'Acuña Guevara', NULL, '76665698', NULL, 'Calle 7 de Junio #106', '074 311203', '942952225', 'luis@gmail.com', '1998-05-22', 1, NULL, 'C', NULL, '2017-07-23 22:17:30', '2017-07-23 22:17:30', NULL),
+(2, 'Luis Edgardo', 'Acuña Guevara', NULL, '76665698', NULL, 'Av. Emiliano Niño #114', '071-311203', '942952225', 'warrioshacks@gmail.com', '1998-05-22', 1, NULL, 'E', NULL, '2018-05-16 05:00:00', '2018-05-16 05:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -474,6 +686,7 @@ INSERT INTO `rolpersona` (`id`, `empresa_id`, `persona_id`, `rol_id`, `created_a
 
 CREATE TABLE `sucursal` (
   `id` int(10) UNSIGNED NOT NULL,
+  `nombre` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `direccion` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `telefono` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `empresa_id` int(10) UNSIGNED NOT NULL,
@@ -486,8 +699,9 @@ CREATE TABLE `sucursal` (
 -- Volcado de datos para la tabla `sucursal`
 --
 
-INSERT INTO `sucursal` (`id`, `direccion`, `telefono`, `empresa_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Av. Luis Gonzales #1420', '074-485976', 1, '2018-05-15 05:00:00', '2018-05-15 16:49:07', NULL);
+INSERT INTO `sucursal` (`id`, `nombre`, `direccion`, `telefono`, `empresa_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'sucursal 1', 'Av. Luis Gonzales #1420', '074-485976', 1, '2018-05-15 05:00:00', '2018-05-15 16:49:07', NULL),
+(2, 'sucursal 2', 'Av. Emiliano Niño #114', '074-485963', 1, '2018-05-17 02:10:52', '2018-05-17 02:10:52', NULL);
 
 -- --------------------------------------------------------
 
@@ -537,7 +751,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `login`, `password`, `state`, `usertype_id`, `persona_id`, `empresa_id`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'admin', '$2y$10$Lnq4K5KFkhR1uoQjtxbKTefiePia77Zu59YVYBMbdwoU1Ks7IsixW', 'H', 1, 1, 1, 'NvxxdKbGebCSsNAs2bHIXI3iZetiUDPAyjcv691nmOap9qxiyQgO35wWB1H9', '2017-07-23 22:17:32', '2017-07-23 22:17:32', NULL);
+(1, 'admin', '$2y$10$d7pz1IkCSCRCR5iF5epwKuNrlQY41ab.qTaA3te5g/LUe.I.D6LVW', 'H', 4, 1, 1, 'l2oIffy4IxWQcxHK3hVvOdaiLlHeRuNW9rhTjD9ZqWKCdWzRbuGVPPQIqwAS', '2017-07-23 22:17:32', '2018-05-18 01:25:24', NULL);
 
 -- --------------------------------------------------------
 
@@ -626,6 +840,28 @@ ALTER TABLE `menuoptioncategory`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `operacion`
+--
+ALTER TABLE `operacion`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `operacion_menu`
+--
+ALTER TABLE `operacion_menu`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `operacion_menu_operacion_id_foreign` (`operacion_id`),
+  ADD KEY `operacion_menu_menuoption_id_foreign` (`menuoption_id`);
+
+--
+-- Indices de la tabla `permiso_operacion`
+--
+ALTER TABLE `permiso_operacion`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `permiso_operacion_operacionmenu_id_foreign` (`operacionmenu_id`),
+  ADD KEY `permiso_operacion_usertype_id_foreign` (`usertype_id`);
 
 --
 -- Indices de la tabla `permission`
@@ -758,22 +994,37 @@ ALTER TABLE `menuoptioncategory`
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+--
+-- AUTO_INCREMENT de la tabla `operacion`
+--
+ALTER TABLE `operacion`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT de la tabla `operacion_menu`
+--
+ALTER TABLE `operacion_menu`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+--
+-- AUTO_INCREMENT de la tabla `permiso_operacion`
+--
+ALTER TABLE `permiso_operacion`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=442;
 --
 -- AUTO_INCREMENT de la tabla `permission`
 --
 ALTER TABLE `permission`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 --
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `personamaestro`
 --
 ALTER TABLE `personamaestro`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
@@ -798,7 +1049,7 @@ ALTER TABLE `rolpersona`
 -- AUTO_INCREMENT de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `unidad`
 --
@@ -847,6 +1098,20 @@ ALTER TABLE `menuoption`
 --
 ALTER TABLE `menuoptioncategory`
   ADD CONSTRAINT `menuoptioncategory_menuoptioncategory_id_foreign` FOREIGN KEY (`menuoptioncategory_id`) REFERENCES `menuoptioncategory` (`id`);
+
+--
+-- Filtros para la tabla `operacion_menu`
+--
+ALTER TABLE `operacion_menu`
+  ADD CONSTRAINT `operacion_menu_menuoption_id_foreign` FOREIGN KEY (`menuoption_id`) REFERENCES `menuoption` (`id`),
+  ADD CONSTRAINT `operacion_menu_operacion_id_foreign` FOREIGN KEY (`operacion_id`) REFERENCES `operacion` (`id`);
+
+--
+-- Filtros para la tabla `permiso_operacion`
+--
+ALTER TABLE `permiso_operacion`
+  ADD CONSTRAINT `permiso_operacion_operacionmenu_id_foreign` FOREIGN KEY (`operacionmenu_id`) REFERENCES `operacion_menu` (`id`),
+  ADD CONSTRAINT `permiso_operacion_usertype_id_foreign` FOREIGN KEY (`usertype_id`) REFERENCES `usertype` (`id`);
 
 --
 -- Filtros para la tabla `permission`
