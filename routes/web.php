@@ -64,6 +64,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('marca/eliminar/{id}/{listarluego}','MarcaController@eliminar')->name('marca.eliminar');
     Route::resource('marca', 'MarcaController', array('except' => array('show')));
 
+    Route::post('servicio/buscar','ServicioController@buscar')->name('servicio.buscar');
+    Route::get('servicio/eliminar/{id}/{listarluego}','ServicioController@eliminar')->name('servicio.eliminar');
+    Route::resource('servicio', 'ServicioController', array('except' => array('show')));
+
     Route::post('categoriaopcionmenu/buscar', 'CategoriaopcionmenuController@buscar')->name('categoriaopcionmenu.buscar');
     Route::get('categoriaopcionmenu/eliminar/{id}/{listarluego}', 'CategoriaopcionmenuController@eliminar')->name('categoriaopcionmenu.eliminar');
     Route::resource('categoriaopcionmenu', 'CategoriaopcionmenuController', array('except' => array('show')));
