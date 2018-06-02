@@ -32,6 +32,10 @@ Route::group(['middleware' => 'auth'], function () {
         return View::make('dashboard.home');
     });
 
+    Route::post('venta/buscar','VentaController@buscar')->name('venta.buscar');
+    Route::get('venta/eliminar/{id}/{listarluego}','VentaController@eliminar')->name('venta.eliminar');
+    Route::resource('venta', 'VentaController', array('except' => array('show')));
+
     Route::post('cliente/buscar','ClienteController@buscar')->name('cliente.buscar');
     Route::get('cliente/eliminar/{id}/{listarluego}','ClienteController@eliminar')->name('cliente.eliminar');
     Route::resource('cliente', 'ClienteController', array('except' => array('show')));
