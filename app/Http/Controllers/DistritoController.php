@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Provincia;
+use App\Distrito;
 use App\Http\Controllers\Controller;
 
 class DistritoController extends Controller
@@ -31,6 +32,13 @@ class DistritoController extends Controller
             return $cadena;
         } else {
             return '';
+        }
+    }
+
+    public function getDistritos(Request $request, $id){
+        if($request->ajax()){
+            $distritos = Distrito::distritos($id);
+            return response()->json($distritos);
         }
     }
 }

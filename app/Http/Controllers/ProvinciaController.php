@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Departamento;
+use App\Provincia;
 use App\Http\Controllers\Controller;
 
 class ProvinciaController extends Controller
@@ -31,6 +32,13 @@ class ProvinciaController extends Controller
             return $cadena;
         } else {
             return '';
+        }
+    }
+
+    public function getProvincias(Request $request, $id){
+        if($request->ajax()){
+            $provincias = Provincia::provincias($id);
+            return response()->json($provincias);
         }
     }
 }

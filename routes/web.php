@@ -27,6 +27,18 @@ Route::get('/', function(){
     return redirect('/dashboard');
 });
 
+Route::group(['middleware' => 'guest'], function() {    
+    //Password reset routes
+    Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
+    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+    Route::get('password','Auth\ResetPasswordController@showPasswordReset');
+    //Register routes
+    Route::get('registro','Auth\RegisterController@showRegistrationForm');
+    Route::post('registro', 'Auth\RegisterController@register');
+});
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', function(){
         return View::make('dashboard.home');
@@ -125,3 +137,16 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
 Route::get('distrito/cbodistrito/{id?}', array('as' => 'distrito.cbodistrito', 'uses' => 'DistritoController@cbodistrito'));
+
+/*Route::get('provincias/{id}', function($id)
+{
+	$departamento_id = $id;
+
+	$provincias = Departamento::find($departamento_id)->provincias;
+
+    return Response::json($provincias);
+});
+*/
+
+Route::get('provincias/{id}','ProvinciaController@getProvincias');
+Route::get('distritos/{id}','DistritoController@getDistritos');

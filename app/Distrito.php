@@ -11,5 +11,13 @@ class Distrito extends Model
     protected $table = 'distrito';
     protected $dates = ['deleted_at'];
 
+    public function provincia() 
+    {
+        return $this->belongsTo('App\Provincia','provincia_id');
+    }
+
+    public static function distritos($id){
+        return  Distrito::where('provincia_id','=',$id)->get();
+    }
     
 }
