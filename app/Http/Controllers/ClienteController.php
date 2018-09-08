@@ -158,7 +158,15 @@ class ClienteController extends Controller
             $cliente->distrito_id  = $request->input('distrito_id');
             $cliente->observation        = $request->input('observacion');
             $cliente->type        = 'C';
-            $cliente->secondtype  = $request->input('cbo_esproveedor');
+
+            if(!is_null($request->input('proveedor')) && is_null($request->input('trabajador'))){
+                $cliente->secondtype  = $request->input('proveedor');
+            }else if(!is_null($request->input('trabajador')) && is_null($request->input('proveedor'))){
+                $cliente->secondtype  = $request->input('trabajador');
+            }else if(!is_null($request->input('proveedor')) && !is_null($request->input('trabajador'))){
+                $cliente->secondtype  = 'T';
+            }
+            //$cliente->secondtype  = $request->input('proveedor');
             $cliente->save();
             /*REGISTRAMOS LA PERSONA EN LA EMPRESA */
             $persona = new Persona();
@@ -253,8 +261,16 @@ class ClienteController extends Controller
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
             $cliente->observation        = $request->input('observacion');
-            $cliente->type        = 'C';
-            $cliente->secondtype        = $request->input('cbo_esproveedor');
+            //$cliente->type        = 'C';
+                        
+            if(!is_null($request->input('proveedor')) && is_null($request->input('trabajador'))){
+                $cliente->secondtype  = $request->input('proveedor');
+            }else if(!is_null($request->input('trabajador')) && is_null($request->input('proveedor'))){
+                $cliente->secondtype  = $request->input('trabajador');
+            }else if(!is_null($request->input('proveedor')) && !is_null($request->input('trabajador'))){
+                $cliente->secondtype  = 'T';
+            }
+
             $cliente->save();
         });
         return is_null($error) ? "OK" : $error;

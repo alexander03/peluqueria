@@ -158,8 +158,17 @@ class TrabajadorController extends Controller
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
             $cliente->observation        = $request->input('observacion');
-            $cliente->type        = 'T';
-            $cliente->secondtype  = $request->input('cbo_esproveedor');//ES CLIENTE NO CAMBIE EL NOMBRE XD
+            $cliente->type        = 'E';
+
+            if(!is_null($request->input('proveedor')) && is_null($request->input('cliente'))){
+                $cliente->secondtype  = $request->input('proveedor');
+            }else if(!is_null($request->input('cliente')) && is_null($request->input('proveedor'))){
+                $cliente->secondtype  = $request->input('cliente');
+            }else if(!is_null($request->input('proveedor')) && !is_null($request->input('clientee'))){
+                $cliente->secondtype  = 'T';
+            }
+
+            //$cliente->secondtype  = $request->input('cbo_esproveedor');//ES CLIENTE NO CAMBIE EL NOMBRE XD
             if($request->input('cbocomision') != "-1"){
                 $cliente->comision = $request->input('cbocomision');
             }
@@ -257,8 +266,17 @@ class TrabajadorController extends Controller
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
             $cliente->observation        = $request->input('observacion');
-            $cliente->type        = 'T';
-            $cliente->secondtype  = $request->input('cbo_esproveedor');//ES CLIENTE NO CAMBIE EL NOMBRE XD
+            //$cliente->type        = 'T';
+            
+            if(!is_null($request->input('proveedor')) && is_null($request->input('cliente'))){
+                $cliente->secondtype  = $request->input('proveedor');
+            }else if(!is_null($request->input('cliente')) && is_null($request->input('proveedor'))){
+                $cliente->secondtype  = $request->input('cliente');
+            }else if(!is_null($request->input('proveedor')) && !is_null($request->input('clientee'))){
+                $cliente->secondtype  = 'T';
+            }
+            //$cliente->secondtype  = $request->input('cbo_esproveedor');//ES CLIENTE NO CAMBIE EL NOMBRE XD
+
             if($request->input('cbocomision') != "-1"){
                 $cliente->comision = $request->input('cbocomision');
             }

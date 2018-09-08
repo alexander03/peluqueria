@@ -160,7 +160,16 @@ class ProveedorController extends Controller
             $cliente->distrito_id  = $request->input('distrito_id');
             $cliente->observation        = $request->input('observacion');
             $cliente->type        = 'P';
-            $cliente->secondtype  = $request->input('cbo_esproveedor');
+            
+            if(!is_null($request->input('cliente')) && is_null($request->input('trabajador'))){
+                $cliente->secondtype  = $request->input('cliente');
+            }else if(!is_null($request->input('trabajador')) && is_null($request->input('cliente'))){
+                $cliente->secondtype  = $request->input('trabajador');
+            }else if(!is_null($request->input('cliente')) && !is_null($request->input('trabajador'))){
+                $cliente->secondtype  = 'T';
+            }
+
+            //$cliente->secondtype  = $request->input('cbo_esproveedor');
             $cliente->save();
             /*REGISTRAMOS LA PERSONA EN LA EMPRESA */
             $persona = new Persona();
@@ -257,8 +266,17 @@ class ProveedorController extends Controller
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
             $cliente->observation        = $request->input('observacion');
-            $cliente->type        = 'P';
-            $cliente->secondtype  = $request->input('cbo_esproveedor');
+            //$cliente->type        = 'P';
+
+            if(!is_null($request->input('cliente')) && is_null($request->input('trabajador'))){
+                $cliente->secondtype  = $request->input('cliente');
+            }else if(!is_null($request->input('trabajador')) && is_null($request->input('cliente'))){
+                $cliente->secondtype  = $request->input('trabajador');
+            }else if(!is_null($request->input('cliente')) && !is_null($request->input('trabajador'))){
+                $cliente->secondtype  = 'T';
+            }
+            
+            //$cliente->secondtype  = $request->input('cbo_esproveedor');
             $cliente->save();
         });
         return is_null($error) ? "OK" : $error;

@@ -1,6 +1,7 @@
 @php
 $documento = NULL;
 $observacion = NULL;
+$type = NULL;
 $secondtype = 'N';
 $comision = "-1";
 if (!is_null($cliente)) {
@@ -9,6 +10,7 @@ if (!is_null($cliente)) {
 		$documento = $cliente->ruc;
 	}
 	$observacion = $cliente-> observation;
+	$type = $cliente-> type;
 	$secondtype = $cliente-> secondtype;
 	if(!is_null($cliente-> comision)){
 		$comision = $cliente-> comision;
@@ -27,16 +29,6 @@ if (!is_null($cliente)) {
 			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '8')) !!}
 		@endif
 	</div>
-	{!! Form::label('es_proveedor', 'Es Cliente:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
-	<div class="col-sm-2 col-xs-12">
-		<select id='cbo_esproveedor' name='cbo_esproveedor' class='form-control'>
-			<option value='N'>NO</option>
-			<option value='S'>SI</option>
-		</select>
-	</div>
-	@php
-		echo "<input type='hidden' id='value_proveedor' value='$secondtype'>"
-	@endphp
 </div>
 <div class="form-group col-xs-12">
 	{!! Form::label('nombres', 'Nombres:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
@@ -110,6 +102,34 @@ if (!is_null($cliente)) {
 		echo "<input type='hidden' id='value_comision' value='$comision'>"
 	@endphp
 </div>
+@if($type == 'E')
+<div class="form-group col-xs-12">
+	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="col-sm-4 col-xs-12">
+		@if($secondtype == 'P')
+			<input type="checkbox" id="proveedor" name="proveedor" value="P"checked><label for="proveedor"> Proveedor</label><br>
+			<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label>
+		@elseif($secondtype == 'C')
+			<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
+			<input type="checkbox" id="cliente" name="cliente" value="C" checked><label for="cliente"> Cliente</label>
+		@elseif($secondtype == 'T')
+			<input type="checkbox" id="proveedor" name="proveedor" value="P" checked><label for="proveedor"> Proveedor</label><br>
+			<input type="checkbox" id="cliente" name="cliente" value="C" checked><label for="cliente"> Cliente</label>
+		@else
+			<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
+			<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label>
+		@endif
+	</div>
+</div>
+@elseif($type == NULL)
+<div class="form-group col-xs-12">
+	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="col-sm-4 col-xs-12">
+		<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
+		<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label>
+	</div>
+</div>
+@endif
 <div class="form-group">
 	<div class="col-sm-12 text-right">
 		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}

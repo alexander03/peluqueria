@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Personamaestro extends Model
 {
@@ -23,6 +24,8 @@ class Personamaestro extends Model
         $sql = "(CONCAT(apellidos,'',nombres) LIKE '%.$name.%' OR RAZONSOCIAL LIKE '%.$name.%')";
         $sql = $sql." AND TYPE = '.$type.' AND SECONDTYPE IN('N','S') OR CASE '.$type.' WHEN 'C' THEN (TYPE IN ('P','T') AND SECONDTYPE = 'S') WHEN 'P' THEN (TYPE = 'C' AND SECONDTYPE = 'S') ELSE (TYPE = 'C' AND SECONDTYPE = 'S') END";
         //echo $sql;        
+        $user = Auth::user();
+        $empresa_id = $user->empresa_id;
         return $query->where(function($subquery) use($name)
 		            {
 		            	if (!is_null($name)) {
@@ -33,16 +36,18 @@ class Personamaestro extends Model
 		            {
 		            	if (!is_null($type)) {
                             //$subquery->where('type', '=', $type)->orWhere('secondtype','=','S');
-                            $IN = " ('P','T')";
+                            //$IN = " ('P','T')";
                             if($type == 'C'){
-                                $subquery->where('type', '=', $type)->orwhere('type', 'IN', $IN)->Where('secondtype','=','S');
+                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('secondtype','=', 'T');
                             }else if($type == 'P'){
-                                $subquery->where('type', '=', $type)->orwhere('type', '=', 'C')->Where('secondtype','=','S');
-                            }else{
-                                $subquery->where('type', '=', $type)->orwhere('type', '=', 'C')->Where('secondtype','=','S');
+                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('secondtype','=', 'T');
+                            }else if($type == 'E'){
+                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('secondtype','=', 'T');
                             }
                         }		            		
                     })
+                    ->leftJoin('persona', 'personamaestro.id', '=', 'persona.personamaestro_id')
+                    ->where('persona.empresa_id', '=', $empresa_id)
                     ->orderBy('nombres', 'ASC')->orderBy('apellidos', 'ASC')->orderBy('razonsocial', 'ASC');                   
     }
 

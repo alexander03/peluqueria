@@ -31,7 +31,14 @@ class Sucursal extends Model
         return $query->where(function($subquery) use($descripcion)
 		            {
 		            	if (!is_null($descripcion)) {
-		            		$subquery->where('nombre', 'LIKE', '%'.$descripcion.'%');
+                            $user = Auth::user();
+                            $empresa_id = $user->empresa_id;
+                            $subquery->where('nombre', 'LIKE', '%'.$descripcion.'%')
+                                     ->where('empresa_id', "=", $empresa_id);
+		            	}else{
+                            $user = Auth::user();
+                            $empresa_id = $user->empresa_id;
+                            $subquery->where('empresa_id', "=", $empresa_id);
 		            	}
 		            })
         			->orderBy('nombre', 'ASC');

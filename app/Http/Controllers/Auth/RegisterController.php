@@ -110,7 +110,7 @@ class RegisterController extends Controller
             $personamaestro->fechanacimiento  = $data['fechanacimiento'];
             $personamaestro->celular          = $data['telefono'];
             $personamaestro->email            = $data['email'];
-            $personamaestro->type             = 'E';
+            $personamaestro->type             = 'T';
             $personamaestro->secondtype       = 'C';
             $personamaestro->save();
 
