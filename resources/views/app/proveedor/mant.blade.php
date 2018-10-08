@@ -1,16 +1,28 @@
 @php
+use App\Distrito;
+use App\Provincia;
 $documento = NULL;
-$observacion = NULL;
+$distrito_el = NULL;
+$provincia_el = NULL;
+$distritos = NULL;
+$provincias = NULL;
 $type = NULL;
 $secondtype = 'N';
+$comision = "-1";
 if (!is_null($cliente)) {
 	$documento = $cliente->dni;
 	if(is_null($documento) || trim($documento) == ''){
 		$documento = $cliente->ruc;
 	}
-	$observacion = $cliente-> observation;
-	$type = $cliente->type;
+	$type = $cliente-> type;
 	$secondtype = $cliente-> secondtype;
+	if(!is_null($cliente-> comision)){
+		$comision = $cliente-> comision;
+	}
+	$distrito_el = Distrito::find($cliente->distrito_id);
+	$provincia_el = Provincia::find($distrito_el->provincia_id);
+	$distritos = Distrito::where('provincia_id','=',$provincia_el->id)->get();
+	$provincias = Provincia::where('departamento_id','=',$provincia_el->departamento_id)->get();
 }
 @endphp
 <div id="divMensajeError{!! $entidad !!}"></div>
@@ -55,12 +67,6 @@ if (!is_null($cliente)) {
 	</div>
 </div>
 <div class="form-group col-xs-12">
-	{!! Form::label('fechanacimiento', 'F. Nacimiento:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
-	<div class="col-sm-9 col-xs-12">
-		{!! Form::date('fechanacimiento', null, array('class' => 'form-control input-xs', 'id' => 'fechanacimiento', 'placeholder' => 'Ingrese Fecha de Nacimiento')) !!}
-	</div>
-</div>
-<div class="form-group col-xs-12">
 	{!! Form::label('email', 'E-mail:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-9 col-xs-12">
 		{!! Form::email('email', null, array('class' => 'form-control input-xs', 'id' => 'email', 'placeholder' => 'Ingrese E-mail')) !!}
@@ -72,18 +78,93 @@ if (!is_null($cliente)) {
 		{!! Form::text('direccion', null, array('class' => 'form-control input-xs', 'id' => 'direccion', 'placeholder' => 'Ingrese Direccion')) !!}
 	</div>
 </div>
+
+
+
+<?php
+
+use App\Departamento;
+
+$departamentos = Departamento::all();
+
+
+?>
+
+<div class="form-group col-sm-12">
+	{!! Form::label('departamento_id', 'Departamento:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="col-sm-9 col-xs-12">
+		@if(!is_null($cliente))
+			<select id="departamento_id" name="departamento_id" class="form-control input-xs">
+				<option disabled>SELECCIONE DEPARTAMENTO</option>
+				@foreach ($departamentos as $departamento)
+					@if($departamento->id == $provincia_el->departamento_id)
+						<option value='{{ $departamento->id }}' selected> {{ $departamento->nombre }}</option>
+					@else
+						<option value='{{ $departamento->id }}'> {{ $departamento->nombre }}</option>
+					@endif
+				@endforeach
+			</select>
+		@else
+			<select id="departamento_id" name="departamento_id" class="form-control input-xs">
+				<option disabled selected>SELECCIONE DEPARTAMENTO</option>
+				@foreach ($departamentos as $departamento)
+					<option value='{{ $departamento->id }}'> {{ $departamento->nombre }}</option>
+				@endforeach
+			</select>
+		@endif
+		<i class="md md-place form-control-feedback l-h-34"></i>
+	</div>
+</div>
+
+
+<div class="form-group col-sm-12">
+	{!! Form::label('provincia_id', 'Provincia:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="col-sm-9 col-xs-12">
+		@if(!is_null($cliente))
+			<select id="provincia_id" name="provincia_id" class="form-control input-xs">
+				<option disabled>SELECCIONE PROVINCIA</option>
+				@foreach ($provincias as $provincia)
+					@if($provincia->id == $provincia_el->id)
+						<option value='{{ $provincia->id }}' selected> {{ $provincia->nombre }}</option>
+					@else
+						<option value='{{ $provincia->id }}'> {{ $provincia->nombre }}</option>
+					@endif
+				@endforeach
+			</select>
+		@else
+			<select id="provincia_id" name="provincia_id" class="form-control input-xs">
+				<option disabled selected>SELECCIONE PROVINCIA</option>
+			</select>
+		@endif
+		<i class="md md-place form-control-feedback l-h-34"></i>
+	</div>
+</div>
+
 <div class="form-group col-sm-12">
 	{!! Form::label('distrito_id', 'Distrito:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-9 col-xs-12">
-		{!! Form::select('distrito_id', $cboDistrito, null, array('class' => 'form-control input-xs', 'id' => 'distrito_id')) !!}
+		@if(!is_null($cliente))
+			<select id="distrito_id" name="distrito_id" class="form-control input-xs">
+				<option disabled selected>SELECCIONE DISTRITO</option>
+				@foreach ($distritos as $distrito)
+					@if($distrito->id == $distrito_el->id)
+						<option value='{{ $distrito->id }}' selected> {{ $distrito->nombre }}</option>
+					@else
+						<option value='{{ $distrito->id }}'> {{ $distrito->nombre }}</option>
+					@endif
+				@endforeach
+			</select>
+		@else
+			<select id="distrito_id" name="distrito_id" class="form-control input-xs">
+				<option disabled selected>SELECCIONE DISTRITO</option>
+			</select>
+		@endif
+		<i class="md md-place form-control-feedback l-h-34"></i>
 	</div>
 </div>
-<div class="form-group col-sm-12">
-	{!! Form::label('observacion', 'Observación:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
-	<div class="col-sm-9 col-xs-12">
-		{!! Form::textArea('observacion', $observacion, array('class' => 'form-control input-xs', 'id' => 'observacion', 'placeholder' => 'Ingrese Observacion', 'rows' => '3', 'maxlength' => '100')) !!}
-	</div>
-</div>
+
+
+
 @if($type == 'P')
 <div class="form-group col-xs-12">
 	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
@@ -158,4 +239,27 @@ if (!is_null($cliente)) {
 		$('#cbo_esproveedor').val($('#value_proveedor').val());
 		
 	}); 
+</script>
+
+
+<script>
+    $('#departamento_id').change(function(event){
+		$.get("provincias/"+event.target.value+"",function(response, departamento){
+			$('#provincia_id').empty();
+			$("#provincia_id").append("<option disabled selected>SELECCIONE PROVINCIA</option>");
+			for(i=0; i<response.length; i++){
+				$("#provincia_id").append("<option value='"+response[i].id+"'> "+response[i].nombre+"</option>");
+			}
+		}, 'json');
+	});
+
+	$('#provincia_id').change(function(event){
+		$.get("distritos/"+event.target.value+"",function(response, provincia){
+			$('#distrito_id').empty();
+			$("#distrito_id").append("<option disabled selected>SELECCIONE DISTRITO</option>");
+			for(i=0; i<response.length; i++){
+				$("#distrito_id").append("<option value='"+response[i].id+"'> "+response[i].nombre+"</option>");
+			}
+		}, 'json');
+	});
 </script>

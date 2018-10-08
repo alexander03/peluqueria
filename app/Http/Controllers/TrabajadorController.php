@@ -50,7 +50,7 @@ class TrabajadorController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Trabajador';
         $name             = Libreria::getParam($request->input('name'));
-        $type             = 'T';
+        $type             = 'E';
         $resultado        = Personamaestro::listar($name,$type);
         $lista            = $resultado->get();
         $cabecera         = array();
@@ -157,7 +157,7 @@ class TrabajadorController extends Controller
             $value =Libreria::getParam($request->input('fechanacimiento'));
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
-            $cliente->observation        = $request->input('observacion');
+            //$cliente->observation        = $request->input('observacion');
             $cliente->type        = 'E';
 
             if(!is_null($request->input('proveedor')) && is_null($request->input('cliente'))){
@@ -265,7 +265,7 @@ class TrabajadorController extends Controller
             $value =Libreria::getParam($request->input('fechanacimiento'));
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
-            $cliente->observation        = $request->input('observacion');
+            //$cliente->observation        = $request->input('observacion');
             //$cliente->type        = 'T';
             
             if(!is_null($request->input('proveedor')) && is_null($request->input('cliente'))){

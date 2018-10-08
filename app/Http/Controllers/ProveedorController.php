@@ -155,10 +155,10 @@ class ProveedorController extends Controller
             $cliente->telefono    = $request->input('telefono');
             $cliente->celular     = $request->input('celular');
             $cliente->email       = $request->input('email');
-            $value =Libreria::getParam($request->input('fechanacimiento'));
-            $cliente->fechanacimiento        = $value;
+            //$value =Libreria::getParam($request->input('fechanacimiento'));
+            //$cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
-            $cliente->observation        = $request->input('observacion');
+            //$cliente->observation        = $request->input('observacion');
             $cliente->type        = 'P';
             
             if(!is_null($request->input('cliente')) && is_null($request->input('trabajador'))){
@@ -262,10 +262,10 @@ class ProveedorController extends Controller
             $cliente->telefono    = $request->input('telefono');
             $cliente->celular     = $request->input('celular');
             $cliente->email       = $request->input('email');
-            $value =Libreria::getParam($request->input('fechanacimiento'));
-            $cliente->fechanacimiento        = $value;
+            //$value =Libreria::getParam($request->input('fechanacimiento'));
+            //$cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
-            $cliente->observation        = $request->input('observacion');
+            //$cliente->observation        = $request->input('observacion');
             //$cliente->type        = 'P';
 
             if(!is_null($request->input('cliente')) && is_null($request->input('trabajador'))){

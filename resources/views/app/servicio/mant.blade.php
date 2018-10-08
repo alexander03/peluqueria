@@ -8,12 +8,6 @@
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('estado', 'Estado:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
-			{!! Form::text('estado', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese estado')) !!}
-		</div>
-	</div>
-	<div class="form-group">
 		{!! Form::label('precio', 'Precio:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
 		<div class="col-lg-9 col-md-9 col-sm-9">
 			{!! Form::text('precio', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese precio')) !!}
@@ -29,12 +23,6 @@
 		{!! Form::label('comision2', 'Comisión 2:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
 		<div class="col-lg-9 col-md-9 col-sm-9">
 			{!! Form::text('comision2', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese comision 2')) !!}
-		</div>
-	</div>
-	<div class="form-group">
-		{!! Form::label('comision3', 'Comisión 3:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
-			{!! Form::text('comision3', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese comision 3')) !!}
 		</div>
 	</div>
 	<div class="form-group">

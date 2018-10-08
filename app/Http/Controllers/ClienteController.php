@@ -48,7 +48,7 @@ class ClienteController extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Cliente';
+        $entidad          = 'cliente';
         $name             = Libreria::getParam($request->input('name'));
         $type             = 'C';
         $resultado        = Personamaestro::listar($name,$type);
@@ -156,7 +156,7 @@ class ClienteController extends Controller
             $value =Libreria::getParam($request->input('fechanacimiento'));
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
-            $cliente->observation        = $request->input('observacion');
+            //$cliente->observation        = $request->input('observacion');
             $cliente->type        = 'C';
 
             if(!is_null($request->input('proveedor')) && is_null($request->input('trabajador'))){
@@ -260,7 +260,7 @@ class ClienteController extends Controller
             $value =Libreria::getParam($request->input('fechanacimiento'));
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
-            $cliente->observation        = $request->input('observacion');
+            //$cliente->observation        = $request->input('observacion');
             //$cliente->type        = 'C';
                         
             if(!is_null($request->input('proveedor')) && is_null($request->input('trabajador'))){

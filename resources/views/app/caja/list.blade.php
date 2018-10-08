@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Menuoption;
 use App\OperacionMenu;
+use App\Personamaestro;
 
 $user = Auth::user();
 /*
@@ -34,8 +35,7 @@ foreach($operaciones as $key => $value){
 /*
 operaciones 
 1 nuevo
-2 editar
-3 eliminar
+* anular
 */
 ?>
 @if(count($lista) == 0)
@@ -57,25 +57,8 @@ operaciones
 		?>
 		@foreach ($lista as $key => $value)
 		<tr>
-			<td>{{ $contador }}</td>
-			<td>{{ $value->descripcion }}</td>
-			<td>{{ $value->precio }}</td>
-			<td>{{ $value->comision1 }}</td>
-			<td>{{ $value->comision2 }}</td>
-			<td>
-			@if(in_array('2',$operacionesnombres))
-			{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning btnEditar' ,'activo' => 'si')) !!}
-			@else
-			{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning btnEditar' , 'activo' => 'no')) !!}
-			@endif
-			</td>
-			<td>
-			@if(in_array('3',$operacionesnombres)) 
-			{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger btnEliminar' ,'activo' => 'si')) !!}
-			@else
-			{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger btnEliminar' ,'activo' => 'no')) !!}
-			@endif
-			</td>
+		<td>{{ $contador }}</td>
+			<td>{{ $value->razonsocial ? $value->razonsocial : $value->nombres.' '.$value->apellidos}}</td>
 		</tr>
 		<?php
 		$contador = $contador + 1;
@@ -86,9 +69,6 @@ operaciones
 @endif
 <script>
 	$(document).ready(function () {
-		if($(".btnEditar").attr('activo')=== 'no'){
-			$('.btnEditar').attr("disabled", true);
-		}
 		if($(".btnEliminar").attr('activo')=== 'no'){
 			$('.btnEliminar').attr("disabled", true);
 		}

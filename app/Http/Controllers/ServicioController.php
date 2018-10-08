@@ -41,11 +41,11 @@ class ServicioController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripcion', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Estado', 'numero' => '1');
+        //$cabecera[]       = array('valor' => 'Estado', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Precio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Comisión 1', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Comisión 2', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Comisión 3', 'numero' => '1');
+        //$cabecera[]       = array('valor' => 'Comisión 3', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -105,11 +105,11 @@ class ServicioController extends Controller
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array('descripcion' => 'required|max:100',
-                            'estado' => 'required|max:1',
+                            //'estado' => 'required|max:1',
                             'precio' => 'required',
                             'comision1' => 'required',
                             'comision2' => 'required',
-                            'comision3' => 'required'
+                            //'comision3' => 'required'
                             );
         $mensajes   = array();
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -119,11 +119,11 @@ class ServicioController extends Controller
         $error = DB::transaction(function() use($request){
             $servicio       = new Servicio();
             $servicio->descripcion = $request->input('descripcion');
-            $servicio->estado = $request->input('estado');
+            //$servicio->estado = $request->input('estado');
             $servicio->precio = $request->input('precio');
             $servicio->comision1 = $request->input('comision1');
             $servicio->comision2 = $request->input('comision2');
-            $servicio->comision3 = $request->input('comision3');
+            //$servicio->comision3 = $request->input('comision3');
             $servicio->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -175,11 +175,11 @@ class ServicioController extends Controller
             return $existe;
         }
         $reglas     = array('descripcion' => 'required|max:100',
-                           'estado' => 'required|max:1',
+                           //'estado' => 'required|max:1',
                             'precio' => 'required',
                             'comision1' => 'required',
                             'comision2' => 'required',
-                            'comision3' => 'required'
+                            //'comision3' => 'required'
                            );
         $mensajes   = array();
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -189,11 +189,11 @@ class ServicioController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $servicio       = Servicio::find($id);
             $servicio->descripcion = $request->input('descripcion');
-            $servicio->estado = $request->input('estado');
+            //$servicio->estado = $request->input('estado');
             $servicio->precio = $request->input('precio');
             $servicio->comision1 = $request->input('comision1');
             $servicio->comision2 = $request->input('comision2');
-            $servicio->comision3 = $request->input('comision3');
+            //$servicio->comision3 = $request->input('comision3');
             $servicio->save();
         });
         return is_null($error) ? "OK" : $error;

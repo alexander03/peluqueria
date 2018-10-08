@@ -44,6 +44,12 @@ Route::group(['middleware' => 'auth'], function () {
         return View::make('dashboard.home');
     });
 
+    Route::post('caja/servicio', 'CajaController@servicio')->name('caja.servicio');
+    Route::get('caja/clienteautocompletar/{searching}', 'CajaController@clienteautocompletar')->name('caja.clienteautocompletar');
+    Route::get('caja/servicioautocompletar/{searching}', 'CajaController@servicioautocompletar')->name('caja.servicioautocompletar');
+    Route::get('caja/productoautocompletar/{searching}', 'CajaController@productoautocompletar')->name('caja.productoautocompletar');
+    Route::resource('caja', 'CajaController', array('except' => array('show')));
+
     Route::post('venta/buscar','VentaController@buscar')->name('venta.buscar');
     Route::get('venta/eliminar/{id}/{listarluego}','VentaController@eliminar')->name('venta.eliminar');
     Route::resource('venta', 'VentaController', array('except' => array('show')));
