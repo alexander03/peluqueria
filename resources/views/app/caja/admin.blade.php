@@ -59,8 +59,7 @@ operaciones
 <div class="row" style="background: rgba(51,122,183,0.10);">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
-
-		{!! Form::open(['route' => $ruta["create"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'IDFORMMANTENIMIENTO'.$entidad]) !!}
+		{!! Form::open(['route' => $ruta["guardarventa"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'IDFORMMANTENIMIENTO'.$entidad]) !!}
 
 			<h4 class="page-title">Seleccione Empleado</h4>
 			<div id="empleados" class="row m-b-30" style="display: -webkit-inline-box; width: 100%; overflow-x: scroll;">
@@ -81,7 +80,7 @@ operaciones
 							{!! Form::label('serieventa', 'N° de Venta:')!!}
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6">
-							{!! Form::text('serieventa', '', array('class' => 'form-control input-xs', 'id' => 'serieventa', 'disabled')) !!}
+							{!! Form::text('serieventa', '', array('class' => 'form-control input-xs', 'id' => 'serieventa', 'readOnly')) !!}
 						</div>
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-2">
@@ -91,7 +90,7 @@ operaciones
 							{!! Form::label('fecha', 'Fecha:')!!}
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6">
-							{!! Form::text('fecha', '', array('class' => 'form-control input-xs', 'id' => 'fecha', 'disabled')) !!}
+							{!! Form::text('fecha', '', array('class' => 'form-control input-xs', 'id' => 'fecha', 'readOnly')) !!}
 						</div>
 					</div>
 				</div>
@@ -141,7 +140,7 @@ operaciones
 
 			<h4 class="page-title">Seleccione Medio de Pago</h4>
 			<div class="row m-b-30">
-			<div class="form-group">
+				<div class="form-group">
 					<div class="col-lg-5 col-md-5 col-sm-5">
 						<select id="tipopago" name="tipopago" class="form-control input-xs">
 							<option disabled selected>SELECCIONE MEDIO DE PAGO</option>
@@ -155,14 +154,15 @@ operaciones
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6">
 
-							{!! Form::text('total', '', array('class' => 'form-control input-xs', 'id' => 'total', 'disabled')) !!}
+							{!! Form::text('total', '', array('class' => 'form-control input-xs', 'id' => 'total', 'readOnly')) !!}
 						</div>
 					</div>
 					<div class="col-lg-4 col-md-4 col-sm-4" style ="padding-top: 10px">
-						{!! Form::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', array('class' => 'btn btn-success waves-effect waves-light m-l-10 btn-sm btnGuardar', 'activo' => 'si' )) !!}
+						{!! Form::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', array( 'onclick' => 'guardarventa()' , 'class' => 'btn btn-success waves-effect waves-light m-l-10 btn-sm btnGuardar', 'activo' => 'si' )) !!}
 					</div>
 				</div>
 			</div>
+			<div id="divMensajeError{!! $entidad !!}"></div>
         </div>
     </div>
 </div>
@@ -180,6 +180,18 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function(){
+
+	//imprimir valor tipo pago
+
+	var tipopago = $('#tipopago').val();
+
+	//colocar total 0.00
+
+	$("#total").val((0).toFixed(2));
+
+	//cant = 0
+
+	$("#cant").val(0);
 
 	$('#serieventa').val({{$serieventa}});
 
@@ -328,9 +340,9 @@ $(document).ready(function(){
 				cant++;
 				var fila = "";
 				if($("#tipo").val() == 'S'){
-					fila =  '<tr class="DetalleServicio" id="'+ servicio_id +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+					fila =  '<tr class="DetalleServicio" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
 				}else{
-					fila =  '<tr class="DetalleProducto" id="'+ servicio_id +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+					fila =  '<tr class="DetalleProducto" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
 				}
 				$("#detalle").append(fila);
 				$("#cant").val(cant);
@@ -342,9 +354,9 @@ $(document).ready(function(){
 				cant++;
 				var fila = "";
 				if($("#tipo").val() == 'S'){
-					fila =  '<tr class="DetalleServicio" id="'+ servicio_id +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+					fila =  '<tr class="DetalleServicio" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
 				}else{
-					fila =  '<tr class="DetalleProducto" id="'+ servicio_id +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2)+'</td><td><a class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+					fila =  '<tr class="DetalleProducto" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2)+'</td><td><a onclick="eliminarDetalle(this)"class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
 				}
 				$("#detalle").append(fila);
 				$("#cant").val(cant);
@@ -361,9 +373,54 @@ $(document).ready(function(){
 </script>
 
 <script>
-$(document).ready(function(){
-	$(".btnEliminar").on('click', function(){
-		alert('hola');
+function eliminarDetalle(comp){
+	var precioeliminar = parseFloat($(comp).attr('precio'));
+	var cant = $("#cant"). val();
+	cant--;
+	$("#cant").val(cant);
+	var total = parseFloat($("#total").val());
+	total -= precioeliminar;
+	$("#total").val(total.toFixed(2));
+	(($(comp).parent()).parent()).remove();
+	if(cant == 0){
+		$("#cabecera").html("");
+	}
+}
+
+function detalleventa(){
+	var data = [];
+	$("#detalle tr").each(function(){
+		var element = $(this); // <-- en la variable element tienes tu elemento
+		var tipo = element.attr('class');
+		if(tipo === "DetalleServicio"){
+			tipo = "S";
+		}
+		if(tipo === "DetalleProducto"){
+			tipo = "P";
+		}
+		var id = element.attr('id');
+		var cantidad = element.attr('cantidad');
+	
+		data.push(
+			{"tipo": tipo , "id": id , "cantidad": cantidad }
+		);
+
 	});
-});
+	var detalle = {"data": data};
+	var json = JSON.stringify(detalle);
+
+	var ajax = $.ajax({
+		"method": "POST",
+		"url": "{{ url('/caja/guardardetalle') }}",
+		"data": {
+			"_token": "{{ csrf_token() }}",
+			"json": json
+			}
+	}).done(function(info){
+		console.log("respuesta servidor")
+		console.log(info)
+	});
+}
+
 </script>
+

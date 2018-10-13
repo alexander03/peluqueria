@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use App\Menuoption;
 use App\OperacionMenu;
 use App\Personamaestro;
+use App\Persona;
 
 $user = Auth::user();
 /*
@@ -63,7 +64,8 @@ operaciones
 			<td>{{ $fechaformato = date("d/m/Y",strtotime($value->fecha))}}</td>
 			
 			<?php
-			$cliente = Personamaestro::where('id','=',$value->cliente_id)->orderBy('id','ASC')->first() 
+			$persona = Persona::where('id','=',$value->cliente_id)->orderBy('id','ASC')->first();
+			$cliente = Personamaestro::where('id','=',$persona->personamaestro_id)->orderBy('id','ASC')->first();
 			?>
 			@if(is_null($cliente->razonsocial))
 				<td>{{ $cliente->nombres . ' ' .$cliente->apellidos }}</td>
@@ -74,14 +76,7 @@ operaciones
 			@if( $value->tipo_pago == '1')
 				<td> EFECTIVO </td>
 			@elseif( $value->tipo_pago == '2')
-				<td> CRÉDITO </td>
-			@elseif( $value->tipo_pago == '3')
-				<td> DEBITO </td>
-			@endif
-			@if( $value->estado == '1')
-				<td> VIGENTE </td>
-			@elseif( $value->estado == '2')
-				<td> ANULADO </td>
+				<td> TARJETA DE CRÉDITO/DÉBITO </td>
 			@endif
 			<td>
 			@if(in_array('9',$operacionesnombres)) 

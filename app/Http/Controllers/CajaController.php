@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Personamaestro;
 use App\Venta;
+use App\Detalleventa;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,8 @@ class CajaController extends Controller
     protected $tituloCliente   = 'Registrar Nuevo Cliente';
     protected $rutas           = array('create' => 'trabajador.create', 
             'cliente'   => 'cliente.create',
+            'guardarventa'   => 'caja.guardarventa',
+            'guardardetalle' => 'caja.guardardetalle',
         );
 
     public function __construct()
@@ -135,6 +138,60 @@ class CajaController extends Controller
             );
         }
         return json_encode($data);
+    }
+
+    public function guardarventa(Request $request){
+        $reglas     = array('empleado_id' => 'required',
+                            'serieventa' => 'required',
+                            'cliente_id' => 'required',
+                            'tipopago' => 'required',
+                            'total' => 'required',
+                           );
+        $mensajes   = array();
+        $validacion = Validator::make($request->all(), $reglas, $mensajes);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        } 
+        $error = DB::transaction(function() use($request){
+            $venta                 = new Venta();
+            $venta->serie_numero   = $request->input('serieventa');
+            $total                 = $request->input('total');
+            $venta->total          = $total;
+            $subtotal              = round($total/(1.18),2);
+            $venta->subtotal       = $subtotal;
+            $venta->igv            = round($total - $subtotal,2);
+            $venta->tipo_pago      = (int) $request->input('tipopago'); // 1-efectivo y 2-tarjeta
+            $venta->cliente_id     = $request->input('cliente_id');
+            $venta->trabajador_id  = $request->input('empleado_id');
+            $user           = Auth::user();
+            $empresa_id     = $user->empresa_id;
+            $venta->empresa_id   = $empresa_id;
+            $venta->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+
+    public function guardardetalle(Request $request){
+        $detalles = json_decode($_POST["json"]);
+        //var_dump($detalles->{"data"}[0]->{"cantidad"});
+        $error = null;
+        $venta_id = Venta::max('id');
+        foreach ($detalles->{"data"} as $detalle) {
+            $error = DB::transaction(function() use($venta_id, $detalle){
+                $detalleventa            = new Detalleventa();
+                $detalleventa->cantidad  = $detalle->{"cantidad"};
+                $tipo                    = $detalle->{"tipo"};
+                if($tipo == "S"){
+                    $detalleventa->servicio_id  = $detalle->{"id"};
+                }
+                if($tipo == "P"){
+                    $detalleventa->producto_id  = $detalle->{"id"};
+                }
+                $detalleventa->venta_id  = $venta_id;
+                $detalleventa->save();
+            });
+        }
+        return is_null($error) ? "OK" : $error;
     }
 
 

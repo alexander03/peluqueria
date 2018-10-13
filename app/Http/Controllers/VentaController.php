@@ -45,7 +45,6 @@ class VentaController extends Controller
         $cabecera[]       = array('valor' => 'Cliente', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Total', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de Pago', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Estado', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '1');
         
         $titulo_eliminar  = $this->tituloEliminar;
