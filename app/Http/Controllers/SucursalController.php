@@ -106,8 +106,8 @@ class SucursalController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $sucursal       = new Sucursal();
-            $sucursal->nombre = $request->input('nombre');
-            $sucursal->direccion = $request->input('direccion');
+            $sucursal->nombre = strtoupper($request->input('nombre'));
+            $sucursal->direccion = strtoupper($request->input('direccion'));
             $sucursal->telefono = $request->input('telefono');
             $user = Auth::user();
             $sucursal->empresa_id = $user->empresa_id;
@@ -171,8 +171,8 @@ class SucursalController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $sucursal       = Sucursal::find($id);
-            $sucursal->nombre = $request->input('nombre');
-            $sucursal->direccion = $request->input('direccion');
+            $sucursal->nombre = strtoupper($request->input('nombre'));
+            $sucursal->direccion = strtoupper($request->input('direccion'));
             $sucursal->telefono = $request->input('telefono');
             $sucursal->save();
         });

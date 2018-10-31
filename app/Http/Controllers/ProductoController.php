@@ -12,6 +12,7 @@ use App\Marca;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ProductoController extends Controller
 {
@@ -48,7 +49,7 @@ class ProductoController extends Controller
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
         $entidad          = 'Producto';
-        $descripcion      = Libreria::getParam($request->input('descripcion'));
+        $descripcion      = Libreria::getParam($request->input('name'));
         $resultado        = Producto::listar($descripcion);
         $lista            = $resultado->get();
         $cabecera         = array();
@@ -102,7 +103,9 @@ class ProductoController extends Controller
         $entidad        = 'Producto';
         $producto        = null;
         $cboMarca = array('' => 'Seleccione') + Marca::pluck('name', 'id')->all();
-        $cboCategoria = array('' => 'Seleccione') + Categoria::pluck('name', 'id')->all();
+        $user = Auth::user();
+        $empresa_id = $user->empresa_id;
+        $cboCategoria = array('' => 'Seleccione') + Categoria::where('empresa_id', '=', $empresa_id)->pluck('name', 'id')->all();
         $cboUnidad = array('' => 'Seleccione') + Unidad::pluck('name', 'id')->all();
         $formData       = array('producto.store');
         $formData       = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
@@ -133,11 +136,14 @@ class ProductoController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $producto               = new Producto();
-            $producto->descripcion = $request->input('descripcion');
+            $producto->descripcion = strtoupper($request->input('descripcion'));
             $producto->precioventa = $request->input('precioventa');
             $producto->marca_id  = $request->input('marca_id');
             $producto->categoria_id = $request->input('categoria_id');
             $producto->unidad_id = $request->input('unidad_id');
+            $user           = Auth::user();
+            $empresa_id     = $user->empresa_id;
+            $producto->empresa_id = $empresa_id;
             $producto->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -205,11 +211,14 @@ class ProductoController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $producto                 = Producto::find($id);
-            $producto->descripcion = $request->input('descripcion');
+            $producto->descripcion = strtoupper($request->input('descripcion'));
             $producto->precioventa = $request->input('precioventa');
             $producto->marca_id = $request->input('marca_id');
             $producto->categoria_id = $request->input('categoria_id');
             $producto->unidad_id = $request->input('unidad_id');
+            $user           = Auth::user();
+            $empresa_id     = $user->empresa_id;
+            $producto->empresa_id = $empresa_id;
             $producto->save();
         });
         return is_null($error) ? "OK" : $error;

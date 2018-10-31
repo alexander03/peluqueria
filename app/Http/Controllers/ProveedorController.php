@@ -148,10 +148,10 @@ class ProveedorController extends Controller
             }else{
                 $cliente->ruc        = $request->input('documento');
             }
-            $cliente->nombres    = $request->input('nombres');
-            $cliente->apellidos  = $request->input('apellidos');
-            $cliente->razonsocial = $request->input('razonsocial'); 
-            $cliente->direccion   = $request->input('direccion');
+            $cliente->nombres    = strtoupper($request->input('nombres'));
+            $cliente->apellidos  = strtoupper($request->input('apellidos'));
+            $cliente->razonsocial = strtoupper($request->input('razonsocial')); 
+            $cliente->direccion   = strtoupper($request->input('direccion'));
             $cliente->telefono    = $request->input('telefono');
             $cliente->celular     = $request->input('celular');
             $cliente->email       = $request->input('email');
@@ -159,14 +159,23 @@ class ProveedorController extends Controller
             //$cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
             //$cliente->observation        = $request->input('observacion');
-            $cliente->type        = 'P';
             
-            if(!is_null($request->input('cliente')) && is_null($request->input('trabajador'))){
-                $cliente->secondtype  = $request->input('cliente');
-            }else if(!is_null($request->input('trabajador')) && is_null($request->input('cliente'))){
-                $cliente->secondtype  = $request->input('trabajador');
-            }else if(!is_null($request->input('cliente')) && !is_null($request->input('trabajador'))){
-                $cliente->secondtype  = 'T';
+            $cliente->comision = 0;
+
+            $cliente->type        = 'P';
+
+            $tipocliente = $request->input('cliente');
+            $tipotrabajador = $request->input('trabajador');
+            
+            if( $tipocliente !== null && $tipotrabajador == null){
+                $cliente->secondtype  = $tipocliente;
+            }else if( $tipocliente == null && $tipotrabajador !== null){
+                $cliente->secondtype  = $tipotrabajador;
+                $cliente->comision = $request->input('comision');
+            }else if( $tipocliente !== null && $tipotrabajador !== null){
+                $cliente->type  = 'T';
+                $cliente->secondtype  = null;
+                $cliente->comision = $request->input('comision');
             }
 
             //$cliente->secondtype  = $request->input('cbo_esproveedor');
@@ -255,10 +264,10 @@ class ProveedorController extends Controller
             }else{
                 $cliente->ruc        = $request->input('documento');
             }
-            $cliente->nombres    = $request->input('nombres');
-            $cliente->apellidos  = $request->input('apellidos');
-            $cliente->razonsocial = $request->input('razonsocial'); 
-            $cliente->direccion   = $request->input('direccion');
+            $cliente->nombres    = strtoupper($request->input('nombres'));
+            $cliente->apellidos  = strtoupper($request->input('apellidos'));
+            $cliente->razonsocial = strtoupper($request->input('razonsocial')); 
+            $cliente->direccion   = strtoupper($request->input('direccion'));
             $cliente->telefono    = $request->input('telefono');
             $cliente->celular     = $request->input('celular');
             $cliente->email       = $request->input('email');
@@ -268,12 +277,53 @@ class ProveedorController extends Controller
             //$cliente->observation        = $request->input('observacion');
             //$cliente->type        = 'P';
 
-            if(!is_null($request->input('cliente')) && is_null($request->input('trabajador'))){
-                $cliente->secondtype  = $request->input('cliente');
-            }else if(!is_null($request->input('trabajador')) && is_null($request->input('cliente'))){
-                $cliente->secondtype  = $request->input('trabajador');
-            }else if(!is_null($request->input('cliente')) && !is_null($request->input('trabajador'))){
-                $cliente->secondtype  = 'T';
+                       
+            $tipocliente = $request->input('cliente');
+            $tipoproveedor = $request->input('proveedor');
+            $tipotrabajador = $request->input('trabajador');
+
+
+            if( $tipocliente !==null && $tipoproveedor == null && $tipotrabajador == null ){
+                //CLIENTE
+                $cliente->type  = $tipocliente;
+                $cliente->secondtype  = null;
+                $cliente->comision = 0;
+            }
+            elseif( $tipocliente == null && $tipoproveedor !== null && $tipotrabajador == null ){
+                //PROVEEDOR
+                $cliente->type  = $tipoproveedor;
+                $cliente->secondtype  = null;
+                $cliente->comision = 0;
+            }
+            elseif( $tipocliente == null && $tipoproveedor == null && $tipotrabajador !== null ){
+                //TRABAJADOR
+                $cliente->type  = $tipotrabajador;
+                $cliente->secondtype  = null;
+                $cliente->comision = $request->input('comision');
+            }
+            elseif( $tipocliente !== null && $tipoproveedor == null && $tipotrabajador !== null ){
+                // CLIENTE Y TRABAJADOR
+                $cliente->type  = $tipocliente;
+                $cliente->secondtype  = $tipotrabajador;
+                $cliente->comision = $request->input('comision');
+            }
+            elseif( $tipocliente !== null && $tipoproveedor !== null && $tipotrabajador == null ){
+                //CLIENTE Y PROVEEDOR
+                $cliente->type  = $tipocliente;
+                $cliente->secondtype  = $tipoproveedor;
+                $cliente->comision = 0;
+            }
+            elseif( $tipocliente == null && $tipoproveedor !== null && $tipotrabajador !== null ){
+                //TRABAJADOR Y PROVEEDOR
+                $cliente->type  = $tipotrabajador;
+                $cliente->secondtype  = $tipoproveedor;
+                $cliente->comision = $request->input('comision');
+            }
+            elseif( $tipocliente !== null && $tipoproveedor !== null && $tipotrabajador !== null ){
+                //TODOS
+                $cliente->type  = 'T';
+                $cliente->secondtype  = null;
+                $cliente->comision = $request->input('comision');
             }
             
             //$cliente->secondtype  = $request->input('cbo_esproveedor');

@@ -7,8 +7,8 @@ $provincia_el = NULL;
 $distritos = NULL;
 $provincias = NULL;
 $type = NULL;
-$secondtype = 'N';
-$comision = "-1";
+$secondtype = NULL;
+$comision = 0;
 if (!is_null($cliente)) {
 	$documento = $cliente->dni;
 	if(is_null($documento) || trim($documento) == ''){
@@ -170,53 +170,121 @@ $departamentos = Departamento::all();
 </div>
 
 
-
+@if(is_null($cliente))
 
 <div class="form-group col-sm-12">
 	{!! Form::label('comision', 'Comision:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-9 col-xs-12">
-		<select id='cbocomision' name='cbocomision' class='form-control'>
-			<option value='-1'>Sin Comision</option>
-			<option value='1'>Comision 1</option>
-			<option value='2'>Comision 2</option>
-			<option value='3'>Comision 3</option>
-		</select>
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="comision" id="comision1" value="1">
+			<label class="form-check-label" for="comision1">SI</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input checked class="form-check-input" type="radio" name="comision" id="comision2" value="0">
+			<label class="form-check-label" for="comision2">NO</label>
+		</div>
 	</div>
-	@php
-		echo "<input type='hidden' id='value_comision' value='$comision'>"
-	@endphp
 </div>
-@if($type == 'E')
+
+@else
+
+<div id="comisionhtml" class="form-group col-sm-12">
+	{!! Form::label('comision', 'Comision:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="col-sm-9 col-xs-12">
+	@if($comision == 1)
+		<div class="form-check form-check-inline">
+			<input checked class="form-check-input" type="radio" name="comision" id="comision1" value="1">
+			<label class="form-check-label" for="comision1">SI</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="comision" id="comision2" value="0">
+			<label class="form-check-label" for="comision2">NO</label>
+		</div>
+	@elseif($comision == 0)
+		<div class="form-check form-check-inline">
+			<input class="form-check-input" type="radio" name="comision" id="comision1" value="1">
+			<label class="form-check-label" for="comision1">SI</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input checked class="form-check-input" type="radio" name="comision" id="comision2" value="0">
+			<label class="form-check-label" for="comision2">NO</label>
+		</div>
+	@endif
+	</div>
+</div>
+
+@endif
+
+@if($type == NULL)
 <div class="form-group col-xs-12">
 	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-4 col-xs-12">
-		@if($secondtype == 'P')
-			<input type="checkbox" id="proveedor" name="proveedor" value="P"checked><label for="proveedor"> Proveedor</label><br>
-			<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label>
-		@elseif($secondtype == 'C')
-			<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
-			<input type="checkbox" id="cliente" name="cliente" value="C" checked><label for="cliente"> Cliente</label>
-		@elseif($secondtype == 'T')
+		<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
+		<input type="checkbox" id="proveedor" name="proveedor" value="P" ><label for="proveedor"> Proveedor</label>
+	</div>
+</div>
+@elseif($type !== NULL)
+<div class="form-group col-xs-12">
+	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="col-sm-4 col-xs-12">
+		@if($type == 'C')
+			@if($secondtype == 'E')
+				<input type="checkbox" readonly id="cliente" name="cliente" value="C" checked><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E" checked><label class="trabajador" for="trabajador"> Empleado</label>
+			@elseif($secondtype == 'P')
+				<input type="checkbox" readonly id="cliente" name="cliente" value="C" checked><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P" checked><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E"><label class="trabajador" for="trabajador"> Empleado</label>
+			@else($secondtype == NULL)
+				<input type="checkbox" readonlycid="cliente" name="cliente" value="C"checked><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E"><label class="trabajador" for="trabajador"> Empleado</label>
+			@endif
+		@elseif($type == 'E')
+			@if($secondtype == 'C')
+				<input type="checkbox" readonly id="cliente" name="cliente" value="C" checked><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E" checked><label class="trabajador" for="trabajador"> Empleado</label>
+			@elseif($secondtype == 'P')
+				<input type="checkbox" readonly id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P" checked><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E" checked><label class="trabajador" for="trabajador"> Empleado</label>
+			@else($secondtype == NULL)
+				<input type="checkbox" readonly id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E" checked><label class="trabajador" for="trabajador"> Empleado</label>
+			@endif
+		@elseif($type == 'P')
+			@if($secondtype == 'C')
+				<input type="checkbox" readonly id="cliente" name="cliente" value="C" checked><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P" checked><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox"  class="trabajador" id="trabajador" name="trabajador" value="E"><label class="trabajador" for="trabajador"> Empleado</label>
+			@elseif($secondtype == 'E')
+				<input type="checkbox" readonly id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P" checked><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E" checked><label class="trabajador" for="trabajador"> Empleado</label>
+			@else($secondtype == NULL)
+				<input type="checkbox" readonly id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
+				<input type="checkbox" id="proveedor" name="proveedor" value="P" checked><label for="proveedor"> Proveedor</label><br>
+				<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E"><label class="trabajador" for="trabajador"> Empleado</label>
+			@endif
+		@elseif($type == 'T')
+			<input type="checkbox" id="cliente" name="cliente" value="C"checked><label for="cliente"> Cliente</label><br>
 			<input type="checkbox" id="proveedor" name="proveedor" value="P" checked><label for="proveedor"> Proveedor</label><br>
-			<input type="checkbox" id="cliente" name="cliente" value="C" checked><label for="cliente"> Cliente</label>
+			<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E" checked><label class="trabajador" for="trabajador"> Empleado</label>
 		@else
+			<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
 			<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
-			<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label>
+			<input type="checkbox" class="trabajador" id="trabajador" name="trabajador" value="E" ><label class="trabajador" for="trabajador"> Empleado</label>
 		@endif
 	</div>
 </div>
-@elseif($type == NULL)
-<div class="form-group col-xs-12">
-	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
-	<div class="col-sm-4 col-xs-12">
-		<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
-		<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label>
-	</div>
-</div>
 @endif
+
 <div class="form-group">
 	<div class="col-sm-12 text-right">
-		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardartrabajador()')) !!}
 		&nbsp;
 		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
 	</div>
@@ -260,7 +328,50 @@ $departamentos = Departamento::all();
 		$('#cbocomision').val($('#value_comision').val());
 	}); 
 </script>
+<script>
 
+$(document).ready(function(){  
+  
+	$("#trabajador").attr('disabled', 'disabled');  
+
+	if($(".trabajador").is(':checked')) {
+		$("#comisionhtml").html("");
+		@if($comision == 0)
+		$("#comisionhtml").html('<label for="comision" class="col-sm-3 col-xs-12 control-label">Comision:</label><div class="col-sm-9 col-xs-12"><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="comision" id="comision1" value="1"><label class="form-check-label" for="comision1">SI</label></div><div class="form-check form-check-inline"><input checked class="form-check-input" type="radio" name="comision" id="comision2" value="0"><label class="form-check-label" for="comision2">NO</label></div></div>');
+		@elseif($comision == 1)
+		$("#comisionhtml").html('<label for="comision" class="col-sm-3 col-xs-12 control-label">Comision:</label><div class="col-sm-9 col-xs-12"><div class="form-check form-check-inline"><input class="form-check-input" checked type="radio" name="comision" id="comision1" value="1"><label class="form-check-label" for="comision1">SI</label></div><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="comision" id="comision2" value="0"><label class="form-check-label" for="comision2">NO</label></div></div>');
+		@endif
+	} else {  
+		$("#comisionhtml").html("");
+	}  
+
+	$(".trabajador").click(function() {  
+		if($(".trabajador").is(':checked')) {
+			$("#comisionhtml").html("");
+			@if($comision == 0)
+			$("#comisionhtml").html('<label for="comision" class="col-sm-3 col-xs-12 control-label">Comision:</label><div class="col-sm-9 col-xs-12"><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="comision" id="comision1" value="1"><label class="form-check-label" for="comision1">SI</label></div><div class="form-check form-check-inline"><input checked class="form-check-input" type="radio" name="comision" id="comision2" value="0"><label class="form-check-label" for="comision2">NO</label></div></div>');
+			@elseif($comision == 1)
+			$("#comisionhtml").html('<label for="comision" class="col-sm-3 col-xs-12 control-label">Comision:</label><div class="col-sm-9 col-xs-12"><div class="form-check form-check-inline"><input class="form-check-input" checked type="radio" name="comision" id="comision1" value="1"><label class="form-check-label" for="comision1">SI</label></div><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="comision" id="comision2" value="0"><label class="form-check-label" for="comision2">NO</label></div></div>');
+			@endif
+		} else {  
+			$("#comisionhtml").html("");
+		}  
+	});  
+
+});  
+
+</script>
+<script>
+
+	function guardartrabajador(){
+		
+		$("#trabajador").attr('disabled', false);
+
+		guardar('Trabajador', this);
+
+	}
+
+</script>
 <script>
     $('#departamento_id').change(function(event){
 		$.get("provincias/"+event.target.value+"",function(response, departamento){

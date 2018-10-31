@@ -6,6 +6,7 @@ use App\User;
 use App\Empresa;
 use App\Personamaestro;
 use App\Persona;
+use App\Sucursal;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -104,26 +105,33 @@ class RegisterController extends Controller
         DB::transaction(function() use($data){
             $personamaestro                   = new Personamaestro();
             $personamaestro->dni              = $data['dni'];
-            $personamaestro->nombres          = $data['nombres'];
-            $personamaestro->apellidos        = $data['apellidos'];
+            $personamaestro->nombres          = strtoupper($data['nombres']);
+            $personamaestro->apellidos        = strtoupper($data['apellidos']);
             $personamaestro->distrito_id      = $data['distrito'];
             $personamaestro->fechanacimiento  = $data['fechanacimiento'];
             $personamaestro->celular          = $data['telefono'];
             $personamaestro->email            = $data['email'];
-            $personamaestro->type             = 'T';
-            $personamaestro->secondtype       = 'C';
+            $personamaestro->type             = 'E';
+            $personamaestro->comision         = 0;
             $personamaestro->save();
 
             $contacto = DB::table('personamaestro')->where('dni', '=', $data['dni'])->first();
             
             $empresa               = new Empresa();
-            $empresa->ruc          = $data['ruc'];
-            $empresa->razonsocial  = $data['razonsocial'];
+            $empresa->ruc          = strtoupper($data['ruc']);
+            $empresa->razonsocial  = strtoupper($data['razonsocial']);
             $empresa->emailempresa = $data['emailempresa'];
             $empresa->contacto_id  = $contacto->id;
             $empresa->save();
 
             $empresa1 = DB::table('empresa')->where('ruc', '=', $data['ruc'])->first();
+
+            $sucursal = new Sucursal();
+            $sucursal->nombre = "PRINCIPAL";
+            $sucursal->direccion = strtoupper($data['direccion']);
+            $sucursal->telefono = strtoupper($data['telefonosucursal']);
+            $sucursal->empresa_id = $empresa1->id;
+            $sucursal->save();
 
             $persona                     = new Persona();
             $persona->empresa_id         = $empresa1->id;

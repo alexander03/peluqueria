@@ -106,7 +106,7 @@ class UnidadController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $unidad       = new Unidad();
-            $unidad->name = $request->input('name');
+            $unidad->name = strtoupper( $request->input('name'));
             $unidad->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -165,7 +165,7 @@ class UnidadController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $unidad       = Unidad::find($id);
-            $unidad->name = $request->input('name');
+            $unidad->name = strtoupper( $request->input('name'));
             $unidad->save();
         });
         return is_null($error) ? "OK" : $error;

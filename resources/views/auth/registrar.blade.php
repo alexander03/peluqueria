@@ -45,6 +45,20 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input name="telefonosucursal" class="form-control" type="text" required="" placeholder="Teléfono">
+                        <i class="md md-phone form-control-feedback l-h-34"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input name="direccion" class="form-control" type="text" required="" placeholder="Dirección">
+                        <i class="md md-place form-control-feedback l-h-34"></i>
+                    </div>
+                </div>
+
             <div class="text-center">
                 <a class="logo-lg"><i class="md md-equalizer"></i> <span>Registrar Administrador</span> </a>
             </div>

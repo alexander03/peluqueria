@@ -48,7 +48,7 @@ class ClienteController extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'cliente';
+        $entidad          = 'Cliente';
         $name             = Libreria::getParam($request->input('name'));
         $type             = 'C';
         $resultado        = Personamaestro::listar($name,$type);
@@ -86,7 +86,7 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $entidad          = 'Cliente';
+        $entidad          = 'cliente';
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
@@ -101,7 +101,7 @@ class ClienteController extends Controller
     public function create(Request $request)
     {
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
-        $entidad        = 'Cliente'; //es personamaestro
+        $entidad        = 'cliente'; //es personamaestro
         $cliente        = null;
         $cboDistrito = array('' => 'Seleccione') + Distrito::pluck('nombre', 'id')->all();
         $formData       = array('cliente.store');
@@ -146,10 +146,10 @@ class ClienteController extends Controller
             }else{
                 $cliente->ruc        = $request->input('documento');
             }
-            $cliente->nombres    = $request->input('nombres');
-            $cliente->apellidos  = $request->input('apellidos');
-            $cliente->razonsocial = $request->input('razonsocial'); 
-            $cliente->direccion   = $request->input('direccion');
+            $cliente->nombres    = strtoupper($request->input('nombres'));
+            $cliente->apellidos  = strtoupper($request->input('apellidos'));
+            $cliente->razonsocial = strtoupper($request->input('razonsocial')); 
+            $cliente->direccion   = strtoupper($request->input('direccion'));
             $cliente->telefono    = $request->input('telefono');
             $cliente->celular     = $request->input('celular');
             $cliente->email       = $request->input('email');
@@ -157,15 +157,28 @@ class ClienteController extends Controller
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
             //$cliente->observation        = $request->input('observacion');
+            
+            $cliente->comision = 0;
+            
             $cliente->type        = 'C';
 
-            if(!is_null($request->input('proveedor')) && is_null($request->input('trabajador'))){
-                $cliente->secondtype  = $request->input('proveedor');
-            }else if(!is_null($request->input('trabajador')) && is_null($request->input('proveedor'))){
-                $cliente->secondtype  = $request->input('trabajador');
-            }else if(!is_null($request->input('proveedor')) && !is_null($request->input('trabajador'))){
-                $cliente->secondtype  = 'T';
+            $tipoproveedor = $request->input('proveedor');
+            $tipotrabajador = $request->input('trabajador');
+            
+            if( $tipoproveedor !== null && $tipotrabajador == null){
+                $cliente->secondtype  = $tipoproveedor;
+            }else if( $tipoproveedor == null && $tipotrabajador !== null){
+                $cliente->secondtype  = $tipotrabajador;
+                $cliente->comision = $request->input('comision');
+            }else if( $tipoproveedor !== null && $tipotrabajador !== null){
+                $cliente->type  = 'T';
+                $cliente->secondtype  = null;
+                $cliente->comision = $request->input('comision');
             }
+
+            
+
+
             //$cliente->secondtype  = $request->input('proveedor');
             $cliente->save();
             /*REGISTRAMOS LA PERSONA EN LA EMPRESA */
@@ -203,7 +216,7 @@ class ClienteController extends Controller
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
         $cboDistrito = array('' => 'Seleccione') + Distrito::pluck('nombre', 'id')->all();
         $cliente        = personamaestro::find($id);
-        $entidad        = 'Cliente';
+        $entidad        = 'cliente';
         $formData       = array('cliente.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
@@ -250,10 +263,10 @@ class ClienteController extends Controller
             }else{
                 $cliente->ruc        = $request->input('documento');
             }
-            $cliente->nombres    = $request->input('nombres');
-            $cliente->apellidos  = $request->input('apellidos');
-            $cliente->razonsocial = $request->input('razonsocial'); 
-            $cliente->direccion   = $request->input('direccion');
+            $cliente->nombres    = strtoupper($request->input('nombres'));
+            $cliente->apellidos  = strtoupper($request->input('apellidos'));
+            $cliente->razonsocial = strtoupper($request->input('razonsocial')); 
+            $cliente->direccion   = strtoupper($request->input('direccion'));
             $cliente->telefono    = $request->input('telefono');
             $cliente->celular     = $request->input('celular');
             $cliente->email       = $request->input('email');
@@ -262,13 +275,53 @@ class ClienteController extends Controller
             $cliente->distrito_id  = $request->input('distrito_id');
             //$cliente->observation        = $request->input('observacion');
             //$cliente->type        = 'C';
-                        
-            if(!is_null($request->input('proveedor')) && is_null($request->input('trabajador'))){
-                $cliente->secondtype  = $request->input('proveedor');
-            }else if(!is_null($request->input('trabajador')) && is_null($request->input('proveedor'))){
-                $cliente->secondtype  = $request->input('trabajador');
-            }else if(!is_null($request->input('proveedor')) && !is_null($request->input('trabajador'))){
-                $cliente->secondtype  = 'T';
+                       
+            $tipocliente = $request->input('cliente');
+            $tipoproveedor = $request->input('proveedor');
+            $tipotrabajador = $request->input('trabajador');
+
+
+            if( $tipocliente !==null && $tipoproveedor == null && $tipotrabajador == null ){
+                //CLIENTE
+                $cliente->type  = $tipocliente;
+                $cliente->secondtype  = null;
+                $cliente->comision = 0;
+            }
+            elseif( $tipocliente == null && $tipoproveedor !== null && $tipotrabajador == null ){
+                //PROVEEDOR
+                $cliente->type  = $tipoproveedor;
+                $cliente->secondtype  = null;
+                $cliente->comision = 0;
+            }
+            elseif( $tipocliente == null && $tipoproveedor == null && $tipotrabajador !== null ){
+                //TRABAJADOR
+                $cliente->type  = $tipotrabajador;
+                $cliente->secondtype  = null;
+                $cliente->comision = $request->input('comision');
+            }
+            elseif( $tipocliente !== null && $tipoproveedor == null && $tipotrabajador !== null ){
+                // CLIENTE Y TRABAJADOR
+                $cliente->type  = $tipocliente;
+                $cliente->secondtype  = $tipotrabajador;
+                $cliente->comision = $request->input('comision');
+            }
+            elseif( $tipocliente !== null && $tipoproveedor !== null && $tipotrabajador == null ){
+                //CLIENTE Y PROVEEDOR
+                $cliente->type  = $tipocliente;
+                $cliente->secondtype  = $tipoproveedor;
+                $cliente->comision = 0;
+            }
+            elseif( $tipocliente == null && $tipoproveedor !== null && $tipotrabajador !== null ){
+                //TRABAJADOR Y PROVEEDOR
+                $cliente->type  = $tipotrabajador;
+                $cliente->secondtype  = $tipoproveedor;
+                $cliente->comision = $request->input('comision');
+            }
+            elseif( $tipocliente !== null && $tipoproveedor !== null && $tipotrabajador !== null ){
+                //TODOS
+                $cliente->type  = 'T';
+                $cliente->secondtype  = null;
+                $cliente->comision = $request->input('comision');
             }
 
             $cliente->save();
@@ -316,7 +369,7 @@ class ClienteController extends Controller
             $listar = $listarLuego;
         }
         $modelo   = Personamaestro::find($id);
-        $entidad  = 'Cliente';
+        $entidad  = 'cliente';
         $formData = array('route' => array('cliente.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));

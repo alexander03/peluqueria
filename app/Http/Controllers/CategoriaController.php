@@ -9,6 +9,7 @@ use App\Categoria;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CategoriaController extends Controller
 {
@@ -107,7 +108,10 @@ class CategoriaController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $categoria       = new Categoria();
-            $categoria->name = $request->input('name');
+            $categoria->name = strtoupper($request->input('name'));
+            $user           = Auth::user();
+            $empresa_id     = $user->empresa_id;
+            $categoria->empresa_id = $empresa_id;
             $categoria->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -166,7 +170,10 @@ class CategoriaController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $categoria       = Categoria::find($id);
-            $categoria->name = $request->input('name');
+            $categoria->name = strtoupper($request->input('name'));
+            $user           = Auth::user();
+            $empresa_id     = $user->empresa_id;
+            $categoria->empresa_id = $empresa_id;
             $categoria->save();
         });
         return is_null($error) ? "OK" : $error;

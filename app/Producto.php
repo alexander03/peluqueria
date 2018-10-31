@@ -24,12 +24,15 @@ class Producto extends Model
 	 */
 	public function scopelistar($query, $descripcion)
     {
+        $user = Auth::user();
+		$empresa_id = $user->empresa_id;
         return $query->where(function($subquery) use($descripcion)
 		            {
 		            	if (!is_null($descripcion)) {
 							$subquery->where('descripcion', 'LIKE', '%'.$descripcion.'%');
 		            	}
-		            })
+                    })
+                    ->where('empresa_id', "=", $empresa_id)
         			->orderBy('descripcion', 'ASC');
 	}
 	

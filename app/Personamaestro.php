@@ -38,16 +38,17 @@ class Personamaestro extends Model
                             //$subquery->where('type', '=', $type)->orWhere('secondtype','=','S');
                             //$IN = " ('P','T')";
                             if($type == 'C'){
-                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('secondtype','=', 'T');
+                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('type','=', 'T');
                             }else if($type == 'P'){
-                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('secondtype','=', 'T');
+                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('type','=', 'T');
                             }else if($type == 'E'){
-                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('secondtype','=', 'T');
+                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('type','=', 'T');
                             }
                         }		            		
                     })
                     ->leftJoin('persona', 'personamaestro.id', '=', 'persona.personamaestro_id')
                     ->where('persona.empresa_id', '=', $empresa_id)
+                    ->whereNull('personamaestro.deleted_at')
                     ->orderBy('nombres', 'ASC')->orderBy('apellidos', 'ASC')->orderBy('razonsocial', 'ASC');                   
     }
 

@@ -107,7 +107,7 @@ class MarcaController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $marca       = new Marca();
-            $marca->name = $request->input('name');
+            $marca->name = strtoupper( $request->input('name') );
             $marca->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -166,7 +166,7 @@ class MarcaController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $marca       = Marca::find($id);
-            $marca->name = $request->input('name');
+            $marca->name = strtoupper( $request->input('name') );
             $marca->save();
         });
         return is_null($error) ? "OK" : $error;

@@ -44,16 +44,25 @@ Route::group(['middleware' => 'auth'], function () {
         return View::make('dashboard.home');
     });
 
-    Route::get('caja/clienteautocompletar/{searching}', 'CajaController@clienteautocompletar')->name('caja.clienteautocompletar');
-    Route::get('caja/servicioautocompletar/{searching}', 'CajaController@servicioautocompletar')->name('caja.servicioautocompletar');
-    Route::get('caja/productoautocompletar/{searching}', 'CajaController@productoautocompletar')->name('caja.productoautocompletar');
-    Route::post('caja/guardarventa', 'CajaController@guardarventa')->name('caja.guardarventa');
-    Route::post('caja/guardardetalle', 'CajaController@guardardetalle')->name('caja.guardardetalle');
-    Route::resource('caja', 'CajaController', array('except' => array('show')));
-
-    Route::post('venta/buscar','VentaController@buscar')->name('venta.buscar');
-    Route::get('venta/eliminar/{id}/{listarluego}','VentaController@eliminar')->name('venta.eliminar');
+    Route::get('venta/clienteautocompletar/{searching}', 'VentaController@clienteautocompletar')->name('venta.clienteautocompletar');
+    Route::get('venta/servicioautocompletar/{searching}', 'VentaController@servicioautocompletar')->name('venta.servicioautocompletar');
+    Route::get('venta/productoautocompletar/{searching}', 'VentaController@productoautocompletar')->name('venta.productoautocompletar');
+    Route::post('venta/guardarventa', 'VentaController@guardarventa')->name('venta.guardarventa');
+    Route::post('venta/guardardetalle', 'VentaController@guardardetalle')->name('venta.guardardetalle');
+    Route::post('venta/serieventa', 'VentaController@serieventa')->name('venta.serieventa');
+    Route::post('venta/permisoRegistrar', 'VentaController@permisoRegistrar')->name('venta.permisoRegistrar');
     Route::resource('venta', 'VentaController', array('except' => array('show')));
+
+    Route::get('caja/clienteautocompletar/{searching}', 'CajaController@clienteautocompletar')->name('caja.clienteautocompletar');
+    Route::get('caja/proveedorautocompletar/{searching}', 'CajaController@proveedorautocompletar')->name('caja.proveedorautocompletar');
+    Route::get('caja/empleadoautocompletar/{searching}', 'CajaController@empleadoautocompletar')->name('caja.empleadoautocompletar');
+    Route::get('caja/generarConcepto','CajaController@generarConcepto')->name('caja.generarConcepto');
+    Route::post('caja/buscar','CajaController@buscar')->name('caja.buscar');
+    Route::get('caja/eliminar/{id}/{listarluego}','CajaController@eliminar')->name('caja.eliminar');
+    Route::get('caja/apertura', 'CajaController@apertura')->name('caja.apertura');
+    Route::get('caja/cierre', 'CajaController@cierre')->name('caja.cierre');
+    Route::get('caja/aperturaycierre', 'CajaController@aperturaycierre')->name('caja.aperturaycierre');
+    Route::resource('caja', 'CajaController', array('except' => array('show')));
 
     Route::post('cliente/buscar','ClienteController@buscar')->name('cliente.buscar');
     Route::get('cliente/eliminar/{id}/{listarluego}','ClienteController@eliminar')->name('cliente.eliminar');
@@ -116,30 +125,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('employee/eliminar/{id}/{listarluego}', 'EmployeeController@eliminar')->name('employee.eliminar');
     Route::resource('employee', 'EmployeeController', array('except' => array('show')));
 
-    /* CUSTOMERS */
-    Route::post('customer/search', 'CustomerController@search')->name('customer.search');
-    Route::get('customer/eliminar/{id}/{listarluego}', 'CustomerController@eliminar')->name('customer.eliminar');
-    Route::resource('customer', 'CustomerController', array('except' => array('show'))); 
-
-    /* PROVIDERS */
-    Route::post('provider/search', 'ProviderController@search')->name('provider.search');
-    Route::get('provider/eliminar/{id}/{listarluego}', 'ProviderController@eliminar')->name('provider.eliminar');
-    Route::resource('provider', 'ProviderController', array('except' => array('show')));
-
-    /* COMPANY */
-    Route::post('company/search', 'CompanyController@search')->name('company.search');
-    Route::get('company/eliminar/{id}/{listarluego}', 'CompanyController@eliminar')->name('company.eliminar');
-    Route::resource('company', 'CompanyController', array('except' => array('show')));
-
     Route::post('usuario/buscar', 'UsuarioController@buscar')->name('usuario.buscar');
     Route::get('usuario/eliminar/{id}/{listarluego}', 'UsuarioController@eliminar')->name('usuario.eliminar');
     Route::resource('usuario', 'UsuarioController', array('except' => array('show')));
-
-    /*PERSON*/
-    Route::post('person/search', 'PersonController@search')->name('person.search');
-    Route::get('person/employeesautocompleting/{searching}', 'PersonController@employeesautocompleting')->name('person.employeesautocompleting');
-    Route::get('person/providersautocompleting/{searching}', 'PersonController@providersautocompleting')->name('person.providersautocompleting');
-    Route::get('person/customersautocompleting/{searching}', 'PersonController@customersautocompleting')->name('person.customersautocompleting');
 });
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));

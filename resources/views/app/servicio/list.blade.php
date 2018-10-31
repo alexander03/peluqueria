@@ -60,8 +60,18 @@ operaciones
 			<td>{{ $contador }}</td>
 			<td>{{ $value->descripcion }}</td>
 			<td>{{ $value->precio }}</td>
-			<td>{{ $value->comision1 }}</td>
-			<td>{{ $value->comision2 }}</td>
+			@if($value->tipo_comision == 0)
+			<td>PORCENTAJE ( % )</td>
+			@elseif($value->tipo_comision == 1)
+			<td>MONTO ( S/. )</td>
+			@endif
+
+			@if($value->tipo_comision == 0)
+			<td>{{ intval($value->comision) }}</td>
+			@elseif($value->tipo_comision == 1)
+			<td>{{ $value->comision }}</td>
+			@endif
+
 			<td>
 			@if(in_array('2',$operacionesnombres))
 			{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning btnEditar' ,'activo' => 'si')) !!}

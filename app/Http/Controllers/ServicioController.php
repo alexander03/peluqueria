@@ -9,6 +9,7 @@ use App\Servicio;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ServicioController extends Controller
 {
@@ -35,17 +36,15 @@ class ServicioController extends Controller
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
         $entidad          = 'Servicio';
-        $descripcion      = Libreria::getParam($request->input('descripcion'));
+        $descripcion      = Libreria::getParam($request->input('name'));
         $resultado        = Servicio::listar($descripcion);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripcion', 'numero' => '1');
-        //$cabecera[]       = array('valor' => 'Estado', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Precio', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Comisión 1', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Comisión 2', 'numero' => '1');
-        //$cabecera[]       = array('valor' => 'Comisión 3', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Tipo de Comisión', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Comisión', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -105,11 +104,9 @@ class ServicioController extends Controller
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas     = array('descripcion' => 'required|max:100',
-                            //'estado' => 'required|max:1',
                             'precio' => 'required',
-                            'comision1' => 'required',
-                            'comision2' => 'required',
-                            //'comision3' => 'required'
+                            'tipocomision' => 'required',
+                            'comision' => 'required',
                             );
         $mensajes   = array();
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
@@ -118,12 +115,13 @@ class ServicioController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $servicio       = new Servicio();
-            $servicio->descripcion = $request->input('descripcion');
-            //$servicio->estado = $request->input('estado');
+            $servicio->descripcion = strtoupper($request->input('descripcion'));
             $servicio->precio = $request->input('precio');
-            $servicio->comision1 = $request->input('comision1');
-            $servicio->comision2 = $request->input('comision2');
-            //$servicio->comision3 = $request->input('comision3');
+            $servicio->tipo_comision = $request->input('tipocomision');
+            $servicio->comision = $request->input('comision');
+            $user           = Auth::user();
+            $empresa_id     = $user->empresa_id;
+            $servicio->empresa_id = $empresa_id;
             $servicio->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -175,12 +173,10 @@ class ServicioController extends Controller
             return $existe;
         }
         $reglas     = array('descripcion' => 'required|max:100',
-                           //'estado' => 'required|max:1',
                             'precio' => 'required',
-                            'comision1' => 'required',
-                            'comision2' => 'required',
-                            //'comision3' => 'required'
-                           );
+                            'tipocomision' => 'required',
+                            'comision' => 'required',
+                            );
         $mensajes   = array();
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -188,12 +184,13 @@ class ServicioController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $servicio       = Servicio::find($id);
-            $servicio->descripcion = $request->input('descripcion');
-            //$servicio->estado = $request->input('estado');
+            $servicio->descripcion = strtoupper($request->input('descripcion'));
             $servicio->precio = $request->input('precio');
-            $servicio->comision1 = $request->input('comision1');
-            $servicio->comision2 = $request->input('comision2');
-            //$servicio->comision3 = $request->input('comision3');
+            $servicio->tipo_comision = $request->input('tipocomision');
+            $servicio->comision = $request->input('comision');
+            $user           = Auth::user();
+            $empresa_id     = $user->empresa_id;
+            $servicio->empresa_id = $empresa_id;
             $servicio->save();
         });
         return is_null($error) ? "OK" : $error;

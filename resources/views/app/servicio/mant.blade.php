@@ -14,15 +14,35 @@
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('comision1', 'Comisión 1:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+		{!! Form::label('tipocomision', 'Tipo de Comisión:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
 		<div class="col-lg-9 col-md-9 col-sm-9">
-			{!! Form::text('comision1', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese comision 1')) !!}
+			@if($servicio == null)
+			<select id="tipocomision" name="tipocomision" class="form-control input-xs">
+				<option disabled selected>SELECCIONE TIPO DE COMISIÓN</option>
+				<option value="0">PORCENTAJE ( % )</option>
+				<option value="1">MONTO (S/.)</option>
+			</select>
+			@else
+				@if($servicio->tipo_comision == 0)
+				<select id="tipocomision" name="tipocomision" class="form-control input-xs">
+					<option disabled >SELECCIONE TIPO DE COMISIÓN</option>
+					<option selected value="0">PORCENTAJE ( % )</option>
+					<option value="1">MONTO (S/.)</option>
+				</select>
+				@elseif($servicio->tipo_comision == 1)
+				<select id="tipocomision" name="tipocomision" class="form-control input-xs">
+					<option disabled >SELECCIONE TIPO DE COMISIÓN</option>
+					<option value="0">PORCENTAJE ( % )</option>
+					<option selected value="1">MONTO (S/.)</option>
+				</select>
+				@endif
+			@endif
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('comision2', 'Comisión 2:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+		{!! Form::label('comision', 'Comisión:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
 		<div class="col-lg-9 col-md-9 col-sm-9">
-			{!! Form::text('comision2', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese comision 2')) !!}
+			{!! Form::text('comision', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese comisión')) !!}
 		</div>
 	</div>
 	<div class="form-group">
