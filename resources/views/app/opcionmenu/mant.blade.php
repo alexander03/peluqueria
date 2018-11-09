@@ -1,5 +1,5 @@
 <?php 
-$icono = 'fa fa-bank';
+$icono = 'glyphicon glyphicon-expand';
 if ($opcionmenu !== NULL) {
 	$icono = $opcionmenu->icon;
 }

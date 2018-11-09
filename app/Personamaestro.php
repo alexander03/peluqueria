@@ -32,22 +32,23 @@ class Personamaestro extends Model
                             $subquery->where(DB::raw('CONCAT(apellidos," ",nombres)'), 'LIKE', '%'.$name.'%')->orWhere('razonsocial','LIKE','%'.$name.'%');
 		            	}
                     })
+                    ->leftJoin('persona', 'personamaestro.id', '=', 'persona.personamaestro_id')
         			->where(function($subquery) use($type)
 		            {
 		            	if (!is_null($type)) {
                             //$subquery->where('type', '=', $type)->orWhere('secondtype','=','S');
                             //$IN = " ('P','T')";
                             if($type == 'C'){
-                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('type','=', 'T');
+                                $subquery->where('persona.type', '=', $type)->orwhere('persona.secondtype','=', $type)->orwhere('persona.type','=', 'T');
                             }else if($type == 'P'){
-                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('type','=', 'T');
+                                $subquery->where('persona.type', '=', $type)->orwhere('persona.secondtype','=', $type)->orwhere('persona.type','=', 'T');
                             }else if($type == 'E'){
-                                $subquery->where('type', '=', $type)->orwhere('secondtype','=', $type)->orwhere('type','=', 'T');
+                                $subquery->where('persona.type', '=', $type)->orwhere('persona.secondtype','=', $type)->orwhere('persona.type','=', 'T');
                             }
                         }		            		
                     })
-                    ->leftJoin('persona', 'personamaestro.id', '=', 'persona.personamaestro_id')
                     ->where('persona.empresa_id', '=', $empresa_id)
+                    ->where('persona.personamaestro_id', '!=', 2)
                     ->whereNull('personamaestro.deleted_at')
                     ->orderBy('nombres', 'ASC')->orderBy('apellidos', 'ASC')->orderBy('razonsocial', 'ASC');                   
     }

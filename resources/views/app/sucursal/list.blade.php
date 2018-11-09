@@ -1,3 +1,6 @@
+<?php
+use App\Serieventa;
+?>
 @if(count($lista) == 0)
 <h3 class="text-warning">No se encontraron resultados.</h3>
 @else
@@ -21,7 +24,12 @@
 			<td>{{ $value->nombre }}</td>
 			<td>{{ $value->direccion }}</td>
 			<td>{{ $value->telefono }}</td>
+			<?php
+				$serieventa = Serieventa::where('sucursal_id' , '=' , $value->id)->max('serie');
+			?>
+			<td>{{ $serieventa }}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-th-list"></div> Serie Venta', array('onclick' => 'modal (\''.URL::route($ruta["serieventa"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_serie_venta.'\', this);', 'class' => 'btn btn-xs btn-success')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 		</tr>
 		<?php

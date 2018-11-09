@@ -76,22 +76,17 @@ operaciones
 			
 			<div class="row m-b-30">
 				<div class="form-group">
-					<div class="col-lg-3 col-md-3 col-sm-3">
+					<div class="col-lg-3 col-md-3 col-sm-3" style ="border-style: dashed; border-color: rgb(63, 81, 181);padding: 5px;">
 						<div class="col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
 							{!! Form::label('sucursal_id', 'Sucursal:')!!}
 						</div>
 						<div class="col-lg-8 col-md-8 col-sm-8">
-							<select class="form-control input-xs" onchange="generarNumeroSerie(); permisoRegistrar();" id="sucursal_id" name="sucursal_id">
-								<option disabled selected>SELECCIONE</option>
-								@foreach($sucursales as $key => $value)
-								<option value="{{$value->id}}">{{$value->nombre}}</option>
-								@endforeach
-							</select>
+							{!! Form::select('sucursal_id', $cboSucursal, null, array('class' => 'form-control input-xs', 'id' => 'sucursal_id' , 'onchange' => 'generarNumeroSerie(); permisoRegistrar();')) !!}		
 						</div>
 					</div>
 					<div class="col-lg-3 col-md-3 col-sm-3">
-						<div class="col-lg-6 col-md-6 col-sm-6" style ="padding-top: 15px">
-							{!! Form::label('serieventa', 'N° de Venta:')!!}
+						<div class="col-lg-5 col-md-5 col-sm-5" style ="text-align:right; padding-top: 15px">
+							{!! Form::label('serieventa', 'N° venta:')!!}
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6">
 							{!! Form::text('serieventa', '', array('class' => 'form-control input-xs', 'id' => 'serieventa', 'readOnly')) !!}
@@ -135,7 +130,7 @@ operaciones
 							{!! Form::label('cantidad', 'Cantidad:')!!}
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6">
-							{!! Form::number('cantidad', null, array('class' => 'form-control input-xs', 'min' => '1', 'id' => 'cantidad', 'value' => '1')) !!}
+							{!! Form::number('cantidad', null, array('class' => 'form-control input-xs', 'min' => '1', 'id' => 'cantidad')) !!}
 						</div>
 					</div>
 					<div class="col-lg-5 col-md-5 col-sm-5" style ="padding-top: 10px">
@@ -155,8 +150,7 @@ operaciones
 				<div class="form-group">
 					<div class="col-lg-5 col-md-5 col-sm-5">
 						<select id="tipopago" name="tipopago" class="form-control input-xs">
-							<option disabled selected>SELECCIONE MEDIO DE PAGO</option>
-							<option value="1">EFECTIVO</option>
+							<option value="1" selected>EFECTIVO</option>
 							<option value="2">TARJETA DE CRÉDITO/DÉBITO</option>
 						</select>
 					</div>
@@ -186,8 +180,10 @@ $(document).ready(function(){
 	$("#total").val((0).toFixed(2));
 
 	//cant = 0
-
 	$("#cant").val(0);
+
+	//cantidad = 1 servicio o producto
+	$("#cantidad").val(1);
 
 	// a continuacion creamos la fecha en la variable date
 	var date = new Date()
@@ -207,15 +203,11 @@ $(document).ready(function(){
 	//CLIENTE ANÓNIMO
 
 	$('.btnDefecto').on('click', function(){
-		$('#cliente_id').val(2);
+		$('#cliente_id').val({{ $anonimo->id }});
 		$('#cliente').val('ANÓNIMO');
 	});
 
-	if($('#sucursal_id').val){
-		$('serieventa').val("");
-	}else{
-		generarNumeroSerie();
-	}
+	generarNumeroSerie();
 
 	permisoRegistrar();
 
@@ -450,6 +442,8 @@ $(document).ready(function(){
 			}
 			total += (precio*cantidad);
 			$("#total").val(total.toFixed(2));
+			//cantidad = 1 servicio o producto
+			$("#cantidad").val(1);
 		}
 	});
 });
@@ -510,6 +504,9 @@ function detalleventa(){
 
 			//colocar total 0.00
 			$("#total").val((0).toFixed(2));
+
+			//cantidad = 1 servicio o producto
+			$("#cantidad").val(1);
 			
 			//cant = 0
 			$("#cant").val(0);
@@ -532,11 +529,7 @@ function detalleventa(){
 			$("#cabecera").html("");
 			$("#detalle").html("");
 
-			if($('#sucursal_id').val){
-				$('serieventa').val("");
-			}else{
-				generarNumeroSerie();
-			}
+			generarNumeroSerie();
 
 			permisoRegistrar();
 

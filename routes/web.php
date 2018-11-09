@@ -64,21 +64,37 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('caja/aperturaycierre', 'CajaController@aperturaycierre')->name('caja.aperturaycierre');
     Route::resource('caja', 'CajaController', array('except' => array('show')));
 
+    Route::post('verificarpersona','ClienteController@verificarpersona')->name('verificarpersona');
+
     Route::post('cliente/buscar','ClienteController@buscar')->name('cliente.buscar');
     Route::get('cliente/eliminar/{id}/{listarluego}','ClienteController@eliminar')->name('cliente.eliminar');
+    Route::get('cliente/repetido/{id}/{listarluego}','ClienteController@repetido')->name('cliente.repetido');
+    Route::post('cliente/guardarrepetido','ClienteController@guardarrepetido')->name('cliente.guardarrepetido');
     Route::resource('cliente', 'ClienteController', array('except' => array('show')));
 
     Route::post('proveedor/buscar','ProveedorController@buscar')->name('proveedor.buscar');
     Route::get('proveedor/eliminar/{id}/{listarluego}','ProveedorController@eliminar')->name('proveedor.eliminar');
+    Route::get('proveedor/repetido/{id}/{listarluego}','ProveedorController@repetido')->name('proveedor.repetido');
+    Route::post('proveedor/guardarrepetido','ProveedorController@guardarrepetido')->name('proveedor.guardarrepetido');
     Route::resource('proveedor', 'ProveedorController', array('except' => array('show')));
 
     Route::post('trabajador/buscar','TrabajadorController@buscar')->name('trabajador.buscar');
     Route::get('trabajador/eliminar/{id}/{listarluego}','TrabajadorController@eliminar')->name('trabajador.eliminar');
+    Route::get('trabajador/repetido/{id}/{listarluego}','TrabajadorController@repetido')->name('trabajador.repetido');
+    Route::post('trabajador/guardarrepetido','TrabajadorController@guardarrepetido')->name('trabajador.guardarrepetido');
     Route::resource('trabajador', 'TrabajadorController', array('except' => array('show')));
 
     Route::post('sucursal/buscar','SucursalController@buscar')->name('sucursal.buscar');
+    Route::get('sucursal/serieventa/{id}','SucursalController@serieventa')->name('sucursal.serieventa');
+    Route::post('sucursal/aumentarserieventa/','SucursalController@aumentarserieventa')->name('sucursal.aumentarserieventa');
+    Route::post('sucursal/eliminarserieventa','SucursalController@eliminarserieventa')->name('sucursal.eliminarserieventa');
+    Route::post('sucursal/actualizarserieventa','SucursalController@actualizarserieventa')->name('sucursal.actualizarserieventa');
     Route::get('sucursal/eliminar/{id}/{listarluego}','SucursalController@eliminar')->name('sucursal.eliminar');
     Route::resource('sucursal', 'SucursalController', array('except' => array('show')));
+
+    Route::post('concepto/buscar','ConceptoController@buscar')->name('concepto.buscar');
+    Route::get('concepto/eliminar/{id}/{listarluego}','ConceptoController@eliminar')->name('concepto.eliminar');
+    Route::resource('concepto', 'ConceptoController', array('except' => array('show')));
 
     Route::post('categoria/buscar','CategoriaController@buscar')->name('categoria.buscar');
     Route::get('categoria/eliminar/{id}/{listarluego}','CategoriaController@eliminar')->name('categoria.eliminar');

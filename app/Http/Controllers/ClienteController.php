@@ -8,6 +8,8 @@ use Hash;
 use Validator;
 use App\Http\Requests;
 use App\Distrito;
+use App\Provincia;
+use App\Departamento;
 use App\Persona;
 use App\Personamaestro;
 use App\Librerias\Libreria;
@@ -27,6 +29,7 @@ class ClienteController extends Controller
             'delete' => 'cliente.eliminar',
             'search' => 'cliente.buscar',
             'index'  => 'cliente.index',
+            'repetido' => 'cliente.repetido'
         );
 
     /**
@@ -107,7 +110,9 @@ class ClienteController extends Controller
         $formData       = array('cliente.store');
         $formData       = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('cliente', 'formData', 'entidad', 'boton', 'cboDistrito', 'listar'));
+        $ruta             = $this->rutas;
+        $accion = 0;
+        return view($this->folderview.'.mant')->with(compact( 'accion' , 'ruta', 'cliente', 'formData', 'entidad', 'boton', 'cboDistrito', 'listar'));
     }
 
     /**
@@ -156,36 +161,32 @@ class ClienteController extends Controller
             $value =Libreria::getParam($request->input('fechanacimiento'));
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
-            //$cliente->observation        = $request->input('observacion');
-            
-            $cliente->comision = 0;
-            
-            $cliente->type        = 'C';
+            $cliente->save();
+
+
+            /*REGISTRAMOS LA PERSONA EN LA EMPRESA */
+            $persona = new Persona();
+            $persona->empresa_id = Auth::user()->empresa_id;
+            $persona->personamaestro_id = $cliente->id;
+
+            $persona->comision = 0;
+            $persona->type        = 'C';
 
             $tipoproveedor = $request->input('proveedor');
             $tipotrabajador = $request->input('trabajador');
             
             if( $tipoproveedor !== null && $tipotrabajador == null){
-                $cliente->secondtype  = $tipoproveedor;
+                $persona->secondtype  = $tipoproveedor;
             }else if( $tipoproveedor == null && $tipotrabajador !== null){
-                $cliente->secondtype  = $tipotrabajador;
-                $cliente->comision = $request->input('comision');
+                $persona->secondtype  = $tipotrabajador;
+                $persona->comision = $request->input('comision');
             }else if( $tipoproveedor !== null && $tipotrabajador !== null){
-                $cliente->type  = 'T';
-                $cliente->secondtype  = null;
-                $cliente->comision = $request->input('comision');
+                $persona->type  = 'T';
+                $persona->secondtype  = null;
+                $persona->comision = $request->input('comision');
             }
-
-            
-
-
-            //$cliente->secondtype  = $request->input('proveedor');
-            $cliente->save();
-            /*REGISTRAMOS LA PERSONA EN LA EMPRESA */
-            $persona = new Persona();
-            $persona->empresa_id = Auth::user()->empresa_id;
-            $persona->personamaestro_id = $cliente->id;
             $persona->save();
+
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -220,7 +221,8 @@ class ClienteController extends Controller
         $formData       = array('cliente.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('cliente', 'formData', 'entidad', 'boton', 'listar', 'cboDistrito'));
+        $accion = 1;
+        return view($this->folderview.'.mant')->with(compact( 'accion' ,'cliente', 'formData', 'entidad', 'boton', 'listar', 'cboDistrito'));
     }
 
     /**
@@ -273,9 +275,14 @@ class ClienteController extends Controller
             $value =Libreria::getParam($request->input('fechanacimiento'));
             $cliente->fechanacimiento        = $value;
             $cliente->distrito_id  = $request->input('distrito_id');
-            //$cliente->observation        = $request->input('observacion');
-            //$cliente->type        = 'C';
+            $cliente->save();
+
                        
+            $user = Auth::user();
+            $empresa_id = $user->empresa_id;
+            $persona = Persona::where('empresa_id', '=', $empresa_id)
+                                ->where('personamaestro_id', '=', $id)->first();
+
             $tipocliente = $request->input('cliente');
             $tipoproveedor = $request->input('proveedor');
             $tipotrabajador = $request->input('trabajador');
@@ -283,48 +290,48 @@ class ClienteController extends Controller
 
             if( $tipocliente !==null && $tipoproveedor == null && $tipotrabajador == null ){
                 //CLIENTE
-                $cliente->type  = $tipocliente;
-                $cliente->secondtype  = null;
-                $cliente->comision = 0;
+                $persona->type  = $tipocliente;
+                $persona->secondtype  = null;
+                $persona->comision = 0;
             }
             elseif( $tipocliente == null && $tipoproveedor !== null && $tipotrabajador == null ){
                 //PROVEEDOR
-                $cliente->type  = $tipoproveedor;
-                $cliente->secondtype  = null;
-                $cliente->comision = 0;
+                $persona->type  = $tipoproveedor;
+                $persona->secondtype  = null;
+                $persona->comision = 0;
             }
             elseif( $tipocliente == null && $tipoproveedor == null && $tipotrabajador !== null ){
                 //TRABAJADOR
-                $cliente->type  = $tipotrabajador;
-                $cliente->secondtype  = null;
-                $cliente->comision = $request->input('comision');
+                $persona->type  = $tipotrabajador;
+                $persona->secondtype  = null;
+                $persona->comision = $request->input('comision');
             }
             elseif( $tipocliente !== null && $tipoproveedor == null && $tipotrabajador !== null ){
                 // CLIENTE Y TRABAJADOR
-                $cliente->type  = $tipocliente;
-                $cliente->secondtype  = $tipotrabajador;
-                $cliente->comision = $request->input('comision');
+                $persona->type  = $tipocliente;
+                $persona->secondtype  = $tipotrabajador;
+                $persona->comision = $request->input('comision');
             }
             elseif( $tipocliente !== null && $tipoproveedor !== null && $tipotrabajador == null ){
                 //CLIENTE Y PROVEEDOR
-                $cliente->type  = $tipocliente;
-                $cliente->secondtype  = $tipoproveedor;
-                $cliente->comision = 0;
+                $persona->type  = $tipocliente;
+                $persona->secondtype  = $tipoproveedor;
+                $persona->comision = 0;
             }
             elseif( $tipocliente == null && $tipoproveedor !== null && $tipotrabajador !== null ){
                 //TRABAJADOR Y PROVEEDOR
-                $cliente->type  = $tipotrabajador;
-                $cliente->secondtype  = $tipoproveedor;
-                $cliente->comision = $request->input('comision');
+                $persona->type  = $tipotrabajador;
+                $persona->secondtype  = $tipoproveedor;
+                $persona->comision = $request->input('comision');
             }
             elseif( $tipocliente !== null && $tipoproveedor !== null && $tipotrabajador !== null ){
                 //TODOS
-                $cliente->type  = 'T';
-                $cliente->secondtype  = null;
-                $cliente->comision = $request->input('comision');
+                $persona->type  = 'T';
+                $persona->secondtype  = null;
+                $persona->comision = $request->input('comision');
             }
 
-            $cliente->save();
+            $persona->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -373,5 +380,87 @@ class ClienteController extends Controller
         $formData = array('route' => array('cliente.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function verificarpersona(Request $request){
+        $documento = $request->input('documento');
+        $tipo = $request->input('tipo');
+        $persona = null;
+
+        if($tipo == "dni"){
+            $persona = Personamaestro::where('dni', '=', $request->input('documento'))->first();
+        }else if($tipo == "ruc"){
+            $persona = Personamaestro::where('ruc', '=', $request->input('documento'))->first();
+        }
+
+        $distrito = null;
+        $departamento = null;
+        $provincia = null;
+
+        if($persona->distrito_id != null){
+            $distrito = Distrito::find($persona->distrito_id);
+            $provincia = Provincia::find($distrito->provincia_id);
+            $departamento = Departamento::find($provincia->departamento_id);
+        }
+
+        $user = Auth::user();
+        $empresa_id = $user->empresa_id;
+
+        $existe = Persona::where('empresa_id', '=', $empresa_id)
+                        ->where('personamaestro_id','=', $persona->id)->count('id');
+
+        if($persona != null && $distrito != null && $existe == 0){
+            return array(
+                'persona' => $persona,
+                'distrito' => $distrito,
+                'departamento' => $departamento,
+                'provincia' => $provincia,
+                'existe' => $existe,
+                        );
+        }else{
+            return array(
+                'existe' => $existe,
+                        );
+        }
+    }
+
+    public function repetido($id, $listarLuego){
+        $existe = Libreria::verificarExistencia($id, 'personamaestro');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+
+        $modelo   = Personamaestro::find($id);
+
+        if($modelo->distrito_id != null){
+            $distrito = Distrito::find($modelo->distrito_id);
+            $provincia = Provincia::find($distrito->provincia_id);
+            $departamento = Departamento::find($provincia->departamento_id);
+        }
+
+
+        $entidad  = 'cliente';
+        $formData = array('route' => array('cliente.guardarrepetido', $id), 'method' => 'POST', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        return view('app.personarepetida')->with(compact('modelo', 'distrito', 'provincia', 'departamento' , 'formData', 'entidad', 'listar'));
+    }
+
+    public function guardarrepetido(Request $request){
+
+        $persona_id = $request->input('persona_id');
+        
+        $error = DB::transaction(function() use($persona_id){
+            $persona = new Persona();
+            $persona->empresa_id = Auth::user()->empresa_id;
+            $persona->personamaestro_id = $persona_id;
+            $persona->comision = 0;
+            $persona->type        = 'C';
+            $persona->save();
+        });
+        return is_null($error) ? "OK" : $error;
+
     }
 }

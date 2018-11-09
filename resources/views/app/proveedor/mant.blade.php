@@ -1,6 +1,7 @@
 @php
 use App\Distrito;
 use App\Provincia;
+use App\Persona;
 $documento = NULL;
 $distrito_el = NULL;
 $provincia_el = NULL;
@@ -14,11 +15,20 @@ if (!is_null($cliente)) {
 	if(is_null($documento) || trim($documento) == ''){
 		$documento = $cliente->ruc;
 	}
-	$type = $cliente-> type;
-	$secondtype = $cliente-> secondtype;
-	if(!is_null($cliente-> comision)){
-		$comision = $cliente-> comision;
+	
+	$user = Auth::user();
+	$empresa_id = $user->empresa_id;
+
+	$persona = Persona::where('empresa_id', '=', $empresa_id)
+						->where('personamaestro_id', '=', $cliente->id)->first();
+
+	$type = $persona->type;
+	$secondtype = $persona-> secondtype;
+	
+	if(!is_null($persona-> comision)){
+		$comision = $persona-> comision;
 	}
+
 	$distrito_el = Distrito::find($cliente->distrito_id);
 	$provincia_el = Provincia::find($distrito_el->provincia_id);
 	$distritos = Distrito::where('provincia_id','=',$provincia_el->id)->get();
@@ -28,11 +38,12 @@ if (!is_null($cliente)) {
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($cliente, $formData) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
+{!! Form::hidden('personamaestro',null,  array('id' => 'personamaestro')) !!}
 <div class="form-group col-xs-12">
 	{!! Form::label('documento', 'N° Documento:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-4 col-xs-12">
 		@if(!is_null($cliente))
-			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11')) !!}
+			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11', 'readOnly')) !!}
 		@else
 			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11')) !!}
 		@endif
@@ -267,21 +278,105 @@ $departamentos = Departamento::all();
 			}
     	});
 
-		if($('#documento').val()!==""){
+		
+		$("#documento").blur(function() {
 			if($('#documento').val().length === 8){
 				$('#nombres').removeAttr('disabled');
 				$('#apellidos').removeAttr('disabled');
 				$('#razonsocial').attr('disabled','disabled');
-			}else{
+				$('#divMensajeErrorProveedor').html("");
+				$('#btnGuardar').prop('disabled',false);
+				verificarpersona($('#documento').val(), 'dni', "Proveedor", "{{$accion}}");
+			}else if($('#documento').val().length === 11){
 				$('#razonsocial').removeAttr('disabled');
 				$('#nombres').attr('disabled','disabled');
 				$('#apellidos').attr('disabled','disabled');
+				$('#divMensajeErrorProveedor').html("");
+				$('#btnGuardar').prop('disabled',false);
+				verificarpersona($('#documento').val(),'ruc', "Proveedor", "{{$accion}}");
+			}else{
+				$('#razonsocial').attr('disabled','disabled');
+				$('#nombres').attr('disabled','disabled');
+				$('#apellidos').attr('disabled','disabled');
 			}
-		}
-
-		$('#cbo_esproveedor').val($('#value_proveedor').val());
+		});
 		
 	}); 
+
+
+function verificarpersona(documento, tipo, entidad, accion){
+	var respuesta ="";
+	if(accion == 0){
+		var existe = null;
+		var ajax = $.ajax({
+			"method": "POST",
+			"url": "{{ url('/verificarpersona') }}",
+			"data": {
+				"documento" : documento, 
+				"tipo" : tipo, 
+				"_token": "{{ csrf_token() }}",
+				}
+		}).done(function(info){
+			respuesta = info;
+			existe = respuesta.existe;
+			console.log(existe)
+		}).always(function(){
+			if(existe == 0){
+				
+				cerrarModal();
+
+				$('body').css('padding-right','0px')
+
+				contadorModal       = 0;
+
+				if(entidad == "cliente"){
+
+					var url = "/peluqueria/cliente/repetido/"+ respuesta.persona.id +"/SI";
+					modal( url , 'Registrar Cliente');
+
+				}else if(entidad == "Proveedor"){
+
+					var url = "/peluqueria/proveedor/repetido/"+ respuesta.persona.id +"/SI";
+					modal( url , 'Registrar Proveedor');
+
+				}else if(entidad == "Trabajador"){
+
+					var url = "/peluqueria/trabajador/repetido/"+ respuesta.persona.id +"/SI";
+					modal( url , 'Registrar Trabajador');
+					
+				}
+
+
+			}else if(existe == 1){
+
+				//RETORNAR MENSAJE DE ERROR DE DOCUMENTO REPETIDO
+
+				var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul><li>Ya tenemos una persona registrada con este documento.</li></ul></div>';
+
+				if(entidad == "cliente"){
+
+					$('#divMensajeErrorcliente').html("");
+					$('#divMensajeErrorcliente').html(cadenaError);
+
+				}else if(entidad == "Proveedor"){
+
+					$('#divMensajeErrorProveedor').html("");
+					$('#divMensajeErrorProveedor').html(cadenaError);
+
+				}else if(entidad == "Trabajador"){
+
+					$('#divMensajeErrorTrabajador').html("");
+					$('#divMensajeErrorTrabajador').html(cadenaError);
+
+				}
+
+				$('#btnGuardar').prop('disabled',true);
+
+			}
+		});
+	}
+	return respuesta;
+}
 </script>
 
 <script>

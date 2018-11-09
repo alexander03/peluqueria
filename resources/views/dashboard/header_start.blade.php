@@ -8,7 +8,7 @@
 
         <link rel="shortcut icon" href="assets/images/favicon_1.ico">
 
-        <title>SISTEMA DE PELUQUERIA</title>
+        <title>PELUKEROS</title>
 
         {!! Html::style('plugins/switchery/switchery.min.css') !!}
 

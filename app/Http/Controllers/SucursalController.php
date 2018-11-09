@@ -6,6 +6,8 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Sucursal;
+use App\Serieventa;
+use App\Movimiento;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -19,11 +21,14 @@ class SucursalController extends Controller
     protected $tituloRegistrar = 'Registrar sucursal';
     protected $tituloModificar = 'Modificar sucursal';
     protected $tituloEliminar  = 'Eliminar sucursal';
+    protected $tituloSerieVenta  = 'Serie venta';
     protected $rutas           = array('create' => 'sucursal.create', 
             'edit'     => 'sucursal.edit', 
             'delete'   => 'sucursal.eliminar',
             'search'   => 'sucursal.buscar',
             'index'    => 'sucursal.index',
+            'serieventa' => 'sucursal.serieventa',
+            'aumentarserieventa' => 'sucursal.aumentarserieventa'
         );
 
     public function __construct()
@@ -44,10 +49,12 @@ class SucursalController extends Controller
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Direccion', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Telefono', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Serie venta', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '3');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
+        $titulo_serie_venta = $this->tituloSerieVenta;
         $ruta             = $this->rutas;
         if (count($lista) > 0) {
             $clsLibreria     = new Libreria();
@@ -58,7 +65,7 @@ class SucursalController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
+            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'titulo_serie_venta', 'ruta'));
         }
         return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
     }
@@ -177,6 +184,70 @@ class SucursalController extends Controller
             $sucursal->save();
         });
         return is_null($error) ? "OK" : $error;
+    }
+
+    public function serieventa(Request $request, $id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'sucursal');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar   = Libreria::getParam($request->input('listar'), 'NO');
+        $sucursal = Sucursal::find($id);
+        $entidad  = 'serieventa';
+        $formData = array('sucursal.aumentarserieventa', $id);
+        $formData = array('route' => $formData, 'method' => 'POST', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $serieventa = Serieventa::where('sucursal_id','=',$id)->max('id');
+        $serieventaa = Serieventa::find($serieventa);
+        $cantidad = Movimiento::where('serieventa_id' , '=' , $serieventa)->count('serieventa_id');
+        $cantidadserie = Serieventa::where('sucursal_id','=',$id)->count('id');
+        return view($this->folderview.'.serieventa')->with(compact('serieventaa', 'cantidadserie' , 'cantidad', 'sucursal', 'formData', 'entidad', 'listar'));
+    }
+
+    public function aumentarserieventa(Request $request){
+
+        $sucursal = Sucursal::find($request->input('sucursal_id'));
+
+        $serieventa = Serieventa::where('sucursal_id', '=' , $sucursal->id)->count('id');
+        $serieventa = $serieventa + 1;
+        $serieventa = (string) $serieventa;
+        $cant = strlen($serieventa);
+        $ceros = 4 - $cant;
+        while($ceros != 0){
+            $serieventa = "0". $serieventa;
+            $ceros = $ceros - 1;
+        }
+        
+        $error = DB::transaction(function() use($request, $sucursal, $serieventa){
+            $serie       = new Serieventa();
+            $serie->serie = $serieventa;
+            $serie->sucursal_id = $sucursal->id;
+            $serie->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+
+    public function eliminarserieventa(Request $request){
+        $sucursal = Sucursal::find($request->input('sucursal_id'));
+
+        $serieventa_id = Serieventa::where('sucursal_id', '=' , $sucursal->id)->max('id');
+        
+        $error = DB::transaction(function() use($request, $serieventa_id){
+            $serieventa = Serieventa::find($serieventa_id);
+            $serieventa->delete();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+
+    public function actualizarserieventa(Request $request){
+
+        $sucursal = Sucursal::find($request->input('sucursal_id'));
+
+        $serieventa_id = Serieventa::where('sucursal_id', '=' , $sucursal->id)->max('id');
+        
+        $serieventa = Serieventa::find($serieventa_id);
+
+        return $serieventa->serie;
     }
 
     /**

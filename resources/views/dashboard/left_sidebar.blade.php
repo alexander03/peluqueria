@@ -3,12 +3,16 @@ use App\Menuoptioncategory;
 use App\Menuoption;
 use App\Permission;
 use App\User;
-use App\Person;
+use App\Empresa;
+use App\Persona;
+use App\Personamaestro;
 $user                  = Auth::user();
 session(['usertype_id' => $user->usertype_id]);
 $tipousuario_id        = session('usertype_id');
 $menu                  = generarMenu($tipousuario_id);
-//$person                = Person::find($user->person_id);
+$empresa               = Empresa::find($user->empresa_id);
+$persona               = Persona::find($user->persona_id);
+$personamaestro        = Personamaestro::find($persona->personamaestro_id);
 ?>
 
 <div class="left side-menu">
@@ -27,18 +31,20 @@ $menu                  = generarMenu($tipousuario_id);
     <div class="user-detail">
         <div class="dropup">
             <a href="" class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
-                <img  src="assets/images/users/avatar-2.jpg" alt="user-img" class="img-circle">
-                <span class="user-info-span">
-                    <h5 class="m-t-0 m-b-0">{{ $person->firstname.' '.$person->lastname }}</h5>
-                    <p class="text-muted m-b-0">
-                        <small><i class="fa fa-circle text-success"></i> <span>Online</span></small>
-                    </p>
+                <div id="avatar" style ="display: block; margin-top: -40px; position: relative; top: 33px;">
+                    <img  src="assets/images/users/avatar-2.jpg" alt="user-img" class="img-circle">
+                </div>
+                <span class="user-info-span" style="margin-left: 40px;">
+                    @if($personamaestro->razonsocial == null)
+                        <h5 class="m-t-0 m-b-0">{{ $personamaestro->nombres . ' ' .$personamaestro->apellidos }}</h5>
+                    @else
+                        <h5 class="m-t-0 m-b-0">{{ $personamaestro->razonsocial }}</h5>
+                    @endif
                 </span>
             </a>
             <ul class="dropdown-menu">
-                <li><a href="javascript:void(0)"><i class="md md-face-unlock"></i> Profile</a></li>
-                <li><a href="javascript:void(0)"><i class="md md-settings"></i> Settings</a></li>
-                <li><a href="javascript:void(0)"><i class="md md-lock"></i> Lock screen</a></li>
+                <li><a href="javascript:void(0)"><i class="md md-face-unlock"></i> Perfil</a></li>
+                <li><a href="javascript:void(0)"><i class="md md-settings"></i> Configuración</a></li>
                 <li><a href="logout"><i class="md md-settings-power"></i> Cerrar Sesión</a></li>
             </ul>
 

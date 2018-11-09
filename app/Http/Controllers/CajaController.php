@@ -46,11 +46,13 @@ class CajaController extends Controller
         $aperturas = Movimiento::where('concepto_id', 1)
                 ->where('empresa_id', "=", $empresa_id)
                 ->where('sucursal_id', "=", $sucursal_id)
+                ->where('estado', "=", 1)
                 ->count();
         //cantidad de cierres
         $cierres = Movimiento::where('concepto_id', 2)
                 ->where('empresa_id', "=", $empresa_id)
                 ->where('sucursal_id', "=", $sucursal_id)
+                ->where('estado', "=", 1)
                 ->count();
                 
         $aperturaycierre = null;
@@ -65,11 +67,13 @@ class CajaController extends Controller
         $maxapertura = Movimiento::where('concepto_id', 1)
                 ->where('empresa_id', "=", $empresa_id)
                 ->where('sucursal_id', "=", $sucursal_id)
+                ->where('estado', "=", 1)
                 ->max('serie_numero');
         //max cierre
         $maxcierre = Movimiento::where('concepto_id', 2)
                 ->where('empresa_id', "=", $empresa_id)
                 ->where('sucursal_id', "=", $sucursal_id)
+                ->where('estado', "=", 1)
                 ->max('serie_numero');
 
         $ingresos_efectivo = 0.00;

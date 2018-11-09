@@ -111,8 +111,6 @@ class RegisterController extends Controller
             $personamaestro->fechanacimiento  = $data['fechanacimiento'];
             $personamaestro->celular          = $data['telefono'];
             $personamaestro->email            = $data['email'];
-            $personamaestro->type             = 'E';
-            $personamaestro->comision         = 0;
             $personamaestro->save();
 
             $contacto = DB::table('personamaestro')->where('dni', '=', $data['dni'])->first();
@@ -136,7 +134,15 @@ class RegisterController extends Controller
             $persona                     = new Persona();
             $persona->empresa_id         = $empresa1->id;
             $persona->personamaestro_id  = $contacto->id;
+            $persona->type             = 'E';
+            $persona->comision         = 0;
             $persona->save();
+
+            $anonimo                     = new Persona();
+            $anonimo->empresa_id         = $empresa1->id;
+            $anonimo->personamaestro_id  = 2; //ANONIMO
+            $persona->comision         = 0;
+            $anonimo->save();
         });
 
         $contactoo = DB::table('personamaestro')->where('dni', '=', $data['dni'])->first();

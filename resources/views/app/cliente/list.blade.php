@@ -16,7 +16,6 @@
 		$contador = $inicio + 1;
 		?>
 		@foreach ($lista as $key => $value)
-		@if($value->id !==2) 
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->ruc ? $value->ruc : $value->dni }}</td>
@@ -27,7 +26,6 @@
 			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->personamaestro_id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->personamaestro_id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 		</tr>
-		@endif
 		<?php
 		$contador = $contador + 1;
 		?>
