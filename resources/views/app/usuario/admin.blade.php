@@ -24,8 +24,8 @@
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 					<div class="form-group">
-						{!! Form::label('login', 'Nombre:') !!}
-						{!! Form::text('login', '', array('class' => 'form-control input-xs', 'id' => 'login')) !!}
+						{!! Form::label('nombre', 'Login:') !!}
+						{!! Form::text('nombre', '', array('class' => 'form-control input-xs', 'id' => 'nombre')) !!}
 					</div>
 					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
@@ -49,7 +49,7 @@
 	$(document).ready(function () {
 		buscar('{{ $entidad }}');
 		init(IDFORMBUSQUEDA+'{{ $entidad }}', 'B', '{{ $entidad }}');
-		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="login"]').keyup(function (e) {
+		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="nombre"]').keyup(function (e) {
 			var key = window.event ? e.keyCode : e.which;
 			if (key == '13') {
 				buscar('{{ $entidad }}');

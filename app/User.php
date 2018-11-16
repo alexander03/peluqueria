@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\UserResetPasswordNotification;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -33,12 +34,15 @@ class User extends Authenticatable
 
     public function scopelistar($query, $login)
     {
+        $user = Auth::user();
+        $empresa_id = $user->empresa_id;
         return $query->where(function($subquery) use($login)
                     {
                         if (!is_null($login)) {
                             $subquery->where('login', 'LIKE', '%'.$login.'%');
                         }
                     })
+                    ->where('empresa_id', $empresa_id)
                     ->orderBy('login', 'ASC');
     }
 

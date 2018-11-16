@@ -72,6 +72,12 @@ operaciones
 			<td>{{ $value->comision }}</td>
 			@endif
 
+			@if($value->frecuente == 0)
+			<td align="center">&#10008;</td>
+			@elseif($value->frecuente == 1)
+			<td align="center">&#10004;</td>
+			@endif
+
 			<td>
 			@if(in_array('2',$operacionesnombres))
 			{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning btnEditar' ,'activo' => 'si')) !!}

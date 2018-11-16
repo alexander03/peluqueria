@@ -45,6 +45,7 @@ class ServicioController extends Controller
         $cabecera[]       = array('valor' => 'Precio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de Comisión', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Comisión', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Frecuente', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -117,6 +118,7 @@ class ServicioController extends Controller
             $servicio       = new Servicio();
             $servicio->descripcion = strtoupper($request->input('descripcion'));
             $servicio->precio = $request->input('precio');
+            $servicio->frecuente = $request->input('frecuente');
             $servicio->tipo_comision = $request->input('tipocomision');
             $servicio->comision = $request->input('comision');
             $user           = Auth::user();
@@ -186,6 +188,7 @@ class ServicioController extends Controller
             $servicio       = Servicio::find($id);
             $servicio->descripcion = strtoupper($request->input('descripcion'));
             $servicio->precio = $request->input('precio');
+            $servicio->frecuente = $request->input('frecuente');
             $servicio->tipo_comision = $request->input('tipocomision');
             $servicio->comision = $request->input('comision');
             $user           = Auth::user();

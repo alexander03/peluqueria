@@ -16,10 +16,10 @@
 	</div>
 	<div class="form-group">		
 		<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
-			{!! Form::label('serieventa', 'Nro:')!!}
+			{!! Form::label('num_caja', 'Nro:')!!}
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-6">
-			{!! Form::text('serieventa', '', array('class' => 'form-control input-xs', 'id' => 'serieventa', 'readOnly')) !!}
+			{!! Form::text('num_caja', '', array('class' => 'form-control input-xs', 'id' => 'num_caja', 'readOnly')) !!}
 		</div>
 	</div>
 	<div class="form-group">
@@ -84,7 +84,7 @@ $(document).ready(function() {
 	$('#concepto_id').val(2);
 
 	//NRO MOVIMIENTO
-	$('#serieventa').val({{$serieventa}});
+	$('#num_caja').val({{$num_caja}});
 
 	//TIPO PAGO
 	$('#tipopago').val(1);
@@ -92,6 +92,8 @@ $(document).ready(function() {
 	//TOTAL
 	var saldo = parseFloat($('#saldo').val());
 	$('#total').val(saldo.toFixed(2));
+
+	$('#comentario').focus();
 
 }); 
 </script>

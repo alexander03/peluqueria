@@ -25,11 +25,10 @@ use App\Serieventa;
 			<td>{{ $value->direccion }}</td>
 			<td>{{ $value->telefono }}</td>
 			<?php
-				$serieventa = Serieventa::where('sucursal_id' , '=' , $value->id)->max('serie');
+				$serieventa = Serieventa::where('sucursal_id' , '=' , $value->id)->first();
 			?>
-			<td>{{ $serieventa }}</td>
+			<td>{{ $serieventa->serie }}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-th-list"></div> Serie Venta', array('onclick' => 'modal (\''.URL::route($ruta["serieventa"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_serie_venta.'\', this);', 'class' => 'btn btn-xs btn-success')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 		</tr>
 		<?php

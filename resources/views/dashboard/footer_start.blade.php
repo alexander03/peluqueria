@@ -45,7 +45,7 @@
 <!-- peity charts -->
 
 <!-- bootbox code -->
-    {!! Html::script('assets/js/bootbox.min.js') !!}
+{!! Html::script('assets/js/bootbox.min.js') !!}
 
 {!! Html::script('plugins/peity/jquery.peity.min.js') !!}
 
@@ -56,6 +56,7 @@
 
 {!! Html::script('assets/js/jquery.core.js') !!}
 {!! Html::script('assets/js/jquery.app.js') !!}
+
 
 {!! Html::script('js/funciones.js') !!}
 

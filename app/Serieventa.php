@@ -21,15 +21,12 @@ class Serieventa extends Model
      */
     public function scopelistar($query, $sucursal_id)
     {
-        $user = Auth::user();
-		$empresa_id = $user->empresa_id;
         return $query->where(function($subquery) use($sucursal_id)
 		            {
 		            	if (!is_null($sucursal_id)) {
 		            		$subquery->where('sucursal_id', '=', sucursal_id);
 		            	}
                     })
-                    ->where('empresa_id', "=", $empresa_id)
         			->orderBy('descripcion', 'ASC');
     }
 

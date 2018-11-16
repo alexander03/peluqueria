@@ -5,10 +5,10 @@
 	<div class="form-group">
 		<div class="col-lg-5 col-md-5 col-sm-5">
 			<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
-				{!! Form::label('serieventa', 'Nro:')!!}
+				{!! Form::label('num_caja', 'Nro:')!!}
 			</div>
 			<div class="col-lg-9 col-md-9 col-sm-9">
-				{!! Form::text('serieventa', '', array('class' => 'form-control input-xs', 'id' => 'serieventa', 'readOnly')) !!}
+				{!! Form::text('num_caja', '', array('class' => 'form-control input-xs', 'id' => 'num_caja', 'readOnly')) !!}
 			</div>
 		</div>
 		<div class="col-lg-2 col-md-2 col-sm-2">
@@ -46,39 +46,25 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-lg-12 col-md-12 col-sm-12">
+		<div class="col-lg-8 col-md-8 col-sm-8">
 			<div class="col-lg-2 col-md-2 col-sm-2" style ="padding-top: 15px">
 				{!! Form::label('persona', 'Persona:')!!}
 			</div>
 			<div class="col-lg-10 col-md-10 col-sm-10">
-				{!! Form::text('persona', '', array('class' => 'form-control input-xs', 'id' => 'persona', 'placeholder' => 'Ingrese nombre o razón social')) !!}
+				{!! Form::text('persona', '', array('class' => 'form-control input-xs', 'id' => 'persona' , 'placeholder' => 'Ingrese nombre o razón social')) !!}
 				{!! Form::hidden('persona_id',null,array('id'=>'persona_id')) !!}
 			</div>
 		</div>
-		
-	</div>
-	<div class="form-group">
-		<div class="col-lg-7 col-md-7 col-sm-7">
-			<div class="col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
-				{!! Form::label('tipopago', 'Tipo de pago:')!!}
-			</div>
-			<div class="col-lg-8 col-md-8 col-sm-8">
-				<select id="tipopago" name="tipopago" class="form-control input-xs">
-					<option disabled selected>SELECCIONE MEDIO DE PAGO</option>
-					<option value="1">EFECTIVO</option>
-					<option value="2">TARJETA DE CRÉDITO/DÉBITO</option>
-				</select>
-			</div>
-		</div>
-		<div class="col-lg-5 col-md-5 col-sm-5">
+		<div class="col-lg-4 col-md-4 col-sm-4">
 			<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
 				{!! Form::label('total', 'Total:')!!}
 			</div>
 			<div class="col-lg-8 col-md-8 col-sm-8">
-				{!! Form::text('total', '', array('class' => 'form-control input-xs', 'id' => 'total', 'placeholder' => '0.00' )) !!}
+				{!! Form::text('total', '', array('class' => 'form-control input-xs',  'id' => 'total', 'placeholder' => '0.00' )) !!}
 			</div>
 		</div>
 	</div>
+	
 	<div class="form-group">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 			<div class="control-label col-lg-2 col-md-2 col-sm-2" style ="padding-top: 15px">
@@ -100,6 +86,9 @@
 $(document).ready(function() {
 	configurarAnchoModal('700');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
+
+	$('#persona').focus();
+
 	//GENERAR CONCEPTO
 	generarConcepto($('#tipo').val());
 
@@ -124,7 +113,9 @@ $(document).ready(function() {
 	$('#fecha').val(fecha);
 
 	//NRO MOVIMIENTO
-	$('#serieventa').val({{$serieventa}});
+	$('#num_caja').val({{$num_caja}});
+
+	
 
 }); 
 

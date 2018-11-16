@@ -25,8 +25,6 @@
     
 </head>
 
-
 <body class="fixed-left">
-
 
 @include('dashboard.topbar')

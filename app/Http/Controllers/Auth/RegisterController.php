@@ -7,6 +7,7 @@ use App\Empresa;
 use App\Personamaestro;
 use App\Persona;
 use App\Sucursal;
+use App\Serieventa;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -130,6 +131,11 @@ class RegisterController extends Controller
             $sucursal->telefono = strtoupper($data['telefonosucursal']);
             $sucursal->empresa_id = $empresa1->id;
             $sucursal->save();
+
+            $serie       = new Serieventa();
+            $serie->serie = "0001";
+            $serie->sucursal_id = $sucursal->id;
+            $serie->save();
 
             $persona                     = new Persona();
             $persona->empresa_id         = $empresa1->id;

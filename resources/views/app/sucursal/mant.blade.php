@@ -19,6 +19,21 @@
 			{!! Form::text('telefono', null, array('class' => 'form-control input-xs', 'id' => 'telefono', 'placeholder' => 'Ingrese telefono')) !!}
 		</div>
 	</div>
+	@if($serienueva != null)
+	<div class="form-group">
+		{!! Form::label('serieventa', 'Serie venta:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+		<div class="col-lg-9 col-md-9 col-sm-9">
+			{!! Form::text('serieventa', $serienueva, array('class' => 'form-control input-xs', 'id' => 'serieventa', 'placeholder' => 'Ingrese serie', 'maxlength' => '6')) !!}
+		</div>
+	</div>
+	@elseif($serieventa != null)
+	<div class="form-group">
+		{!! Form::label('serieventa', 'Serie venta:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+		<div class="col-lg-9 col-md-9 col-sm-9">
+			{!! Form::text('serieventa', $serieventa->serie, array('class' => 'form-control input-xs', 'id' => 'serieventa', 'placeholder' => 'Ingrese serie', 'maxlength' => '4')) !!}
+		</div>
+	</div>
+	@endif
 	<div class="form-group">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}

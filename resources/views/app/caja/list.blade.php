@@ -8,6 +8,7 @@ use App\Personamaestro;
 use App\Persona;
 use App\User;
 use App\Concepto;
+use App\Movimiento;
 
 $user = Auth::user();
 /*
@@ -63,7 +64,8 @@ operaciones
 @endif
 
 <input id="ingresos_efectivo" name="ingresos_efectivo" type="hidden" value="{{$ingresos_efectivo}}">
-<input id="ingresos_tarjeta" name="ingresos_tarjeta" type="hidden" value="{{$ingresos_tarjeta}}">
+<input id="ingresos_visa" name="ingresos_visa" type="hidden" value="{{$ingresos_visa}}">
+<input id="ingresos_master" name="ingresos_master" type="hidden" value="{{$ingresos_master}}">
 <input id="ingresos_total" name="ingresos_total" type="hidden" value="{{$ingresos_total}}">
 <input id="egresos" name="egresos" type="hidden" value="{{$egresos}}">
 <input id="saldo" name="saldo" type="hidden" value="{{$saldo}}">
@@ -83,9 +85,7 @@ operaciones
 		</tr>
 	</thead>
 	<tbody>
-		<?php
-		$contador = $inicio + 1;
-		?>
+		
 		@foreach ($lista as $key => $value)
 
 		@if($value->estado == 1)
@@ -96,7 +96,7 @@ operaciones
 
 			<td align="center">{{ $fechaformato = date("d/m/Y",strtotime($value->fecha))}}</td>
 			
-			<td align="center">{{ $value->serie_numero }}</td>
+			<td align="center">{{ $value->num_caja }}</td>
 			
 			<?php
 			$concepto = Concepto::find($value->concepto_id);
@@ -105,27 +105,51 @@ operaciones
 			<td>{{ $concepto->concepto}}</td>
 
 			<?php
-			$persona = Persona::find($value->cliente_id);
-			$cliente = Personamaestro::find($persona->personamaestro_id);
+			$persona_persona = Persona::find($value->persona_id);
+			$personamaestro_persona = Personamaestro::find($persona_persona->personamaestro_id);
 			?>
-			@if($cliente->razonsocial == null)
-				<td>{{ $cliente->nombres . ' ' .$cliente->apellidos }}</td>
+			@if($personamaestro_persona->razonsocial == null)
+				<td>{{ $personamaestro_persona->nombres . ' ' .$personamaestro_persona->apellidos }}</td>
 			@else
-				<td>{{ $cliente->razonsocial }}</td>
+				<td>{{ $personamaestro_persona->razonsocial }}</td>
 			@endif
 			
 			@if($concepto->tipo == 0)
-			<td style="color:green;font-weight: bold;">{{ $value->total }}</td>
-			<td align="center"> - </td>
+			<td align="center" style="color:green;font-weight: bold;">{{ $value->total }}</td>
+			<td align="center">0.00</td>
 			@elseif($concepto->tipo == 1)
-			<td align="center"> - </td>
+			<td align="center">0.00</td>
 			<td align="center" style="color:red;font-weight: bold;">{{ $value->total }}</td>
 			@endif
 			
-			@if( $value->tipo_pago == '1')
-				<td> EFECTIVO </td>
-			@elseif( $value->tipo_pago == '2')
-				<td> TARJETA DE CRÉDITO/DÉBITO </td>
+			<?php
+			$venta = null;
+			if($value->venta_id !=null){
+				$venta = Movimiento::find($value->venta_id);
+			}
+			?>
+
+			@if($venta != null)
+				@if($venta->montoefectivo == null)
+				<td>EFECTIVO = 0.00 / 
+				@else
+				<td>EFECTIVO = {{$venta->montoefectivo}} /
+				@endif
+
+				@if($venta->montovisa == null)
+				VISA = 0.00 / 
+				@else
+				VISA = {{$venta->montovisa}} /
+				@endif
+
+				@if($venta->montomaster == null)
+				MASTERCARD = 0.00 </td>
+				@else
+				MASTERCARD = {{$venta->montomaster}} </td>
+				@endif
+
+			@else
+			<td align="center"> - </td>
 			@endif
 
 			@if( $value->comentario == null )
@@ -136,11 +160,11 @@ operaciones
 
 			<?php
 				$usuario = User::find($value->usuario_id);
-				$persona = Persona::find($usuario->persona_id);
-				$personamaestro = Personamaestro::find($persona->personamaestro_id);
+				$persona_usuario = Persona::find($usuario->persona_id);
+				$personamaestro_usuario = Personamaestro::find($persona_usuario->personamaestro_id);
 			?>
 
-			<td>{{ $personamaestro->nombres . ' ' . $personamaestro->apellidos }}</td>
+			<td>{{ $personamaestro_usuario->nombres . ' ' . $personamaestro_usuario->apellidos }}</td>
 
 			<td align="center">
 			@if($aperturaycierre == 1)	
@@ -164,16 +188,13 @@ operaciones
 			@endif
 			</td>
 		</tr>
-		<?php
-		$contador = $contador + 1;
-		?>
 		@endforeach
 	</tbody>
 </table>
 <table class="table-bordered table-striped table-condensed" align="center">
     <thead>
         <tr>
-            <th class="text-center" colspan="2">Resumen de Caja</th>
+            <th class="text-center" colspan="2">RESUMEN DE CAJA</th>
         </tr>
     </thead>
     <tbody>
@@ -186,8 +207,12 @@ operaciones
             <td align="right"><div id ="ingresosefectivo"></div></td>
         </tr>
         <tr>
-            <td>TARJETA :</td>
-            <td align="right"><div id ="ingresostarjeta"></div></td>
+            <td>VISA :</td>
+            <td align="right"><div id ="ingresosvisa"></div></td>
+        </tr>
+		<tr>
+            <td>MASTERCARD :</td>
+            <td align="right"><div id ="ingresosmaster"></div></td>
         </tr>
         <tr>
             <th>EGRESOS :</th>
@@ -204,7 +229,8 @@ operaciones
 <script>
 	var ingresos_total = {{$ingresos_total}};
 	var ingresos_efectivo = {{$ingresos_efectivo}};
-	var ingresos_tarjeta = {{$ingresos_tarjeta}};
+	var ingresos_visa = {{$ingresos_visa}};
+	var ingresos_master = {{$ingresos_master}};
 	var egresos = {{$egresos}};
 	var saldo = {{$saldo}};
 	
@@ -216,7 +242,8 @@ operaciones
 
 		$('#ingresostotal').html(ingresos_total.toFixed(2));
 		$('#ingresosefectivo').html(ingresos_efectivo.toFixed(2));
-		$('#ingresostarjeta').html(ingresos_tarjeta.toFixed(2));
+		$('#ingresosvisa').html(ingresos_visa.toFixed(2));
+		$('#ingresosmaster').html(ingresos_master.toFixed(2));
 		$('#egreso').html(egresos.toFixed(2));
 		$('#saldoo').html(saldo.toFixed(2));
 	});

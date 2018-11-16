@@ -45,6 +45,46 @@
 			{!! Form::text('comision', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese comisión')) !!}
 		</div>
 	</div>
+
+
+	<div class="form-group">
+		{!! Form::label('frecuente', 'Frecuente:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+		<div class="col-sm-9 col-xs-12">
+		
+		@if($servicio == null)
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="frecuente" id="frecuentesi" value="1">
+				<label class="form-check-label" for="frecuentesi">SI</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input checked class="form-check-input" type="radio" name="frecuente" id="frecuenteno" value="0">
+				<label class="form-check-label" for="frecuenteno">NO</label>
+			</div>
+		@else
+			@if($servicio->frecuente == 1)
+				<div class="form-check form-check-inline">
+					<input checked class="form-check-input" type="radio" name="frecuente" id="frecuentesi" value="1">
+					<label class="form-check-label" for="frecuentesi">SI</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="frecuente" id="frecuenteno" value="0">
+					<label class="form-check-label" for="frecuenteno">NO</label>
+				</div>
+			@elseif($servicio->frecuente == 0)
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="frecuente" id="frecuentesi" value="1">
+					<label class="form-check-label" for="frecuentesi">SI</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input checked class="form-check-input" type="radio" name="frecuente" id="frecuenteno" value="0">
+					<label class="form-check-label" for="frecuenteno">NO</label>
+				</div>
+			@endif
+		@endif
+		</div>
+	</div>
+
+
 	<div class="form-group">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}

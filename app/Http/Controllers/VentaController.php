@@ -11,6 +11,7 @@ use App\Movimiento;
 use App\Detalleventa;
 use App\Serieventa;
 use App\Servicio;
+use App\Tipodocumento;
 use App\Sucursal;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
@@ -65,9 +66,12 @@ class VentaController extends Controller
         ->orderBy('apellidos', 'ASC')->orderBy('nombres', 'ASC')->orderBy('razonsocial', 'ASC')
                             ->get();
         $cboSucursal      = Sucursal::where('empresa_id', '=', $empresa_id)->pluck('nombre', 'id')->all();
+        $cboTipoDocumento = Tipodocumento::pluck('descripcion', 'id')->all();
         $anonimo = Persona::where('empresa_id', '=', $empresa_id)
                           ->where('personamaestro_id','=',2)->first();
-        return view($this->folderview.'.admin')->with(compact('empleados','anonimo' , 'cboSucursal' ,'entidad', 'title', 'titulo_cliente', 'ruta'));
+        $servicios = Servicio::where('empresa_id',$empresa_id)->where('frecuente',1)->orderBy('descripcion', 'ASC')->get();
+        
+        return view($this->folderview.'.admin')->with(compact('servicios', 'empleados', 'cboTipoDocumento','anonimo' , 'cboSucursal' ,'entidad', 'title', 'titulo_cliente', 'ruta'));
     }
 
     public function clienteautocompletar($searching)
@@ -166,7 +170,6 @@ class VentaController extends Controller
         $reglas     = array('empleado_id' => 'required',
                             'serieventa' => 'required',
                             'cliente_id' => 'required',
-                            'tipopago' => 'required',
                             'total' => 'required',
                            );
         $mensajes   = array();
@@ -174,54 +177,72 @@ class VentaController extends Controller
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
+        
+        $error = DB::transaction(function() use($request){
+
+            $num_caja = Movimiento::where('tipomovimiento_id', 1)
+                                    ->where('sucursal_id', $request->input('sucursal_id'))
+                                    ->where('estado', "=", 1)
+                                    ->max('num_caja');
+            $num_caja = $num_caja + 1;
 
 
-        $user = Auth::user();
-        $empresa_id = $user->empresa_id;		
-        $sucursal_id  = $request->input('sucursal_id');   
-        $cantidad = Movimiento::where('sucursal_id', $sucursal_id)->count('serie_numero');
-        $cantidad = $cantidad + 1;
-        $maxserie = Serieventa::where('sucursal_id', $sucursal_id)->max('id');
-
-
-        $num_venta = Movimiento::where('empresa_id', $empresa_id)
-                                ->where('sucursal_id', $sucursal_id)
-                                ->where('estado', "=", 1)
-                                ->where('serieventa_id', '=', $maxserie)
-                                    ->count('num_venta');
-        $num_venta = $num_venta + 1;
-        $num_venta = (string) $num_venta;
-        $cant = strlen($num_venta);
-        $ceros = 6 - $cant; 
-        while($ceros != 0){
-            $num_venta = "0". $num_venta;
-            $ceros = $ceros - 1;
-        }
-
-        $serieventa = Serieventa::find($maxserie);
-
-        $error = DB::transaction(function() use($request, $cantidad,$maxserie , $serieventa, $num_venta){
-            $movimiento                 = new Movimiento();
-            $movimiento->concepto_id    = 3;
-            $movimiento->serie_numero   = $cantidad;
-            $movimiento->serieventa_id  = $maxserie;
-            $movimiento->num_venta      = $num_venta;
-            $total                      = $request->input('total');
-            $movimiento->total          = $total;
-            $subtotal                   = round($total/(1.18),2);
-            $movimiento->subtotal       = $subtotal;
-            $movimiento->igv            = round($total - $subtotal,2);
-            $movimiento->tipo_pago      = (int) $request->input('tipopago'); // 1-efectivo y 2-tarjeta
-            $movimiento->estado         = 1;
-            $movimiento->comentario     = "VENTA N° ".$serieventa->serie .'-'. $num_venta;
-            $movimiento->cliente_id     = $request->input('cliente_id');
-            $movimiento->trabajador_id  = $request->input('empleado_id');
+            $movimiento                       = new Movimiento();
+            $movimiento->tipomovimiento_id    = 2;
+            $movimiento->tipodocumento_id     = $request->input('tipodocumento_id');
+            $movimiento->num_caja             = $num_caja;  
+            $movimiento->concepto_id          = 3;
+            $movimiento->num_venta            = $request->input('serieventa');  
+            $total                            = $request->input('total');
+            $movimiento->total                = $total;
+            $subtotal                         = round($total/(1.18),2);
+            $movimiento->subtotal             = $subtotal;
+            $movimiento->igv                  = round($total - $subtotal,2);
+            if($request->input('montoefectivo') != null){
+                $movimiento->montoefectivo        = $request->input('montoefectivo');
+            }else{
+                $movimiento->montoefectivo        = 0.00;
+            }
+            if($request->input('montovisa') != null){
+                $movimiento->montovisa        = $request->input('montovisa');
+            }else{
+                $movimiento->montovisa        = 0.00;
+            }
+            if($request->input('montomaster') != null){
+                $movimiento->montomaster        = $request->input('montomaster');
+            }else{
+                $movimiento->montomaster        = 0.00;
+            }
+            $movimiento->estado               = 1;
+            $movimiento->persona_id           = $request->input('cliente_id');
+            $movimiento->trabajador_id        = $request->input('empleado_id');
             $user           = Auth::user();
-            $movimiento->usuario_id     = $user->id;
-            $empresa_id     = $user->empresa_id;
-            $movimiento->empresa_id   = $empresa_id;
-            $movimiento->sucursal_id   =  $request->input('sucursal_id');
+            $movimiento->usuario_id           = $user->id;
+            $movimiento->sucursal_id          = $request->input('sucursal_id');
             $movimiento->save();
+
+            $movimientocaja                       = new Movimiento();
+            $movimientocaja->tipomovimiento_id    = 1;
+            $movimientocaja->concepto_id          = 3;
+            $movimientocaja->num_caja             = $num_caja;
+            $movimientocaja->total                = $request->input('total');
+            $movimientocaja->subtotal             = $request->input('total');
+            $movimientocaja->estado               = 1;
+            $movimientocaja->persona_id           = $request->input('cliente_id');
+            $user           = Auth::user();
+            $movimientocaja->usuario_id           = $user->id;
+            $movimientocaja->sucursal_id          = $request->input('sucursal_id');
+            $movimientocaja->venta_id             = $movimiento->id;
+
+            if($request->input('tipodocumento_id') == 1){
+                $movimientocaja->comentario           = "Pago de: B".$request->input('serieventa');  
+            }else if($request->input('tipodocumento_id') == 2){
+                $movimientocaja->comentario           = "Pago de: F".$request->input('serieventa');  
+            }else if($request->input('tipodocumento_id') == 3){
+                $movimientocaja->comentario           = "Pago de: T".$request->input('serieventa');  
+            }
+            
+            $movimientocaja->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -230,7 +251,9 @@ class VentaController extends Controller
         $detalles = json_decode($_POST["json"]);
         //var_dump($detalles->{"data"}[0]->{"cantidad"});
         $error = null;
-        $venta_id = Movimiento::max('id');
+        $venta_id = Movimiento::where('tipomovimiento_id', 2)
+                            ->where('sucursal_id', $request->input('sucursal_id'))
+                            ->max('id');
         foreach ($detalles->{"data"} as $detalle) {
             $error = DB::transaction(function() use($venta_id, $detalle){
                 $detalleventa            = new Detalleventa();
@@ -271,11 +294,9 @@ class VentaController extends Controller
             }
 
             $comision = round($comision , 1);
-
-            $serieventa = Serieventa::find($venta->serieventa_id);
             
             if($comision != 0.00){
-                $error = DB::transaction(function() use($request, $comision, $venta, $serieventa){
+               /* $error = DB::transaction(function() use($request, $comision, $venta, $serieventa){
                     $movimiento                 = new Movimiento();
                     $movimiento->concepto_id    = 8;
                     $movimiento->serie_numero   = $venta->serie_numero + 1;
@@ -290,7 +311,7 @@ class VentaController extends Controller
                     $movimiento->empresa_id   = $empresa_id;
                     $movimiento->sucursal_id   =  $venta->sucursal_id;
                     $movimiento->save();
-                });
+                });*/
             }
         }
         return is_null($error) ? "OK" : $error;
@@ -298,44 +319,58 @@ class VentaController extends Controller
 
     public function serieventa(Request $request){
         $user = Auth::user();
-        $empresa_id = $user->empresa_id;		
         $sucursal_id  = $request->input('sucursal_id');   
-        $maxserie = Serieventa::where('sucursal_id', $sucursal_id)->max('id');
+        $tipodocumento_id  = $request->input('tipodocumento_id');  
 
-        $num_venta = Movimiento::where('empresa_id', $empresa_id)
-                                ->where('sucursal_id', $sucursal_id)
+        $ultimaventa_id = Movimiento::where('sucursal_id', $sucursal_id)
                                 ->where('estado', "=", 1)
-                                ->where('serieventa_id', '=', $maxserie)
-                                    ->count('num_venta');
-        $num_venta = $num_venta + 1;
-        $num_venta = (string) $num_venta;
-        $cant = strlen($num_venta);
-        $ceros = 6 - $cant; 
-        while($ceros != 0){
-            $num_venta = "0". $num_venta;
-            $ceros = $ceros - 1;
+                                ->where('tipomovimiento_id', 2)
+                                ->where('tipodocumento_id', $tipodocumento_id)
+                                    ->max('id');
+
+        $ultimaventa = Movimiento::find($ultimaventa_id);
+
+        $num_venta = null;
+
+        if($ultimaventa == null){
+            $num_venta = 0;
+            $num_venta = $num_venta + 1;
+            $num_venta = (string) $num_venta;
+            $cant = strlen($num_venta);
+            $ceros = 7 - $cant; 
+            while($ceros != 0){
+                $num_venta = "0". $num_venta;
+                $ceros = $ceros - 1;
+            }
+        }else{
+            $num_venta = $ultimaventa->num_venta;
+            list($serie, $num_venta) = explode("-", $num_venta);
+            $num_venta = (int) $num_venta;
+            $num_venta = $num_venta + 1;
+            $cant = strlen($num_venta);
+            $ceros = 7 - $cant; 
+            while($ceros != 0){
+                $num_venta = "0". $num_venta;
+                $ceros = $ceros - 1;
+            }
         }
 
-        $serieventa = Serieventa::find($maxserie);
+        $serieventa = Serieventa::where('sucursal_id', $sucursal_id)->first();
         $num_venta = $serieventa->serie .'-'. $num_venta;
         return $num_venta;
     }
 
     public function permisoRegistrar(Request $request){//registrar solo si hay apertura de caja sin cierre
 
-        $user = Auth::user();
-        $empresa_id = $user->empresa_id;
         $sucursal_id  = $request->input('sucursal_id');
 
         //cantidad de aperturas
         $aperturas = Movimiento::where('concepto_id', 1)
-                ->where('empresa_id', "=", $empresa_id)
                 ->where('sucursal_id', "=", $sucursal_id)
                 ->where('estado', "=", 1)
                 ->count();
         //cantidad de cierres
         $cierres = Movimiento::where('concepto_id', 2)
-                ->where('empresa_id', "=", $empresa_id)
                 ->where('sucursal_id', "=", $sucursal_id)
                 ->where('estado', "=", 1)
                 ->count();

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CrearTablaSerieventaSucursal extends Migration
+class CrearTablaSerieventa extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CrearTablaSerieventaSucursal extends Migration
      */
     public function up()
     {
-        Schema::create('serieventa_sucursal', function (Blueprint $table) {
+        Schema::create('serieventa', function (Blueprint $table) {
             $table->increments('id');
             $table->string('serie',4);
             $table->integer('sucursal_id')->unsigned();
@@ -30,6 +30,6 @@ class CrearTablaSerieventaSucursal extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('serieventa_sucursal');
+        Schema::dropIfExists('serieventa');
     }
 }
