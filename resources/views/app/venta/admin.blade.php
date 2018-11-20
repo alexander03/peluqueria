@@ -57,31 +57,42 @@ operaciones
 <div class="row" style="background: rgba(51,122,183,0.10);">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
-		<div id="divMensajeError{!! $entidad !!}"></div>
+
 		{!! Form::open(['route' => $ruta["guardarventa"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'IDFORMMANTENIMIENTO'.$entidad]) !!}
-			<div>
-			<h4 class="page-venta">DATOS DEL DOCUMENTO</h4>
-			</div>
-			<div class="row col-lg-12 col-md-12 col-sm-12 row m-b-15" id="divDatosDocumento1">
-				<div class="col-lg-3 col-md-6 col-sm-12">
+			
+		<h4 class="page-venta" style ="margin-top: 3px;">SELECCIONE EMPLEADO</h4><div style="width: 100%; text-align: right; margin-top: -25px;"><a type="button" id="btnMostrarEmpleados" class="btn btn-warning btn-xs glyphicon glyphicon-chevron-up" style="width: 25px; height: 23px;" value="0"></div></a>
+		<div id="empleados" style=" margin: 10px 0px; display: -webkit-inline-box; width: 100%; overflow-x: scroll; border-style: groove;">
+			@foreach($empleados  as $key => $value)
+				<div class="empleado" id="{{ $value->id}}" style="margin: 5px; width: 150px; height: 170px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181); border-radius: 10px;" >
+					<img src="assets/images/empleado.png" style="width: 120px; height: 120px">
+					<label style="font-size: 11px;">{{ $value->razonsocial ? $value->razonsocial : $value->nombres.' '.$value->apellidos}}</label>
+				</div>
+			@endforeach
+			{!! Form::hidden('empleado_id',null,array('id'=>'empleado_id')) !!}
+			{!! Form::hidden('empleado_nombre',null,array('id'=>'empleado_nombre')) !!}
+		</div>
+
+		<h4 id="tituloDetalle" class="page-venta"><div class="col-lg-3 col-md-3 col-sm-3">DATOS DEL DOCUMENTO</div><div class="col-lg-6 col-md-6 col-sm-6">SELECCIONE SERVICIOS / PRODUCTOS</div><div class="col-lg-3 col-md-3 col-sm-3">PAGO</div></h4>
+
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div class="col-lg-3 col-md-3 col-sm-3" id="divDatosDocumento1">
+				<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 					{!! Form::label('sucursal_id', 'Sucursal:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 					{!! Form::select('sucursal_id', $cboSucursal, null, array('class' => 'form-control input-sm', 'id' => 'sucursal_id' , 'onchange' => 'generarNumeroSerie(); permisoRegistrar();')) !!}		
 				</div>
-				<div class="col-lg-3 col-md-6 col-sm-12">
+				<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 					{!! Form::label('tipodocumento_id', 'Tipo de Documento:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 					{!! Form::select('tipodocumento_id', $cboTipoDocumento, null, array('class' => 'form-control input-sm', 'id' => 'tipodocumento_id', 'onchange' => 'generarNumeroSerie();')) !!}		
 				</div>
-				<div class="col-lg-3 col-md-6 col-sm-12">
+				<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 					{!! Form::label('serieventa', 'Número:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 					{!! Form::text('serieventa', '', array('class' => 'form-control input-sm', 'id' => 'serieventa', 'data-inputmask' => "'mask': '9999-9999999'")) !!}
 				</div>
-				<div class="col-lg-3 col-md-6 col-sm-12">
+				<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 					{!! Form::label('fecha', 'Fecha:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 					{!! Form::text('fecha', '', array('class' => 'form-control input-sm', 'id' => 'fecha', 'readOnly')) !!}
 				</div>
-			</div>
-			<div class="row col-lg-12 col-md-12 col-sm-12 row m-b-15" id="divDatosDocumento2">
-				<div class="col-lg-3 col-md-6 col-sm-12">
+				<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 					<div class="col-lg-3 col-md-3 col-sm-3" style="margin-left:-10px;">
 						{!! Form::label('cliente', 'Cliente:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 					</div>
@@ -97,64 +108,22 @@ operaciones
 					{!! Form::text('cliente', '', array('class' => 'form-control input-sm', 'id' => 'cliente')) !!}
 					{!! Form::hidden('cliente_id',null,array('id'=>'cliente_id')) !!}
 				</div>
-
-				<div id="divAmbos" class="col-lg-4 col-md-4 col-sm-12">
-					<div class="col-lg-4 col-md-4 col-sm-4">
-						{!! Form::label('montoefectivo', 'Efectivo:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
-						{!! Form::text('montoefectivo', '', array('class' => 'form-control input-sm montos', 'id' => 'montoefectivo', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
-					</div>
-					<div class="col-lg-4 col-md-4 col-sm-4">
-						{!! Form::label('montovisa', 'Visa:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
-						{!! Form::text('montovisa', '', array('class' => 'form-control input-sm montos', 'id' => 'montovisa', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
-					</div>
-					<div class="col-lg-4 col-md-4 col-sm-4">
-						{!! Form::label('montomaster', 'MasterCard:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
-						{!! Form::text('montomaster', '', array('class' => 'form-control input-sm montos', 'id' => 'montomaster', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
-					</div>
-				</div>
-				<div class="col-lg-2 col-md-2 col-sm-12">
-					<div class="col-lg-8 col-md-8 col-sm-8">
-						{!! Form::label('total', 'Total:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
-						{!! Form::text('total', '', array('class' => 'form-control input-sm', 'id' => 'total', 'readOnly', 'style' => 'text-align: right;')) !!}
-					</div>
-					<div class="col-lg-4 col-md-4 col-sm-4">
-						{!! Form::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', array( 'onclick' => 'guardarventa()' , 'class' => 'btn btn-success waves-effect waves-light m-l-10 btn-sm btnGuardar', 'id' => 'btnGuardar' , 'style' => 'margin-top: 23px;' )) !!}
-					</div>
-				</div>
 			</div>
 
-
-
-
-			<h4 class="page-venta" style ="margin-top: 3px;">SELECCIONE EMPLEADO</h4><div style="width: 100%; text-align: right; margin-top: -25px;"><a type="button" id="btnMostrarEmpleados" class="btn btn-warning btn-xs glyphicon glyphicon-chevron-up" style="width: 25px; height: 23px;" value="0"></div></a>
-			<div id="empleados" style=" margin: 10px 0px; display: -webkit-inline-box; width: 100%; overflow-x: scroll; border-style: groove;">
-				@foreach($empleados  as $key => $value)
-					<div class="empleado" id="{{ $value->id}}" style="margin: 5px; width: 150px; height: 170px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181);" >
-						<img src="assets/images/empleado.png" style="width: 120px; height: 120px">
-						<label style="font-size: 11px;">{{ $value->razonsocial ? $value->razonsocial : $value->nombres.' '.$value->apellidos}}</label>
-					</div>
-				@endforeach
-				{!! Form::hidden('empleado_id',null,array('id'=>'empleado_id')) !!}
-			</div>
-
-
-
-			<h4 id="tituloDetalle" class="page-venta">SELECCIONE SERVICIOS / PRODUCTOS</h4>
-			<div class="row">
-				
-				<div class="col-lg-6 col-md-6 col-sm-6">
-					<h4 align="center" class="col-lg-12 col-md-12 col-sm-12 m-t-10" style="margin-bottom: -10px;">SERVICIOS FRECUENTES</h4>
-					<div id="servicios_frecuentes" class="col-lg-12 col-md-12 col-sm-12" style="margin: 10px; border-style: groove; width: 100%; height: 250px; overflow-y: scroll;">
+			<div class="col-lg-6 col-md-6 col-sm-6">
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<h5 align="center" class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: -10px; margin-top: 0px;">SERVICIOS FRECUENTES</h5>
+					<div id="servicios_frecuentes" class="col-lg-12 col-md-12 col-sm-12" style="margin: 10px; border-style: groove; width: 100%; height: 160px; overflow-y: scroll;">
 						@foreach($servicios  as $key => $value)
-							<div class="servicio_frecuente col-lg-3 col-md-3 col-sm-3" id="{{ $value->id}}"  precio="{{ $value->precio }}" descripcion="{{ $value->descripcion }}" style="margin: 5px; width: 105px; height: 105px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181);" >
-								<img src="assets/images/peine.png" style="width: 60px; height: 60px">
-								<label style="font-size: 11px;">{{ $value->descripcion}}</label>
+							<div class="servicio_frecuente col-lg-3 col-md-3 col-sm-3" id="{{ $value->id}}"  precio="{{ $value->precio }}" descripcion="{{ $value->descripcion }}" style="margin: 5px; width: 85px; height: 65px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181); border-radius: 10px;" >
+								<img src="assets/images/peine_1.png" style="width: 30px; height: 30px">
+								<label style="font-size: 9.5px;">{{ $value->descripcion}}</label>
 							</div>
 						@endforeach
 					</div>
 				</div>
 
-				<div class="form-group col-lg-6 col-md-6 col-sm-6">
+				<div class="form-group col-lg-12 col-md-12 col-sm-12">
 					<div class="col-lg-7 col-md-7 col-sm-7">
 						{!! Form::label('servicio', 'Servicio/Producto:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 						{!! Form::text('servicio', '', array('class' => 'form-control input-sm', 'id' => 'servicio')) !!}
@@ -170,13 +139,45 @@ operaciones
 						{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Agregar', array('class' => 'btn btn-primary waves-effect waves-light m-l-10 btn-sm btnAgregar', 'activo' => 'si' )) !!}
 					</div>
 					{!! Form::hidden('cant',null,array('id'=>'cant', 'value' => '0')) !!}
-					<h4 align="center" class="col-lg-12 col-md-12 col-sm-12 m-t-30">LISTA SERVICIOS/PRODUCTOS</h4>
-					<table class="table table-striped table-bordered col-lg-12 col-md-12 col-sm-12 ">
-						<thead id="cabecera"><tr><th>Descripción</th><th>Cantidad</th><th>Precio</th><th>Eliminar</th></tr></thead>
+					<h5 align="center" class="col-lg-12 col-md-12 col-sm-12 m-t-30">LISTA SERVICIOS/PRODUCTOS</h5>
+					<table class="table table-striped table-bordered col-lg-12 col-md-12 col-sm-12 " style="font-size: 70%; padding: 0px 0px !important;">
+						<thead id="cabecera"><tr><th style="font-size: 13px !important;">Descripción</th><th style="font-size: 13px !important;">Cant</th><th style="font-size: 13px !important;">Precio Unit</th><th style="font-size: 13px !important;">Precio Acum</th><th style="font-size: 13px !important;">Eliminar</th></tr></thead>
 						<tbody id="detalle"></tbody>
 					</table>
 				</div>
 			</div>
+
+		<div class="col-lg-3 col-md-3 col-sm-3">
+			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
+				{!! Form::label('montoefectivo', 'Monto Efectivo:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
+				{!! Form::text('montoefectivo', '', array('class' => 'form-control input-lg montos', 'id' => 'montoefectivo', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
+				{!! Form::label('montovisa', 'Monto Visa:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
+				{!! Form::text('montovisa', '', array('class' => 'form-control input-lg montos', 'id' => 'montovisa', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
+				{!! Form::label('montomaster', 'Monto MasterCard:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
+				{!! Form::text('montomaster', '', array('class' => 'form-control input-lg montos', 'id' => 'montomaster', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
+				{!! Form::label('total', 'Total:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
+				{!! Form::text('total', '', array('class' => 'form-control input-lg', 'id' => 'total', 'readOnly', 'style' => 'text-align: right;')) !!}
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				{!! Form::label('vuelto', 'Vuelto:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
+				{!! Form::text('vuelto', '', array('class' => 'form-control input-lg', 'id' => 'vuelto', 'readOnly', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
+			</div>
+			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15" style="text-align:right">
+				{!! Form::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', array( 'class' => 'btn btn-success waves-effect waves-light m-l-10 btn-md btnGuardar', 'id' => 'btnGuardar' , 'style' => 'margin-top: 23px;' )) !!}
+			</div>
+		</div>
+
+		{!! Form::close() !!}
+		<div class="col-lg-12 col-md-12 col-sm-12">
+			<div id="divMensajeError{!! $entidad !!}"></div>
+		</div>
+
         </div>
     </div>
 </div>
@@ -268,7 +269,20 @@ $(document).ready(function(){
 			var montomaster = 0.00;
 		}
 		var total = parseFloat($("#total").val());
-		evaluarmontosventa(montoefectivo, montovisa, montomaster, total);
+		var vuelto = montoefectivo + montovisa + montomaster - total;
+		if(vuelto < 0){
+			vuelto =0.00;
+		}
+		$('#vuelto').val(vuelto.toFixed(2));
+		if(montoefectivo - vuelto  + montovisa + montomaster != total){
+			var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+			cadenaError += '<li>La SUMA de los montos EFECTIVO, VISA y MASTERCARD debe ser igual al TOTAL.</li></ul></div>';
+			$('#divMensajeErrorVenta').html(cadenaError);
+			$('#btnGuardar').prop('disabled', true);
+		}else{
+			$('#divMensajeErrorVenta').html("");
+			$('#btnGuardar').prop('disabled', false);
+		}
 	});
 
 	
@@ -277,15 +291,36 @@ $(document).ready(function(){
 	});
 
 	$(".servicio_frecuente").on('click', function(){
+		var elemento = this;
 		var idservicio_frecuente = $(this).attr('id');
 		var precio = parseFloat($(this).attr('precio'));
 		var descripcion = $(this).attr('descripcion');
+		var cant = $("#cant"). val();
 
 		$(this).css('background', 'rgb(179,188,237)');
 		
-		fila =  '<tr class="DetalleServicio" id="'+ idservicio_frecuente +'" cantidad="'+ 1 +'"><td>'+ descripcion +'</td><td>'+ 1 +'</td><td>'+ (precio).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
-		$("#detalle").append(fila);
+		var existe = false;
 
+		if(cant != 0){
+			$("#detalle tr").each(function(){
+				if(idservicio_frecuente == this.id){
+					if($(this).attr('class') == "DetalleServicio"){
+						var cantidadfila = parseInt($(this).attr('cantidad'));
+						cantidadfila++;
+						$(this).attr('cantidad',cantidadfila);
+						var nuevafila = '<td>'+ descripcion +'</td><td>'+ cantidadfila +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidadfila).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+						$(this).html(nuevafila);
+						existe = true;
+					}
+				}
+			});
+		}
+
+		if(!existe){
+			fila =  '<tr class="DetalleServicio" id="'+ idservicio_frecuente +'" cantidad="'+ 1 +'"><td>'+ descripcion +'</td><td>'+ 1 +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+			$("#detalle").append(fila);
+		}
+		
 		var total = $("#total").val();
 		if(total){
 			var total = parseFloat($("#total").val());
@@ -295,12 +330,82 @@ $(document).ready(function(){
 
 		total += precio;
 		$("#total").val(total.toFixed(2));
-		$("#montoefectivo").val(total.toFixed(2));
 
-		var cant = $("#cant"). val();
 		cant++;
 		$("#cant").val(cant);
 
+		if($('#montoefectivo').val() != ""){
+			var montoefectivo = parseFloat($('#montoefectivo').val());
+		}else{
+			var montoefectivo = 0.00;
+		}
+		if($('#montovisa').val() != ""){
+			var montovisa = parseFloat($('#montovisa').val());
+		}else{
+			var montovisa = 0.00;
+		}
+		if($('#montomaster').val() != ""){
+			var montomaster = parseFloat($('#montomaster').val());
+		}else{
+			var montomaster = 0.00;
+		}
+		var total = parseFloat($("#total").val());
+		var vuelto = montoefectivo + montovisa + montomaster - total;
+		if(vuelto < 0){
+			vuelto =0.00;
+		}
+		$('#vuelto').val(vuelto.toFixed(2));
+		if(montoefectivo - vuelto  + montovisa + montomaster != total){
+			var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+			cadenaError += '<li>La SUMA de los montos EFECTIVO, VISA y MASTERCARD debe ser igual al TOTAL.</li></ul></div>';
+			$('#divMensajeErrorVenta').html(cadenaError);
+			$('#btnGuardar').prop('disabled', true);
+		}else{
+			$('#divMensajeErrorVenta').html("");
+			$('#btnGuardar').prop('disabled', false);
+		}
+
+	});
+
+//'onclick' => 'guardarventa()' ,
+
+	$('.btnGuardar').on('click', function(){
+		var sucursal = document.getElementById("sucursal_id");
+		var empleado = $('#empleado_id').val();
+		var cant = parseInt($("#cant"). val());
+		var tipo = $('#tipodocumento_id').val();
+		var letra = "";
+		if(tipo == 1){
+			letra ="B";
+		}else if(tipo == 2){
+			letra ="F";
+		}else if(tipo == 3){
+			letra ="T";
+		}
+		if(!empleado || cant==0){
+			var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+			if(!empleado){
+				cadenaError += ' <li> El campo empleado es obligatorio.</li>';
+			}
+			if(cant ==0){
+				cadenaError += '<li>Debe agregar mínimo un servicio o producto.</li></ul></div>';
+			}
+			$('#divMensajeErrorVenta').html(cadenaError);
+		}else{
+			swal({
+				title: 'Confirmar Guardado',
+				html: "<p><label>Sucursal:  </label>  "+ sucursal.options[sucursal.selectedIndex].text +"</p><p><label>N° Venta: </label>  "+ letra+ $('#serieventa').val()+"</p><p><label>Cliente:  </label>  "+ $('#cliente').val()+"</p><p><label>Empleado:  </label>  "+ $('#empleado_nombre').val()+"</p>",
+				type: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#54b359',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Guardar Venta'
+				}).then((result) => {
+					if (result.value) {
+						guardarventa();
+					}
+				})
+		}
 	});
 
 });
@@ -377,6 +482,7 @@ function permisoRegistrar(){
 				$(".empleado").css('background', 'rgb(255,255,255)');
 				$(this).css('background', 'rgb(179,188,237)');
 				$('#empleado_id').attr('value',idempleado);
+				$("#empleado_nombre").val($(this).children('label').html());
 			});
 
 			$('#divMensajeErrorVenta').html("");
@@ -495,9 +601,9 @@ var productos = new Bloodhound({
 $(document).ready(function(){
 	$('.btnAgregar').on('click', function(){
 		var servicio = $("#servicio").val();	
-		var cantidad = $("#cantidad").val();
+		var cantidad = parseInt($("#cantidad").val());
 		var servicio_id = $("#servicio_id").val();
-		var precio = $("#precio").val();	
+		var precio = parseFloat($("#precio").val());	
 		var cant = $("#cant"). val();
 		var total = $("#total").val();
 		if(total){
@@ -506,40 +612,94 @@ $(document).ready(function(){
 			var total = 0;
 		}
 		if(servicio && cantidad && servicio_id){
-			if(cant == 0){
+			
+			if(cant != 0){
+				/**/	
+
 				cant++;
-				var fila = "";
-				if($("#tipo").val() == 'S'){
-					fila =  '<tr class="DetalleServicio" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
-				}else{
-					fila =  '<tr class="DetalleProducto" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
-				}
-				$("#detalle").append(fila);
+
+				var existe = false;
+				
+				$("#detalle tr").each(function(){
+					if(servicio_id == this.id){
+						if($(this).attr('class') == "DetalleServicio" && $("#tipo").val() == 'S'){
+							var cantidadfila = parseInt($(this).attr('cantidad'));
+							cantidadfila = cantidadfila + cantidad;
+							$(this).attr('cantidad',cantidadfila);
+							var nuevafila = '<td>'+ servicio +'</td><td>'+ cantidadfila +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidadfila).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+							$(this).html(nuevafila);
+							existe = true;
+						}else if($(this).attr('class') == "DetalleProducto" && $("#tipo").val() == 'P'){
+							var cantidadfila = parseInt($(this).attr('cantidad'));
+							cantidadfila = cantidadfila + cantidad;
+							$(this).attr('cantidad',cantidadfila);
+							var nuevafila = '<td>'+ servicio +'</td><td>'+ cantidadfila +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidadfila).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+							$(this).html(nuevafila);
+							existe = true;
+						}
+					}
+				});
+
+				
 				$("#cant").val(cant);
 				$("#servicio").val("");
 				$("#cantidad").val("");
 				$("#servicio_id").val("");
 				$("#precio").val("");	
-			}else{
-				cant++;
-				var fila = "";
-				if($("#tipo").val() == 'S'){
-					fila =  '<tr class="DetalleServicio" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
-				}else{
-					fila =  '<tr class="DetalleProducto" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio*cantidad).toFixed(2)+'</td><td><a onclick="eliminarDetalle(this)"class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
-				}
-				$("#detalle").append(fila);
-				$("#cant").val(cant);
-				$("#servicio").val("");
-				$("#cantidad").val("");
-				$("#servicio_id").val("");
-				$("#precio").val("");	
+
 			}
+
+			if(!existe){
+				cant++;
+				var fila = "";
+				if($("#tipo").val() == 'S'){
+					fila =  '<tr class="DetalleServicio" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+				}else{
+					fila =  '<tr class="DetalleProducto" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+				}
+				$("#detalle").append(fila);
+				$("#cant").val(cant);
+				$("#servicio").val("");
+				$("#cantidad").val("");
+				$("#servicio_id").val("");
+				$("#precio").val("");
+			}
+
 			total += (precio*cantidad);
 			$("#total").val(total.toFixed(2));
-			$("#montoefectivo").val(total.toFixed(2));
 			//cantidad = 1 servicio o producto
 			$("#cantidad").val(1);
+
+			if($('#montoefectivo').val() != ""){
+				var montoefectivo = parseFloat($('#montoefectivo').val());
+			}else{
+				var montoefectivo = 0.00;
+			}
+			if($('#montovisa').val() != ""){
+				var montovisa = parseFloat($('#montovisa').val());
+			}else{
+				var montovisa = 0.00;
+			}
+			if($('#montomaster').val() != ""){
+				var montomaster = parseFloat($('#montomaster').val());
+			}else{
+				var montomaster = 0.00;
+			}
+			var total = parseFloat($("#total").val());
+			var vuelto = montoefectivo + montovisa + montomaster - total;
+			if(vuelto < 0){
+				vuelto =0.00;
+			}
+			$('#vuelto').val(vuelto.toFixed(2));
+			if(montoefectivo - vuelto  + montovisa + montomaster != total){
+				var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+				cadenaError += '<li>La SUMA de los montos EFECTIVO, VISA y MASTERCARD debe ser igual al TOTAL.</li></ul></div>';
+				$('#divMensajeErrorVenta').html(cadenaError);
+				$('#btnGuardar').prop('disabled', true);
+			}else{
+				$('#divMensajeErrorVenta').html("");
+				$('#btnGuardar').prop('disabled', false);
+			}
 		}
 	});
 });
@@ -555,8 +715,38 @@ function eliminarDetalle(comp){
 	var total = parseFloat($("#total").val());
 	total -= precioeliminar;
 	$("#total").val(total.toFixed(2));
-	$("#montoefectivo").val(total.toFixed(2));
 	(($(comp).parent()).parent()).remove();
+
+	if($('#montoefectivo').val() != ""){
+		var montoefectivo = parseFloat($('#montoefectivo').val());
+	}else{
+		var montoefectivo = 0.00;
+	}
+	if($('#montovisa').val() != ""){
+		var montovisa = parseFloat($('#montovisa').val());
+	}else{
+		var montovisa = 0.00;
+	}
+	if($('#montomaster').val() != ""){
+		var montomaster = parseFloat($('#montomaster').val());
+	}else{
+		var montomaster = 0.00;
+	}
+	var total = parseFloat($("#total").val());
+	var vuelto = montoefectivo + montovisa + montomaster - total;
+	if(vuelto < 0){
+		vuelto =0.00;
+	}
+	$('#vuelto').val(vuelto.toFixed(2));
+	if(montoefectivo - vuelto  + montovisa + montomaster != total){
+		var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+		cadenaError += '<li>La SUMA de los montos EFECTIVO, VISA y MASTERCARD debe ser igual al TOTAL.</li></ul></div>';
+		$('#divMensajeErrorVenta').html(cadenaError);
+		$('#btnGuardar').prop('disabled', true);
+	}else{
+		$('#divMensajeErrorVenta').html("");
+		$('#btnGuardar').prop('disabled', false);
+	}
 }
 
 function detalleventa(){

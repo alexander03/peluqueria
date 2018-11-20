@@ -9,6 +9,7 @@ use App\Persona;
 use App\Personamaestro;
 use App\Movimiento;
 use App\Detalleventa;
+use App\Detallecomision;
 use App\Serieventa;
 use App\Servicio;
 use App\Tipodocumento;
@@ -199,7 +200,7 @@ class VentaController extends Controller
             $movimiento->subtotal             = $subtotal;
             $movimiento->igv                  = round($total - $subtotal,2);
             if($request->input('montoefectivo') != null){
-                $movimiento->montoefectivo        = $request->input('montoefectivo');
+                $movimiento->montoefectivo        = $request->input('montoefectivo') - $request->input('vuelto');
             }else{
                 $movimiento->montoefectivo        = 0.00;
             }
@@ -294,24 +295,19 @@ class VentaController extends Controller
             }
 
             $comision = round($comision , 1);
-            
+
             if($comision != 0.00){
-               /* $error = DB::transaction(function() use($request, $comision, $venta, $serieventa){
-                    $movimiento                 = new Movimiento();
-                    $movimiento->concepto_id    = 8;
-                    $movimiento->serie_numero   = $venta->serie_numero + 1;
-                    $movimiento->total          = $comision;
-                    $movimiento->tipo_pago      = 1; // 1-efectivo y 2-tarjeta
-                    $movimiento->estado         = 1;
-                    $movimiento->cliente_id     = $venta->trabajador_id;
-                    $movimiento->comentario     = "COMISIÓN DE VENTA N° ".$serieventa->serie .'-'. $venta->num_venta;
-                    $user           = Auth::user();
-                    $movimiento->usuario_id     = $user->id;
-                    $empresa_id     = $user->empresa_id;
-                    $movimiento->empresa_id   = $empresa_id;
-                    $movimiento->sucursal_id   =  $venta->sucursal_id;
-                    $movimiento->save();
-                });*/
+                $error = DB::transaction(function() use($request, $comision, $venta, $persona){
+                    $detallecomision = new Detallecomision();
+                    $detallecomision->comision = $comision;
+                    $detallecomision->trabajador_id = $persona->id;
+                    $detallecomision->venta_id = $venta->id;
+                    $detallecomision->save();
+
+                    $comision_acum = $persona->comision_acum + $comision;
+                    $persona->comision_acum = $comision_acum;
+                    $persona->save();
+                });
             }
         }
         return is_null($error) ? "OK" : $error;

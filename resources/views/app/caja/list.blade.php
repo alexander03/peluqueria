@@ -147,9 +147,8 @@ operaciones
 				@else
 				MASTERCARD = {{$venta->montomaster}} </td>
 				@endif
-
 			@else
-			<td align="center"> - </td>
+			<td>EFECTIVO = {{$value->total}}</td>
 			@endif
 
 			@if( $value->comentario == null )

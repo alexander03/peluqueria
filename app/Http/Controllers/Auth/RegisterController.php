@@ -147,6 +147,7 @@ class RegisterController extends Controller
             $anonimo                     = new Persona();
             $anonimo->empresa_id         = $empresa1->id;
             $anonimo->personamaestro_id  = 2; //ANONIMO
+            $persona->type             = 'C';
             $persona->comision         = 0;
             $anonimo->save();
         });

@@ -84,11 +84,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('trabajador/guardarrepetido','TrabajadorController@guardarrepetido')->name('trabajador.guardarrepetido');
     Route::resource('trabajador', 'TrabajadorController', array('except' => array('show')));
 
+    Route::post('comision/buscar','ComisionController@buscar')->name('comision.buscar');
+    Route::get('comision/eliminar/{id}/{listarluego}','ComisionController@eliminar')->name('comision.eliminar');
+    Route::resource('comision', 'ComisionController', array('except' => array('show')));
+
     Route::post('sucursal/buscar','SucursalController@buscar')->name('sucursal.buscar');
-    Route::get('sucursal/serieventa/{id}','SucursalController@serieventa')->name('sucursal.serieventa');
-    Route::post('sucursal/aumentarserieventa/','SucursalController@aumentarserieventa')->name('sucursal.aumentarserieventa');
-    Route::post('sucursal/eliminarserieventa','SucursalController@eliminarserieventa')->name('sucursal.eliminarserieventa');
-    Route::post('sucursal/actualizarserieventa','SucursalController@actualizarserieventa')->name('sucursal.actualizarserieventa');
     Route::get('sucursal/eliminar/{id}/{listarluego}','SucursalController@eliminar')->name('sucursal.eliminar');
     Route::resource('sucursal', 'SucursalController', array('except' => array('show')));
 

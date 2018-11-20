@@ -27,8 +27,6 @@ class SucursalController extends Controller
             'delete'   => 'sucursal.eliminar',
             'search'   => 'sucursal.buscar',
             'index'    => 'sucursal.index',
-            'serieventa' => 'sucursal.serieventa',
-            'aumentarserieventa' => 'sucursal.aumentarserieventa'
         );
 
     public function __construct()
