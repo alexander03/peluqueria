@@ -42,6 +42,9 @@ operaciones
 * anular
 */
 
+$venta = "'venta'";
+$container = "'container'";
+
 ?>
 <div style="padding-top: 50px">
 
@@ -51,13 +54,17 @@ operaciones
 
 	{!! Form::button('<i class="glyphicon glyphicon-usd"></i> Nuevo', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-sm btnNuevo', 'disabled' , 'onclick' => 'modalCaja (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 
+	{!! Form::button('<i class="glyphicon glyphicon-usd"></i> Venta Rápida', array('class' => 'btn btn-secondary waves-effect waves-light m-l-10 btn-sm btnNuevo', 'onclick' => 'cargarRutaMenu("venta", "container", 16)')) !!}
+
 	{!! Form::button('<i class="glyphicon glyphicon-remove-circle"></i> Cierre', array('class' => 'btn btn-danger waves-effect waves-light m-l-10 btn-sm btnCierre', 'disabled' , 'onclick' => 'modalCaja (\''.URL::route($ruta["cierre"], array('listar'=>'SI')).'\', \''.$titulo_cierre.'\', this);')) !!}
 
 @else
-			
+
 	{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Apertura', array('class' => 'btn btn-success waves-effect waves-light m-l-10 btn-sm btnApertura', 'disabled' , 'onclick' => 'modalCaja (\''.URL::route($ruta["apertura"], array('listar'=>'SI')).'\', \''.$titulo_apertura.'\', this);')) !!}
 
 	{!! Form::button('<i class="glyphicon glyphicon-usd"></i> Nuevo', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-sm btnNuevo', 'activo' => 'si' , 'onclick' => 'modalCaja (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
+
+	{!! Form::button('<i class="glyphicon glyphicon-usd"></i> Venta Rápida', array('class' => 'btn btn-secondary waves-effect waves-light m-l-10 btn-sm btnNuevo', 'onclick' => 'cargarRutaMenu("venta", "container", 16)')) !!}
 
 	{!! Form::button('<i class="glyphicon glyphicon-remove-circle"></i> Cierre', array('class' => 'btn btn-danger waves-effect waves-light m-l-10 btn-sm btnCierre' , 'onclick' => 'modalCaja (\''.URL::route($ruta["cierre"], array('listar'=>'SI')).'\', \''.$titulo_cierre.'\', this);')) !!}
 
@@ -143,9 +150,9 @@ operaciones
 				@endif
 
 				@if($venta->montomaster == null)
-				MASTERCARD = 0.00 </td>
+				MASTER = 0.00 </td>
 				@else
-				MASTERCARD = {{$venta->montomaster}} </td>
+				MASTER = {{$venta->montomaster}} </td>
 				@endif
 			@else
 			<td>EFECTIVO = {{$value->total}}</td>

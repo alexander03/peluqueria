@@ -1,5 +1,6 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CajaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,6 +41,9 @@ Route::group(['middleware' => 'guest'], function() {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+
+//AGREGAR SUCURSAL
+
     Route::get('/dashboard', function(){
         return View::make('dashboard.home');
     });
@@ -61,6 +65,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('caja/eliminar/{id}/{listarluego}','CajaController@eliminar')->name('caja.eliminar');
     Route::get('caja/apertura', 'CajaController@apertura')->name('caja.apertura');
     Route::get('caja/cierre', 'CajaController@cierre')->name('caja.cierre');
+    Route::get('caja/persona', 'CajaController@persona')->name('caja.persona');
+    Route::post('caja/guardarpersona', 'CajaController@guardarpersona')->name('caja.guardarpersona');
+    Route::get('caja/repetido/{id}/{listarluego}','CajaController@repetido')->name('caja.repetido');
+    Route::post('caja/guardarrepetido','CajaController@guardarrepetido')->name('caja.guardarrepetido');
     Route::get('caja/aperturaycierre', 'CajaController@aperturaycierre')->name('caja.aperturaycierre');
     Route::resource('caja', 'CajaController', array('except' => array('show')));
 
@@ -143,6 +151,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('usuario/buscar', 'UsuarioController@buscar')->name('usuario.buscar');
     Route::get('usuario/eliminar/{id}/{listarluego}', 'UsuarioController@eliminar')->name('usuario.eliminar');
+    Route::get('usuario/escogerSucursal','UsuarioController@escogerSucursal')->name('usuario.escogerSucursal');
+    Route::post('usuario/guardarSucursal','UsuarioController@guardarSucursal')->name('usuario.guardarSucursal');
     Route::resource('usuario', 'UsuarioController', array('except' => array('show')));
 });
 

@@ -130,14 +130,12 @@ class ProveedorController extends Controller
                 'nombres'    => 'required|max:100',
                 'apellidos'    => 'required|max:100',
                 'celular'    => 'required|max:15',
-                'distrito_id' => 'required|integer|exists:distrito,id,deleted_at,NULL',
                 );
         }else{
             $reglas = array(
             'documento'       => 'required|max:11|unique:personamaestro,ruc,NULL,id,deleted_at,NULL',
             'razonsocial'    => 'required|max:100',
             'celular'    => 'required|max:15',
-            'distrito_id' => 'required|integer|exists:distrito,id,deleted_at,NULL',
             );
         }
         $validacion = Validator::make($request->all(),$reglas);
@@ -245,14 +243,12 @@ class ProveedorController extends Controller
                 'nombres'    => 'required|max:100',
                 'apellidos'    => 'required|max:100',
                 'celular'    => 'required|max:15',
-                'distrito_id' => 'required|integer|exists:distrito,id,deleted_at,NULL',
                 );
         }else{
             $reglas = array(
             'documento'       => 'required|max:11|unique:personamaestro,ruc,'.$id.',id,deleted_at,NULL',
             'razonsocial'    => 'required|max:100',
             'celular'    => 'required|max:15',
-            'distrito_id' => 'required|integer|exists:distrito,id,deleted_at,NULL',
             );
         }
         $validacion = Validator::make($request->all(),$reglas);
@@ -389,7 +385,7 @@ class ProveedorController extends Controller
         if ($existe !== true) {
             return $existe;
         }
-        $listar = "NO";
+        $listar = "SI";
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;
         }

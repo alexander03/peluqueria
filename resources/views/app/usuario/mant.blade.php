@@ -26,7 +26,7 @@ if (!is_null($usuario)) {
 	</div>
 </div>
 <div class="form-group">
-	{!! Form::label('login', 'Usuario:', array('class' => 'col-lg-4 col-md-4 col-sm-4 control-label')) !!}
+	{!! Form::label('login', 'Login:', array('class' => 'col-lg-4 col-md-4 col-sm-4 control-label')) !!}
 	<div class="col-lg-8 col-md-8 col-sm-8">
 		{!! Form::text('login', null, array('class' => 'form-control input-xs', 'id' => 'login', 'placeholder' => 'Ingrese login')) !!}
 	</div>
@@ -49,30 +49,36 @@ if (!is_null($usuario)) {
 	$(document).ready(function() {
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		$(IDFORMMANTENIMIENTO + '{!! $entidad !!} :input[id="usertype_id"]').focus();
-		configurarAnchoModal('400');
-		var personas = new Bloodhound({
+		configurarAnchoModal('600');
+
+
+		var empleados = new Bloodhound({
 			datumTokenizer: function (d) {
 				return Bloodhound.tokenizers.whitespace(d.value);
 			},
+			limit: 5,
 			queryTokenizer: Bloodhound.tokenizers.whitespace,
 			remote: {
-				url: 'person/employeesautocompleting/%QUERY',
-				filter: function (personas) {
-					return $.map(personas, function (movie) {
+				url: 'caja/empleadoautocompletar/%QUERY',
+				filter: function (empleados) {
+					return $.map(empleados, function (empleado) {
 						return {
-							value: movie.value,
-							id: movie.id
+							value: empleado.value,
+							id: empleado.id,
 						};
 					});
 				}
 			}
 		});
-		personas.initialize();
+		empleados.initialize();
+
 		$('#nombrepersona').typeahead(null,{
 			displayKey: 'value',
-			source: personas.ttAdapter()
+			source: empleados.ttAdapter()
 		}).on('typeahead:selected', function (object, datum) {
 			$('#person_id').val(datum.id);
 		});
+
+		
 	}); 
 </script>

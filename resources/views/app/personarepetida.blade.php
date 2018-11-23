@@ -2,6 +2,8 @@
 {!! Form::model($modelo, $formData) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 
+
+
 @if($modelo != null)
 	@if($modelo->razonsocial !=null)
 		<p><strong>Razón Social:</strong><p>{{ $modelo->razonsocial }}</p>
@@ -33,10 +35,25 @@
 	@endif 
 @endif
 
+
+@if($entidad =="Persona")
+<div class="form-group col-xs-12">
+	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="col-sm-4 col-xs-12">
+		<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
+		<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
+	</div>
+	<div id="comisionhtml" class="col-sm-4 col-xs-12">
+	
+	</div>
+</div>
+@endif
+
+
 {!! $mensaje or '<blockquote><p class="text-dark">Tenemos un registro con este documento, ¿Desea registrarlo?</p></blockquote>' !!}
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-		{!! Form::button('<i class="fa fa-check fa-lg"></i> Registrar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardarrepetido(\''.$modelo->id.'\',"'. $entidad.'")')) !!}
+		{!! Form::button('<i class="fa fa-check fa-lg"></i> Registrar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardarrepetido()')) !!}
 		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal((contadorModal - 1));')) !!}
 	</div>
 </div>
@@ -47,11 +64,15 @@
 		configurarAnchoModal('400');
 	}); 
 
-	function guardarrepetido(id, entidad){
+	function guardarrepetido(){
 
 		var respuesta ="";
 
-		if(entidad == "cliente"){
+		var id = '{{$modelo->id}}' ;
+
+		var entidad = '{{$entidad}}';
+
+		@if($entidad == "cliente")
 
 			var ajax = $.ajax({
 				"method": "POST",
@@ -63,12 +84,11 @@
 			}).done(function(info){
 				respuesta = info;
 			}).always(function(){
-
+				repetido(entidad);
 				cerrarModal();
-
 			});
 		
-		}else if(entidad == "Proveedor"){
+		@elseif($entidad == "Proveedor")
 
 			var ajax = $.ajax({
 				"method": "POST",
@@ -80,12 +100,11 @@
 			}).done(function(info){
 				respuesta = info;
 			}).always(function(){
-
+				repetido(entidad);
 				cerrarModal();
-
 			});
 
-		}else if(entidad == "Trabajador"){
+		@elseif($entidad == "Trabajador")
 
 			var ajax = $.ajax({
 				"method": "POST",
@@ -97,12 +116,36 @@
 			}).done(function(info){
 				respuesta = info;
 			}).always(function(){
-
+				repetido(entidad);
 				cerrarModal();
-
 			});
 
-		}
+		@elseif($entidad == "Persona")
+			var type = null;
+			var secondtype = null;
+			if( $("#cliente").is(':checked')){
+				type = "C";
+			}
+			if( $("#proveedor").is(':checked')){
+				secondtype = "P";
+			}
+			var ajax = $.ajax({
+				"method": "POST",
+				"url": "{{ url('/caja/guardarrepetido') }}",
+				"data": {
+					"persona_id" : id, 
+					"_token": "{{ csrf_token() }}",
+					'type': type,
+					'secondtype': secondtype,
+					}
+			}).done(function(info){
+				respuesta = info;
+			}).always(function(){
+				repetido(entidad);
+				cerrarModal();
+			});
+		@endif
+
 
 	}
 

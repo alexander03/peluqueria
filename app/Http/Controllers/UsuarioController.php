@@ -9,9 +9,11 @@ use Validator;
 use App\Http\Requests;
 use App\User;
 use App\Usertype;
+use App\Sucursal;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class UsuarioController extends Controller
 {
@@ -21,6 +23,8 @@ class UsuarioController extends Controller
     protected $tituloModificar = 'Modificar usuario';
     protected $tituloEliminar  = 'Eliminar usuario';
     protected $rutas           = array('create' => 'usuario.create', 
+            'guardarSucursal' => 'usuario.guardarSucursal',
+            'escogerSucursal' => 'usuario.escogerSucursal',
             'edit'   => 'usuario.edit', 
             'delete' => 'usuario.eliminar',
             'search' => 'usuario.buscar',
@@ -118,7 +122,7 @@ class UsuarioController extends Controller
             'login'       => 'required|max:20|unique:user,login,NULL,id,deleted_at,NULL',
             'password'    => 'required|max:20',
             'usertype_id' => 'required|integer|exists:usertype,id,deleted_at,NULL',
-            'person_id'   => 'required|integer|exists:person,id,deleted_at,NULL',
+            'person_id'   => 'required|integer|exists:persona,id,deleted_at,NULL',
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
@@ -129,7 +133,10 @@ class UsuarioController extends Controller
             $usuario->login        = $request->input('login');
             $usuario->password     = Hash::make($request->input('password'));
             $usuario->usertype_id  = $request->input('usertype_id');
-            $usuario->person_id    = $request->input('person_id');
+            $usuario->persona_id    = $request->input('person_id');
+            $user = Auth::user();
+            $empresa_id = $user->empresa_id;
+            $usuario->empresa_id    = $empresa_id;
             $usuario->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -241,5 +248,27 @@ class UsuarioController extends Controller
         $formData = array('route' => array('usuario.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function escogerSucursal()
+    {
+        $entidad          = 'Usuario';
+        $title            = 'Escoger Sucursal';
+        $ruta             = $this->rutas;
+        $user = Auth::user();
+        $empresa_id = $user->empresa_id;
+        $cboSucursal      = Sucursal::where('empresa_id', '=', $empresa_id)->pluck('nombre', 'id')->all();
+        return view($this->folderview.'.escogerSucursal')->with(compact('cboSucursal','entidad', 'title', 'ruta'));
+    }
+
+    public function guardarSucursal(Request $request)
+    {
+        $error = DB::transaction(function() use($request){
+            $usuario = Auth::user();
+            $usuario->sucursal_id = $request->input('sucursal_id');
+            $usuario->fecha_sucursal = new \Datetime();
+            $usuario->save();
+        });
+        return is_null($error) ? "OK" : $error;
     }
 }

@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\DB;
 use App\Menuoption;
 use App\Movimiento;
 use App\OperacionMenu;
+use App\Sucursal;
 
 $user = Auth::user();
+$sucursal = Sucursal::find($user->sucursal_id);
 /*
 SELECT operacion_menu.operacion_id
 FROM  operacion_menu 
@@ -65,8 +67,19 @@ operaciones
 				{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 				{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 				<div class="form-group">
+				@if($sucursal !== null)
+					@if($user->usertype_id == 3)
+						{!! Form::label('sucursal_id', 'Sucursal:') !!}
+						{!! Form::text('sucursal', $sucursal->nombre , array('class' => 'form-control input-xs', 'id' => 'sucursal' , 'readOnly')) !!}
+						{!! Form::hidden('sucursal_id', $user->sucursal_id , array('id' => 'sucursal_id')) !!}
+					@else
+						{!! Form::label('sucursal_id', 'Sucursal:') !!}
+						{!! Form::select('sucursal_id', $cboSucursal, null, array('class' => 'form-control input-xs', 'id' => 'sucursal_id' , 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
+					@endif
+				@else
 					{!! Form::label('sucursal_id', 'Sucursal:') !!}
 					{!! Form::select('sucursal_id', $cboSucursal, null, array('class' => 'form-control input-xs', 'id' => 'sucursal_id' , 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
+				@endif
 				</div>
 				<div class="form-group">
 					{!! Form::label('filas', 'Filas a mostrar:')!!}

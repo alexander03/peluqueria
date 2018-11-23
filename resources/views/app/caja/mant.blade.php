@@ -51,8 +51,29 @@
 				{!! Form::label('persona', 'Persona:')!!}
 			</div>
 			<div class="col-lg-10 col-md-10 col-sm-10">
-				{!! Form::text('persona', '', array('class' => 'form-control input-xs', 'id' => 'persona' , 'placeholder' => 'Ingrese nombre o razón social')) !!}
-				{!! Form::hidden('persona_id',null,array('id'=>'persona_id')) !!}
+				<div class="col-lg-8 col-md-8 col-sm-8">
+					{!! Form::text('persona', '', array('class' => 'form-control input-xs', 'id' => 'persona' , 'placeholder' => 'Ingrese nombre o razón social')) !!}
+				</div>
+
+<style>
+#btnpersonanuevo{
+	margin-bottom: -18px;
+}
+#btnpersonavarios{
+	margin-bottom: -18px;
+}
+#btnpersonaborrar{
+	margin-bottom: -18px;
+}
+
+</style>
+
+				<div class="col-lg-4 col-md-4 col-sm-4">
+					{!! Form::button('<i class="glyphicon glyphicon-plus"></i>', array( 'id' => 'btnpersonanuevo' , 'class' => 'btn btn-success waves-effect waves-light btn-xs btnCliente', 'onclick' => 'modalCaja (\''.URL::route($ruta["persona"], array('listar'=>'SI')).'\', \''.$titulo_persona.'\', this);', 'data-toggle' => 'tooltip', 'data-placement' => 'top' ,  'title' => 'NUEVO')) !!}
+					{!! Form::button('<i class="glyphicon glyphicon-user"></i>', array('id' => 'btnpersonavarios' , 'class' => 'btn btn-primary waves-effect waves-light btn-xs btnDefecto', 'data-toggle' => 'tooltip', 'data-placement' => 'top' ,  'title' => 'VARIOS')) !!}
+					{!! Form::button('<i class="glyphicon glyphicon-trash"></i>', array('id' => 'btnpersonaborrar' , 'class' => 'btn btn-danger waves-effect waves-light btn-xs btnBorrar' , 'data-toggle' => 'tooltip', 'data-placement' => 'top' ,  'title' => 'BORRAR')) !!}
+					{!! Form::hidden('persona_id',null,array('id'=>'persona_id')) !!}
+				</div>
 			</div>
 		</div>
 		<div class="col-lg-4 col-md-4 col-sm-4">
@@ -77,7 +98,7 @@
 	</div>
 	<div class="form-group">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardarCaja', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
 			{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
 		</div>
 	</div>
@@ -87,7 +108,7 @@ $(document).ready(function() {
 	configurarAnchoModal('700');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 
-	$('#persona').focus();
+	$('[data-toggle="tooltip"]').tooltip({trigger: 'hover'}); 
 
 	//GENERAR CONCEPTO
 	generarConcepto($('#tipo').val());
@@ -115,8 +136,21 @@ $(document).ready(function() {
 	//NRO MOVIMIENTO
 	$('#num_caja').val({{$num_caja}});
 
+	$('#persona_id').val({{ $anonimo->id }});
+	$('#persona').val('VARIOS');
+	$("#persona").prop('disabled',true);
 	
+	$('.btnDefecto').on('click', function(){
+		$('#persona_id').val({{ $anonimo->id }});
+		$('#persona').val('VARIOS');
+		$("#persona").prop('disabled',true);
+	});
 
+	$('.btnBorrar').on('click', function(){
+		$('#persona_id').val("");
+		$('#persona').val("");
+		$("#persona").prop('disabled',false);
+	});
 }); 
 
 
@@ -223,5 +257,6 @@ function generarConcepto(valor){
         }
     });
 }
+
 </script>
 

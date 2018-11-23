@@ -20,7 +20,7 @@ $empresa               = Empresa::find($user->empresa_id);
                 <!-- LOGO -->
                 <div class="topbar-left">
                     <div class="text-center">
-                        <a href="index.html" class="logo"><i class="md md-equalizer"></i> <span>SIST. PELUKEROS</span> </a>
+                        <a href="" class="logo"><i class="md md-equalizer"></i> <span>SIST. PELUKEROS</span> </a>
                     </div>
                 </div>
 

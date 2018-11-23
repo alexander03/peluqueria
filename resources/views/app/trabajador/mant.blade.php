@@ -341,6 +341,7 @@ $departamentos = Departamento::all();
 				$('#btnGuardar').prop('disabled',false);
 				verificarpersona($('#documento').val(),'ruc', "Trabajador", "{{$accion}}");
 			}else{
+				$('#divMensajeErrorTrabajador').html("");
 				//$('#razonsocial').attr('disabled','disabled');
 				$('#nombres').attr('disabled','disabled');
 				$('#apellidos').attr('disabled','disabled');

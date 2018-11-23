@@ -150,23 +150,23 @@ operaciones
 		<div class="col-lg-3 col-md-3 col-sm-3">
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 				{!! Form::label('montoefectivo', 'Monto Efectivo:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
-				{!! Form::text('montoefectivo', '', array('class' => 'form-control input-lg montos', 'id' => 'montoefectivo', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
+				{!! Form::text('montoefectivo', '', array('class' => 'form-control input-lg montos', 'id' => 'montoefectivo', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 				{!! Form::label('montovisa', 'Monto Visa:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
-				{!! Form::text('montovisa', '', array('class' => 'form-control input-lg montos', 'id' => 'montovisa', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
+				{!! Form::text('montovisa', '', array('class' => 'form-control input-lg montos', 'id' => 'montovisa', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 				{!! Form::label('montomaster', 'Monto MasterCard:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
-				{!! Form::text('montomaster', '', array('class' => 'form-control input-lg montos', 'id' => 'montomaster', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
+				{!! Form::text('montomaster', '', array('class' => 'form-control input-lg montos', 'id' => 'montomaster', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 				{!! Form::label('total', 'Total:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
-				{!! Form::text('total', '', array('class' => 'form-control input-lg', 'id' => 'total', 'readOnly', 'style' => 'text-align: right;')) !!}
+				{!! Form::text('total', '', array('class' => 'form-control input-lg', 'id' => 'total', 'readOnly', 'style' => 'text-align: right; font-size: 30px;')) !!}
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12">
 				{!! Form::label('vuelto', 'Vuelto:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
-				{!! Form::text('vuelto', '', array('class' => 'form-control input-lg', 'id' => 'vuelto', 'readOnly', 'style' => 'text-align: right;', 'placeholder' => '0.00')) !!}
+				{!! Form::text('vuelto', '', array('class' => 'form-control input-lg', 'id' => 'vuelto', 'readOnly', 'style' => 'text-align: right; font-size: 30px; color: red;', 'placeholder' => '0.00')) !!}
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15" style="text-align:right">
 				{!! Form::button('<i class="glyphicon glyphicon-floppy-disk"></i> Guardar', array( 'class' => 'btn btn-success waves-effect waves-light m-l-10 btn-md btnGuardar', 'id' => 'btnGuardar' , 'style' => 'margin-top: 23px;' )) !!}
@@ -189,6 +189,7 @@ $(document).ready(function(){
 	//colocar total 0.00
 
 	$("#total").val((0).toFixed(2));
+	$("#vuelto").val((0).toFixed(2));
 
 	//cant = 0
 	$("#cant").val(0);
@@ -330,6 +331,10 @@ $(document).ready(function(){
 
 		total += precio;
 		$("#total").val(total.toFixed(2));
+		$("#montoefectivo").val("");
+		$("#montovisa").val("");
+		$("#montomaster").val("");
+		$("#vuelto").val((0).toFixed(2));
 
 		cant++;
 		$("#cant").val(cant);
@@ -403,6 +408,7 @@ $(document).ready(function(){
 				}).then((result) => {
 					if (result.value) {
 						guardarventa();
+						cargarRutaMenu('caja', 'container', '15');
 					}
 				})
 		}
@@ -667,6 +673,10 @@ $(document).ready(function(){
 
 			total += (precio*cantidad);
 			$("#total").val(total.toFixed(2));
+			$("#montoefectivo").val("");
+			$("#montovisa").val("");
+			$("#montomaster").val("");
+			$("#vuelto").val((0).toFixed(2));
 			//cantidad = 1 servicio o producto
 			$("#cantidad").val(1);
 
@@ -715,6 +725,10 @@ function eliminarDetalle(comp){
 	var total = parseFloat($("#total").val());
 	total -= precioeliminar;
 	$("#total").val(total.toFixed(2));
+	$("#montoefectivo").val("");
+	$("#montovisa").val("");
+	$("#montomaster").val("");
+	$("#vuelto").val((0).toFixed(2));
 	(($(comp).parent()).parent()).remove();
 
 	if($('#montoefectivo').val() != ""){

@@ -295,6 +295,7 @@ $departamentos = Departamento::all();
 				$('#btnGuardar').prop('disabled',false);
 				verificarpersona($('#documento').val(),'ruc', "Proveedor", "{{$accion}}");
 			}else{
+				$('#divMensajeErrorProveedor').html("");
 				$('#razonsocial').attr('disabled','disabled');
 				$('#nombres').attr('disabled','disabled');
 				$('#apellidos').attr('disabled','disabled');
