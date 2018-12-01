@@ -41,7 +41,9 @@ if (!is_null($persona)) {
 {!! Form::hidden('personamaestro',null,  array('id' => 'personamaestro')) !!}
 
 <div class="form-group col-xs-12">
-	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+	{!! Form::label('roles', 'Roles:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-4 col-xs-12">
 		<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
 		<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
@@ -53,26 +55,33 @@ if (!is_null($persona)) {
 </div>
 
 <div class="form-group col-xs-12">
-	{!! Form::label('documento', 'N° Documento:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+	{!! Form::label('documento', 'N° Documento:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-4 col-xs-12">
 		{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11')) !!}
 	</div>
-		
 </div>
 <div class="form-group col-xs-12">
-	{!! Form::label('nombres', 'Nombres:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('nombres', 'Nombres:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-9 col-xs-12">
 		{!! Form::text('nombres', null, array('class' => 'form-control input-xs', 'id' => 'nombres', 'placeholder' => 'Ingrese Nombres', 'disabled' => 'disabled')) !!}
 	</div>
 </div>
 <div class="form-group col-xs-12">
-	{!! Form::label('apellidos', 'Apellidos:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('apellidos', 'Apellidos:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-9 col-xs-12">
 		{!! Form::text('apellidos', null, array('class' => 'form-control input-xs', 'id' => 'apellidos', 'placeholder' => 'Ingrese Apellidos', 'disabled' => 'disabled')) !!}
 	</div>
 </div>
 <div class="form-group col-xs-12">
-	{!! Form::label('razonsocial', 'Razón Social:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('razonsocial', 'Razón Social:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-9 col-xs-12">
 		{!! Form::text('razonsocial', null, array('class' => 'form-control input-xs', 'id' => 'razonsocial', 'placeholder' => 'Ingrese Razon Social', 'disabled' => 'disabled')) !!}
 	</div>
@@ -274,7 +283,7 @@ function verificarpersona(documento, tipo, entidad, accion){
 
 				contadorModal  = 1;
 
-				var url = "/peluqueria/caja/repetido/"+ respuesta.persona.id +"/SI";
+				var url = "/caja/repetido/"+ respuesta.persona.id +"/SI";
 				modalCaja( url , 'Registrar Persona');
 
 			}else if(existe == 1){

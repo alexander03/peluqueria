@@ -54,7 +54,7 @@ $container = "'container'";
 
 	{!! Form::button('<i class="glyphicon glyphicon-usd"></i> Nuevo', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-sm btnNuevo', 'disabled' , 'onclick' => 'modalCaja (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 
-	{!! Form::button('<i class="glyphicon glyphicon-usd"></i> Venta Rápida', array('class' => 'btn btn-secondary waves-effect waves-light m-l-10 btn-sm btnNuevo', 'onclick' => 'cargarRutaMenu("venta", "container", 16)')) !!}
+	{!! Form::button('<i class="glyphicon glyphicon-usd"></i> Venta Rápida', array('class' => 'btn btn-secondary waves-effect waves-light m-l-10 btn-sm btnNuevo', 'disabled', 'onclick' => 'cargarRutaMenu("venta", "container", 16)')) !!}
 
 	{!! Form::button('<i class="glyphicon glyphicon-remove-circle"></i> Cierre', array('class' => 'btn btn-danger waves-effect waves-light m-l-10 btn-sm btnCierre', 'disabled' , 'onclick' => 'modalCaja (\''.URL::route($ruta["cierre"], array('listar'=>'SI')).'\', \''.$titulo_cierre.'\', this);')) !!}
 
@@ -69,7 +69,7 @@ $container = "'container'";
 	{!! Form::button('<i class="glyphicon glyphicon-remove-circle"></i> Cierre', array('class' => 'btn btn-danger waves-effect waves-light m-l-10 btn-sm btnCierre' , 'onclick' => 'modalCaja (\''.URL::route($ruta["cierre"], array('listar'=>'SI')).'\', \''.$titulo_cierre.'\', this);')) !!}
 
 @endif
-
+<input id="monto_apertura" name="monto_apertura" type="hidden" value="{{$montoapertura}}">
 <input id="ingresos_efectivo" name="ingresos_efectivo" type="hidden" value="{{$ingresos_efectivo}}">
 <input id="ingresos_visa" name="ingresos_visa" type="hidden" value="{{$ingresos_visa}}">
 <input id="ingresos_master" name="ingresos_master" type="hidden" value="{{$ingresos_master}}">
@@ -101,7 +101,7 @@ $container = "'container'";
 		<tr style ="background-color: #ff9ea2 !important">
 		@endif
 
-			<td align="center">{{ $fechaformato = date("d/m/Y",strtotime($value->fecha))}}</td>
+			<td align="center">{{ $fechaformato = date("d/m/Y H:i:s",strtotime($value->fecha))}}</td>
 			
 			<td align="center">{{ $value->num_caja }}</td>
 			
@@ -204,6 +204,10 @@ $container = "'container'";
         </tr>
     </thead>
     <tbody>
+		<tr>
+            <th>MONTO APERTURA :</th>
+            <th class="text-right"><div id ="montoapertura"></div></th>
+        </tr>
         <tr>
             <th>INGRESOS :</th>
             <th class="text-right"><div id ="ingresostotal"></div></th>
@@ -239,6 +243,7 @@ $container = "'container'";
 	var ingresos_master = {{$ingresos_master}};
 	var egresos = {{$egresos}};
 	var saldo = {{$saldo}};
+	var montoapertura = {{$montoapertura}};
 	
 	$(document).ready(function () {
 
@@ -252,6 +257,7 @@ $container = "'container'";
 		$('#ingresosmaster').html(ingresos_master.toFixed(2));
 		$('#egreso').html(egresos.toFixed(2));
 		$('#saldoo').html(saldo.toFixed(2));
+		$('#montoapertura').html(montoapertura.toFixed(2));
 	});
 
 </script>

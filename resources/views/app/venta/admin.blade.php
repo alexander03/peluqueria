@@ -149,16 +149,28 @@ operaciones
 
 		<div class="col-lg-3 col-md-3 col-sm-3">
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
-				{!! Form::label('montoefectivo', 'Monto Efectivo:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
-				{!! Form::text('montoefectivo', '', array('class' => 'form-control input-lg montos', 'id' => 'montoefectivo', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
+				<div  class="col-lg-3 col-md-3 col-sm-3">
+					<img src="assets/images/efectivo.png" style="width: 60px; height: 60px">
+				</div>
+				<div  class="col-lg-9 col-md-9 col-sm-9">
+					{!! Form::text('montoefectivo', '', array('class' => 'form-control input-lg montos', 'id' => 'montoefectivo', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
+				</div>
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
-				{!! Form::label('montovisa', 'Monto Visa:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
-				{!! Form::text('montovisa', '', array('class' => 'form-control input-lg montos', 'id' => 'montovisa', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
+				<div  class="col-lg-3 col-md-3 col-sm-3">
+					<img src="assets/images/visa.png" style="width: 60px; height: 60px">
+				</div>
+				<div  class="col-lg-9 col-md-9 col-sm-9">
+					{!! Form::text('montovisa', '', array('class' => 'form-control input-lg montos', 'id' => 'montovisa', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
+				</div>
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
-				{!! Form::label('montomaster', 'Monto MasterCard:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
-				{!! Form::text('montomaster', '', array('class' => 'form-control input-lg montos', 'id' => 'montomaster', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
+				<div  class="col-lg-3 col-md-3 col-sm-3">
+					<img src="assets/images/master.png" style="width: 60px; height: 40px">
+				</div>
+				<div  class="col-lg-9 col-md-9 col-sm-9">
+					{!! Form::text('montomaster', '', array('class' => 'form-control input-lg montos', 'id' => 'montomaster', 'style' => 'text-align: right; font-size: 30px;', 'placeholder' => '0.00')) !!}
+				</div>
 			</div>
 			<div class="col-lg-12 col-md-12 col-sm-12 m-b-15">
 				{!! Form::label('total', 'Total:' ,array('class' => 'input-md', 'style' => 'margin-bottom: -30px;'))!!}
@@ -379,6 +391,7 @@ $(document).ready(function(){
 		var empleado = $('#empleado_id').val();
 		var cant = parseInt($("#cant"). val());
 		var tipo = $('#tipodocumento_id').val();
+		var total = parseFloat($("#total").val());
 		var letra = "";
 		if(tipo == 1){
 			letra ="B";
@@ -399,7 +412,7 @@ $(document).ready(function(){
 		}else{
 			swal({
 				title: 'Confirmar Guardado',
-				html: "<p><label>Sucursal:  </label>  "+ sucursal.options[sucursal.selectedIndex].text +"</p><p><label>N° Venta: </label>  "+ letra+ $('#serieventa').val()+"</p><p><label>Cliente:  </label>  "+ $('#cliente').val()+"</p><p><label>Empleado:  </label>  "+ $('#empleado_nombre').val()+"</p>",
+				html: "<p><label>Sucursal:  </label>  "+ sucursal.options[sucursal.selectedIndex].text +"</p><p><label>N° Venta: </label>  "+ letra+ $('#serieventa').val()+"</p><p><label>Cliente:  </label>  "+ $('#cliente').val()+"</p><p><label>Empleado:  </label>  "+ $('#empleado_nombre').val()+"</p><p><label>Total:  </label>  S/."+  total.toFixed(2) +"</p>",
 				type: 'question',
 				showCancelButton: true,
 				confirmButtonColor: '#54b359',

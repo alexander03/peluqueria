@@ -2,34 +2,44 @@
 {!! Form::model($sucursal, $formData) !!}	
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 	<div class="form-group">
-		{!! Form::label('nombre', 'Nombre:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+		<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('nombre', 'Nombre:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 		<div class="col-lg-9 col-md-9 col-sm-9">
 			{!! Form::text('nombre', null, array('class' => 'form-control input-xs', 'id' => 'nombre', 'placeholder' => 'Ingrese nombre')) !!}
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('direccion', 'Direccion:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+		<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('direccion', 'Direccion:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 		<div class="col-lg-9 col-md-9 col-sm-9">
 			{!! Form::text('direccion', null, array('class' => 'form-control input-xs', 'id' => 'direccion', 'placeholder' => 'Ingrese direccion')) !!}
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('telefono', 'Telefono:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+		<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('telefono', 'Telefono:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 		<div class="col-lg-9 col-md-9 col-sm-9">
 			{!! Form::text('telefono', null, array('class' => 'form-control input-xs', 'id' => 'telefono', 'placeholder' => 'Ingrese telefono')) !!}
 		</div>
 	</div>
 	@if($serienueva != null)
 	<div class="form-group">
-		{!! Form::label('serieventa', 'Serie venta:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
+		<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('serieventa', 'Serie venta:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-4">
 			{!! Form::text('serieventa', $serienueva, array('class' => 'form-control input-xs', 'id' => 'serieventa', 'placeholder' => 'Ingrese serie', 'maxlength' => '6')) !!}
 		</div>
 	</div>
 	@elseif($serieventa != null)
 	<div class="form-group">
-		{!! Form::label('serieventa', 'Serie venta:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
+		<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('serieventa', 'Serie venta:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-4">
 			{!! Form::text('serieventa', $serieventa->serie, array('class' => 'form-control input-xs', 'id' => 'serieventa', 'placeholder' => 'Ingrese serie', 'maxlength' => '4')) !!}
 		</div>
 	</div>
@@ -43,7 +53,7 @@
 {!! Form::close() !!}
 <script type="text/javascript">
 $(document).ready(function() {
-	configurarAnchoModal('450');
+	configurarAnchoModal('470');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 }); 
 </script>

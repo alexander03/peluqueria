@@ -38,6 +38,7 @@ Route::group(['middleware' => 'guest'], function() {
     //Register routes
     Route::get('registro','Auth\RegisterController@showRegistrationForm');
     Route::post('registro', 'Auth\RegisterController@register');
+    Route::post('registrovalidator', 'Auth\RegisterController@validator');
 });
 
 Route::group(['middleware' => 'auth'], function () {

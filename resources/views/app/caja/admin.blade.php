@@ -70,7 +70,7 @@ operaciones
 				@if($sucursal !== null)
 					@if($user->usertype_id == 3)
 						{!! Form::label('sucursal_id', 'Sucursal:') !!}
-						{!! Form::text('sucursal', $sucursal->nombre , array('class' => 'form-control input-xs', 'id' => 'sucursal' , 'readOnly')) !!}
+						{!! Form::text('sucursalnombre', $sucursal->nombre , array('class' => 'form-control input-xs', 'id' => 'sucursalnombre' , 'readOnly')) !!}
 						{!! Form::hidden('sucursal_id', $user->sucursal_id , array('id' => 'sucursal_id')) !!}
 					@else
 						{!! Form::label('sucursal_id', 'Sucursal:') !!}

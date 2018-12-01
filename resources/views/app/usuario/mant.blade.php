@@ -9,13 +9,17 @@ if (!is_null($usuario)) {
 {!! Form::model($usuario, $formData) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-group">
-	{!! Form::label('usertype_id', 'Tipo de usuario:', array('class' => 'col-lg-4 col-md-4 col-sm-4 control-label')) !!}
+	<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+	{!! Form::label('usertype_id', 'Tipo de usuario:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 	<div class="col-lg-8 col-md-8 col-sm-8">
 		{!! Form::select('usertype_id', $cboTipousuario, null, array('class' => 'form-control input-xs', 'id' => 'usertype_id')) !!}
 	</div>
 </div>
 <div class="form-group">
-	{!! Form::label('nombrepersona', 'Persona:', array('class' => 'col-lg-4 col-md-4 col-sm-4 control-label')) !!}
+<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+	{!! Form::label('nombrepersona', 'Persona:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 	{!! Form::hidden('person_id', null, array('id' => 'person_id')) !!}
 	<div class="col-lg-8 col-md-8 col-sm-8">
 		@if(!is_null($usuario))
@@ -26,13 +30,17 @@ if (!is_null($usuario)) {
 	</div>
 </div>
 <div class="form-group">
-	{!! Form::label('login', 'Login:', array('class' => 'col-lg-4 col-md-4 col-sm-4 control-label')) !!}
+<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+	{!! Form::label('login', 'Login:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 	<div class="col-lg-8 col-md-8 col-sm-8">
 		{!! Form::text('login', null, array('class' => 'form-control input-xs', 'id' => 'login', 'placeholder' => 'Ingrese login')) !!}
 	</div>
 </div>
 <div class="form-group">
-	{!! Form::label('password', 'Contraseña:', array('class' => 'col-lg-4 col-md-4 col-sm-4 control-label')) !!}
+<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+	{!! Form::label('password', 'Contraseña:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 	<div class="col-lg-8 col-md-8 col-sm-8">
 		{!! Form::password('password', array('class' => 'form-control input-xs', 'id' => 'password', 'placeholder' => 'Ingrese contraseña')) !!}
 	</div>

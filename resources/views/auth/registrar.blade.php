@@ -1,7 +1,18 @@
 @include('auth.header')
-<div class="wrapper-page">
+<div class="wrapper-page" style="margin: 7.5% auto;max-width: 840px;">
     <div class="card-box">
         <div class="panel-body">
+
+
+            <form class="form-horizontal"  id="registro" role="form" method="POST" action="{{ url('/registro') }}">
+                {{ csrf_field() }}
+
+            <div id="divMensajeError"></div>
+            
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+            
+
             <div class="text-center">
                 <a class="logo-lg"><i class="md md-equalizer"></i> <span>Registrar Empresa</span> </a>
             </div>
@@ -11,12 +22,11 @@
                 </div>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/registro') }}">
-                {{ csrf_field() }}
+
 
                 <div class="form-group{{ $errors->has('ruc') ? ' has-error' : '' }}">
                     <div class="col-xs-12">
-                        <input name="ruc" class="form-control" type="text" required="" placeholder="RUC" autofocus>
+                        <input name="ruc" class="form-control" type="text" placeholder="RUC" autofocus>
                         <i class="md md-account-circle form-control-feedback l-h-34"></i>
                         @if ($errors->has('ruc'))
                             <span class="help-block">
@@ -27,14 +37,14 @@
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="razonsocial" class="form-control" type="text" required="" placeholder="Razón Social">
+                        <input name="razonsocial" class="form-control" type="text" placeholder="Razón Social">
                         <i class="md md-info-outline form-control-feedback l-h-34"></i>
                     </div>
                 </div>
 
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     <div class="col-md-12">
-                        <input id="emailempresa" type="email" class="form-control" name="emailempresa" value="{{ $email or old('email') }}" placeholder="Correo Electrónico" required autofocus>
+                        <input id="emailempresa" type="email" class="form-control" name="emailempresa" value="{{ $email or old('email') }}" placeholder="Correo Electrónico"  autofocus>
                         <i class="md md-mail form-control-feedback l-h-34"></i>
 
                         @if ($errors->has('email'))
@@ -47,17 +57,22 @@
 
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="telefonosucursal" class="form-control" type="text" required="" placeholder="Teléfono">
+                        <input name="telefonosucursal" class="form-control" type="text" placeholder="Teléfono">
                         <i class="md md-phone form-control-feedback l-h-34"></i>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="direccion" class="form-control" type="text" required="" placeholder="Dirección">
+                        <input name="direccion" class="form-control" type="text" placeholder="Dirección">
                         <i class="md md-place form-control-feedback l-h-34"></i>
                     </div>
                 </div>
+
+
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+
 
             <div class="text-center">
                 <a class="logo-lg"><i class="md md-equalizer"></i> <span>Registrar Administrador</span> </a>
@@ -65,7 +80,7 @@
 
                 <div class="form-group{{ $errors->has('dni') ? ' has-error' : '' }}">
                     <div class="col-xs-12">
-                        <input name="dni" class="form-control" type="text" required="" placeholder="DNI" autofocus>
+                        <input name="dni" class="form-control" type="text" placeholder="DNI" autofocus>
                         <i class="md md-account-circle form-control-feedback l-h-34"></i>
                         @if ($errors->has('dni'))
                             <span class="help-block">
@@ -77,72 +92,27 @@
 
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="nombres" class="form-control" type="text" required="" placeholder="Nombres" autofocus>
+                        <input name="nombres" class="form-control" type="text" placeholder="Nombres" autofocus>
                         <i class="md md-info-outline form-control-feedback l-h-34"></i>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="apellidos" class="form-control" type="text" required="" placeholder="Apellidos">
+                        <input name="apellidos" class="form-control" type="text"  placeholder="Apellidos">
                         <i class="md md-info-outline form-control-feedback l-h-34"></i>
                     </div>
                 </div>
 
-                <?php
-
-                    use App\Departamento;
-
-                    $departamentos = Departamento::all();
-
-                ?>
-
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <select id="departamento" name="departamento" class="form-control">
-                            <option disabled selected>SELECCIONE DEPARTAMENTO</option>
-                            @foreach ($departamentos as $departamento)
-                                <option value='{{ $departamento->id }}'> {{ $departamento->nombre }}</option>
-                            @endforeach
-                        </select>
-                        <i class="md md-place form-control-feedback l-h-34"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-xs-12">
-                        <select id="provincia" name="provincia" class="form-control">
-                            <option disabled selected>SELECCIONE PROVINCIA</option>
-                        </select>
-                        <i class="md md-place form-control-feedback l-h-34"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-xs-12">
-                        <select id="distrito" name="distrito" class="form-control">
-                            <option disabled selected>SELECCIONE DISTRITO</option>
-                        </select>
-                        <i class="md md-place form-control-feedback l-h-34"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-xs-12">
-                        <input name="fechanacimiento" class="form-control" type="date" required="" placeholder="Fecha de Nacimiento">
-                        <i class="md md-cake form-control-feedback l-h-34"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-xs-12">
-                        <input name="telefono" class="form-control" type="text" required="" placeholder="Celular">
+                        <input name="telefono" class="form-control" type="text" placeholder="Celular">
                         <i class="md md-phone form-control-feedback l-h-34"></i>
                     </div>
                 </div>
 
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                     <div class="col-md-12">
-                        <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" placeholder="Correo Electrónico" required autofocus>
+                        <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" placeholder="Correo Electrónico"  autofocus>
                         <i class="md md-mail form-control-feedback l-h-34"></i>
 
                         @if ($errors->has('email'))
@@ -155,7 +125,7 @@
 
                 <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                     <div class="col-md-12">
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" required>
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" >
                         <i class="md md-vpn-key form-control-feedback l-h-34"></i>
 
                         @if ($errors->has('password'))
@@ -168,7 +138,7 @@
 
                 <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
                     <div class="col-md-12">
-                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirme Contraseña" required>
+                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirme Contraseña" >
                         <i class="md md-vpn-key form-control-feedback l-h-34"></i>
 
                         @if ($errors->has('password_confirmation'))
@@ -179,42 +149,55 @@
                     </div>
                 </div>
 
-                <div class="form-group" style="text-align: center">
-                    <div class="col-md-6">
-                        <button class="btn btn-primary btn-custom w-md waves-effect waves-light" type="submit">
+                
+            </div>
+            <div class="form-group" style="text-align: center">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <a class="btnGuardar btn btn-primary btn-custom w-md waves-effect waves-light">
                             Registrar
-                        </button>
+                        </a>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <a href="{{ url('/login') }}" class="btn btn-success btn-custom w-md waves-effect waves-light">
                             Cancelar
                         </a>
                     </div>
+                    <div class="col-md-3"></div>
                 </div>
+
             </form>
         </div>    
     </div>
 </div>
+
 @include('auth.footer')
 
 <script>
-    $('#departamento').change(function(event){
-		$.get("provincias/"+event.target.value+"",function(response, departamento){
-			$('#provincia').empty();
-			$("#provincia").append("<option disabled selected>SELECCIONE PROVINCIA</option>");
-			for(i=0; i<response.length; i++){
-				$("#provincia").append("<option value='"+response[i].id+"'> "+response[i].nombre+"</option>");
-			}
-		}, 'json');
-	});
+$('.btnGuardar').on('click', function(){
+        guardarRegistro("{{ url('/registrovalidator') }}");    
+});
+    /*
+$('#departamento').change(function(event){
+    $.get("provincias/"+event.target.value+"",function(response, departamento){
+        $('#provincia').empty();
+        $("#provincia").append("<option disabled selected>SELECCIONE PROVINCIA</option>");
+        for(i=0; i<response.length; i++){
+            $("#provincia").append("<option value='"+response[i].id+"'> "+response[i].nombre+"</option>");
+        }
+    }, 'json');
+});
 
-	$('#provincia').change(function(event){
-		$.get("distritos/"+event.target.value+"",function(response, provincia){
-			$('#distrito').empty();
-			$("#distrito").append("<option disabled selected>SELECCIONE DISTRITO</option>");
-			for(i=0; i<response.length; i++){
-				$("#distrito").append("<option value='"+response[i].id+"'> "+response[i].nombre+"</option>");
-			}
-		}, 'json');
-	});
+$('#provincia').change(function(event){
+    $.get("distritos/"+event.target.value+"",function(response, provincia){
+        $('#distrito').empty();
+        $("#distrito").append("<option disabled selected>SELECCIONE DISTRITO</option>");
+        for(i=0; i<response.length; i++){
+            $("#distrito").append("<option value='"+response[i].id+"'> "+response[i].nombre+"</option>");
+        }
+    }, 'json');
+});
+
+*/
+
 </script>

@@ -2,7 +2,9 @@
 {!! Form::model($concepto, $formData) !!}	
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 	<div class="form-group">
-		{!! Form::label('concepto', 'Concepto:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+		<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+			{!! Form::label('concepto', 'Concepto:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 		<div class="col-lg-9 col-md-9 col-sm-9">
 			{!! Form::text('concepto', null, array('class' => 'form-control input-xs', 'id' => 'concepto', 'placeholder' => 'Ingrese concepto')) !!}
 		</div>

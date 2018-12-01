@@ -2,20 +2,26 @@
 {!! Form::model($servicio, $formData) !!}	
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 	<div class="form-group">
-		{!! Form::label('descripcion', 'Descripción:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
+	<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+		{!! Form::label('descripcion', 'Descripción:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
+		<div class="col-lg-8 col-md-8 col-sm-8">
 			{!! Form::text('descripcion', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese descripción')) !!}
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('precio', 'Precio:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
+	<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+		{!! Form::label('precio', 'Precio:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
+		<div class="col-lg-8 col-md-8 col-sm-8">
 			{!! Form::text('precio', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese precio')) !!}
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('tipocomision', 'Tipo de Comisión:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
+		<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+		{!! Form::label('tipocomision', 'Tipo de Comisión:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
+		<div class="col-lg-8 col-md-8 col-sm-8">
 			@if($servicio == null)
 			<select id="tipocomision" name="tipocomision" class="form-control input-xs">
 				<option disabled selected>SELECCIONE TIPO DE COMISIÓN</option>
@@ -40,16 +46,18 @@
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('comision', 'Comisión:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
+	<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+		{!! Form::label('comision', 'Comisión:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
+		<div class="col-lg-8 col-md-8 col-sm-8">
 			{!! Form::text('comision', null, array('class' => 'form-control input-xs', 'id' => 'name', 'placeholder' => 'Ingrese comisión')) !!}
 		</div>
 	</div>
 
 
 	<div class="form-group">
-		{!! Form::label('frecuente', 'Frecuente:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
-		<div class="col-sm-9 col-xs-12">
+		{!! Form::label('frecuente', 'Frecuente:', array('class' => 'col-sm-4 col-xs-12 control-label')) !!}
+		<div class="col-sm-8 col-xs-12">
 		
 		@if($servicio == null)
 			<div class="form-check form-check-inline">
@@ -94,7 +102,7 @@
 {!! Form::close() !!}
 <script type="text/javascript">
 $(document).ready(function() {
-	configurarAnchoModal('450');
+	configurarAnchoModal('500');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 }); 
 </script>

@@ -81,6 +81,7 @@ class CajaController extends Controller
                 ->where('estado', "=", 1)
                 ->max('num_caja');
 
+        $montoapertura = 0.00;
         $ingresos_efectivo = 0.00;
         $ingresos_visa = 0.00;
         $ingresos_master = 0.00;
@@ -89,6 +90,11 @@ class CajaController extends Controller
         $saldo = 0.00;
 
         if (!is_null($maxapertura) && !is_null($maxcierre)) { // Ya existe una apertura y un cierre
+            $apertura = Movimiento::where('concepto_id', 1)
+                ->where('sucursal_id', "=", $sucursal_id)
+                ->where('estado', "=", 1)
+                ->where('num_caja',$maxapertura)->first();
+            $montoapertura = $apertura->total;
             if($aperturaycierre == 0){ //apertura y cierre iguales ---- mostrar desde apertura a cierre
                 /*
 
@@ -234,6 +240,7 @@ class CajaController extends Controller
                 */
                 //ingresos tarjeta visa
 
+
                 $ingresos_visa = Movimiento::where('num_caja','>', $maxapertura)
                                             ->where('tipomovimiento_id',2)
                                             ->where('estado', "=", 1)
@@ -299,7 +306,13 @@ class CajaController extends Controller
                 //saldo
                 $saldo = round($ingresos_total - $egresos, 2);
             }
+            $saldo += $montoapertura;
         }else if(!is_null($maxapertura) && is_null($maxcierre)) { //existe apertura pero no existe cierre
+            $apertura = Movimiento::where('concepto_id', 1)
+                ->where('sucursal_id', "=", $sucursal_id)
+                ->where('estado', "=", 1)
+                ->where('num_caja',$maxapertura)->first();
+            $montoapertura = $apertura->total;
             if($aperturaycierre == 1){ //apertura y cierre diferentes ------- mostrar desde apertura hasta ultimo movimiento
                 /*
 
@@ -400,6 +413,7 @@ class CajaController extends Controller
                 //saldo
                 $saldo = round($ingresos_total - $egresos, 2);
             }
+            $saldo += $montoapertura;
         }
 
         $pagina           = $request->input('page');
@@ -437,9 +451,9 @@ class CajaController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'ingresos_efectivo', 'ingresos_visa', 'ingresos_master' , 'ingresos_total', 'egresos' , 'saldo',  'aperturas' , 'cierres' , 'ruta', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'aperturaycierre', 'titulo_eliminar', 'titulo_registrar', 'titulo_apertura', 'titulo_cierre', 'ruta'));
+            return view($this->folderview.'.list')->with(compact('montoapertura', 'lista', 'ingresos_efectivo', 'ingresos_visa', 'ingresos_master' , 'ingresos_total', 'egresos' , 'saldo',  'aperturas' , 'cierres' , 'ruta', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'aperturaycierre', 'titulo_eliminar', 'titulo_registrar', 'titulo_apertura', 'titulo_cierre', 'ruta'));
         }
-        return view($this->folderview.'.list')->with(compact('lista', 'ingresos_efectivo', 'ingresos_visa', 'ingresos_master' , 'ingresos_total', 'egresos' , 'saldo', 'aperturas' , 'cierres' , 'ruta', 'aperturaycierre', 'titulo_registrar', 'titulo_apertura', 'titulo_cierre', 'entidad'));
+        return view($this->folderview.'.list')->with(compact('montoapertura', 'lista', 'ingresos_efectivo', 'ingresos_visa', 'ingresos_master' , 'ingresos_total', 'egresos' , 'saldo', 'aperturas' , 'cierres' , 'ruta', 'aperturaycierre', 'titulo_registrar', 'titulo_apertura', 'titulo_cierre', 'entidad'));
     }
 
     /**
@@ -686,12 +700,21 @@ class CajaController extends Controller
     public function store(Request $request)
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
-        $reglas     = array('num_caja' => 'required|numeric',
-                            'fecha'      => 'required',
-                            'concepto_id'   => 'required',
-                            'persona_id' => 'required',
-                            'total'      => 'required',
-                         );
+        if($request->input('concepto_id') == 1){
+            $reglas     = array('num_caja' => 'required|numeric',
+                                'fecha'      => 'required',
+                                'concepto_id'   => 'required',
+                                'persona_id' => 'required',
+                                'monto'      => 'required|numeric',
+                            );
+        }else{
+            $reglas     = array('num_caja' => 'required|numeric',
+                                'fecha'      => 'required',
+                                'concepto_id'   => 'required',
+                                'persona_id' => 'required',
+                                'total'      => 'required|numeric',
+                            );
+        }
         $mensajes   = array();
         $validacion = Validator::make($request->all(), $reglas, $mensajes);
         if ($validacion->fails()) {
@@ -702,8 +725,13 @@ class CajaController extends Controller
             $movimiento->tipomovimiento_id = 1;
             $movimiento->concepto_id    = $request->input('concepto_id');
             $movimiento->num_caja   = $request->input('num_caja');
-            $movimiento->total          = $request->input('total');
-            $movimiento->subtotal          = $request->input('total');
+            if($request->input('concepto_id') == 1){
+                $movimiento->total          = $request->input('monto');
+                $movimiento->subtotal          = $request->input('monto');
+            }else{
+                $movimiento->total          = $request->input('total');
+                $movimiento->subtotal          = $request->input('total');
+            }
             $movimiento->estado         = 1;
             $movimiento->persona_id     = $request->input('persona_id');
             $user           = Auth::user();

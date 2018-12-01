@@ -38,7 +38,9 @@
 
 @if($entidad =="Persona")
 <div class="form-group col-xs-12">
-	{!! Form::label('roles', 'Roles:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+	{!! Form::label('roles', 'Roles:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-4 col-xs-12">
 		<input type="checkbox" id="cliente" name="cliente" value="C"><label for="cliente"> Cliente</label><br>
 		<input type="checkbox" id="proveedor" name="proveedor" value="P"><label for="proveedor"> Proveedor</label><br>
@@ -84,8 +86,8 @@
 			}).done(function(info){
 				respuesta = info;
 			}).always(function(){
-				repetido(entidad);
 				cerrarModal();
+				repetido(entidad);
 			});
 		
 		@elseif($entidad == "Proveedor")
@@ -100,8 +102,8 @@
 			}).done(function(info){
 				respuesta = info;
 			}).always(function(){
-				repetido(entidad);
 				cerrarModal();
+				repetido(entidad);
 			});
 
 		@elseif($entidad == "Trabajador")
@@ -116,8 +118,8 @@
 			}).done(function(info){
 				respuesta = info;
 			}).always(function(){
-				repetido(entidad);
 				cerrarModal();
+				repetido(entidad);
 			});
 
 		@elseif($entidad == "Persona")
@@ -141,8 +143,8 @@
 			}).done(function(info){
 				respuesta = info;
 			}).always(function(){
-				repetido(entidad);
 				cerrarModal();
+				repetido(entidad);
 			});
 		@endif
 

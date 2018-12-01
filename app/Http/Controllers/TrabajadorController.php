@@ -133,8 +133,6 @@ class TrabajadorController extends Controller
         }else{
             $reglas = array(
             'documento'       => 'required|max:11|unique:personamaestro,ruc,NULL,id,deleted_at,NULL',
-            'razonsocial'    => 'required|max:100',
-            'celular'    => 'required|max:15',
             );
         }
         $validacion = Validator::make($request->all(),$reglas);
@@ -245,8 +243,7 @@ class TrabajadorController extends Controller
         }else{
             $reglas = array(
             'documento'       => 'required|max:11|unique:personamaestro,ruc,'.$id.',id,deleted_at,NULL',
-            'razonsocial'    => 'required|max:100',
-            );
+S            );
         }
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {

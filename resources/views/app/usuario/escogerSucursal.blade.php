@@ -88,8 +88,8 @@ operaciones
 			respuesta = info;
 		}).always(function(){
 			if(respuesta == "OK"){
-				guardarSucursalCorrecto();
 				cargarRutaMenu('caja', 'container', '15');
+				guardarSucursalCorrecto();
 			}
 		});
 	}

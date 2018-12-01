@@ -8,7 +8,9 @@
 		</div>
 	</div>
 	<div class="form-group">
-		{!! Form::label('montopagar', 'Monto a pagar:', array('class' => 'col-lg-6 col-md-6 col-sm-6 control-label')) !!}
+		<div class="control-label col-lg-6 col-md- col-sm-6" style ="padding-top: 15px">
+		{!! Form::label('montopagar', 'Monto a pagar:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
 		<div class="col-lg-4 col-md-4 col-sm-4">
 			{!! Form::text('montopagar', null, array('class' => 'form-control input-xs', 'id' => 'montopagar', 'placeholder' => '0.00')) !!}
 		</div>
@@ -22,7 +24,7 @@
 {!! Form::close() !!}
 <script type="text/javascript">
 $(document).ready(function() {
-	configurarAnchoModal('350');
+	configurarAnchoModal('400');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 
 	$("#montopagar").blur(function() {

@@ -56,9 +56,6 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
 
-       //Validates data
-        $this->validator($request->all())->validate();
-
        //Create user
         $user = $this->create($request->all());
 
@@ -76,23 +73,23 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(Request $request)
     {
-        return Validator::make($data, [
+        $validacion = Validator::make($request->all(), [
             'ruc'       => 'required|numeric|digits:11|unique:empresa',
             'razonsocial'    => 'required|string|max:200|unique:empresa',
             'emailempresa' => 'required|email|max:255|unique:empresa',
             'dni'       =>   'required|numeric|digits:8|unique:personamaestro',
             'nombres'  => 'required',
             'apellidos'  => 'required',
-            'departamento'  => 'required',
-            'provincia'  => 'required',
-            'distrito'  => 'required',
-            'fechanacimiento'  => 'required',
-            'telefono'   => 'required|numeric|digits:9',
             'email' => 'required|email|max:255|unique:personamaestro',
             'password' => 'required|min:6|max:18|confirmed',
         ]);
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }else{
+            return "OK";
+        }
     }
 
     /**
@@ -108,8 +105,8 @@ class RegisterController extends Controller
             $personamaestro->dni              = $data['dni'];
             $personamaestro->nombres          = strtoupper($data['nombres']);
             $personamaestro->apellidos        = strtoupper($data['apellidos']);
-            $personamaestro->distrito_id      = $data['distrito'];
-            $personamaestro->fechanacimiento  = $data['fechanacimiento'];
+            //$personamaestro->distrito_id      = $data['distrito'];
+            //$personamaestro->fechanacimiento  = $data['fechanacimiento'];
             $personamaestro->celular          = $data['telefono'];
             $personamaestro->email            = $data['email'];
             $personamaestro->save();

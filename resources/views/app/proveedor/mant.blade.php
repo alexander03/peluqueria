@@ -40,35 +40,45 @@ if (!is_null($cliente)) {
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 {!! Form::hidden('personamaestro',null,  array('id' => 'personamaestro')) !!}
 <div class="form-group col-xs-12">
-	{!! Form::label('documento', 'N° Documento:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+	{!! Form::label('documento', 'N° Documento:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-4 col-xs-12">
 		@if(!is_null($cliente))
-			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11', 'readOnly')) !!}
+			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11' , 'readOnly')) !!}
 		@else
 			{!! Form::text('documento', $documento, array('class' => 'form-control input-xs', 'id' => 'documento', 'placeholder' => 'Ingrese N° Documento', 'maxlength' => '11')) !!}
 		@endif
 	</div>
 </div>
 <div class="form-group col-xs-12">
-	{!! Form::label('nombres', 'Nombres:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('nombres', 'Nombres:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-9 col-xs-12">
 		{!! Form::text('nombres', null, array('class' => 'form-control input-xs', 'id' => 'nombres', 'placeholder' => 'Ingrese Nombres', 'disabled' => 'disabled')) !!}
 	</div>
 </div>
 <div class="form-group col-xs-12">
-	{!! Form::label('apellidos', 'Apellidos:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('apellidos', 'Apellidos:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-9 col-xs-12">
 		{!! Form::text('apellidos', null, array('class' => 'form-control input-xs', 'id' => 'apellidos', 'placeholder' => 'Ingrese Apellidos', 'disabled' => 'disabled')) !!}
 	</div>
 </div>
 <div class="form-group col-xs-12">
-	{!! Form::label('razonsocial', 'Razón Social:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('razonsocial', 'Razón Social:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-9 col-xs-12">
 		{!! Form::text('razonsocial', null, array('class' => 'form-control input-xs', 'id' => 'razonsocial', 'placeholder' => 'Ingrese Razon Social', 'disabled' => 'disabled')) !!}
 	</div>
 </div>
 <div class="form-group col-xs-12">
-	{!! Form::label('celular', 'Cel/Telf:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
+	<div class="control-label col-lg-3 col-md-3 col-sm-3" style ="padding-top: 15px">
+		{!! Form::label('celular', 'Cel/Telf:') !!}<div class="" style="display: inline-block;color: red;">*</div>
+	</div>
 	<div class="col-sm-5 col-xs-12">
 		{!! Form::text('celular', null, array('class' => 'form-control input-xs', 'id' => 'celular', 'placeholder' => 'Ingrese Celular', 'maxlength' => '9')) !!}
 	</div>
@@ -332,17 +342,17 @@ function verificarpersona(documento, tipo, entidad, accion){
 
 				if(entidad == "cliente"){
 
-					var url = "/peluqueria/cliente/repetido/"+ respuesta.persona.id +"/SI";
+					var url = "/cliente/repetido/"+ respuesta.persona.id +"/SI";
 					modal( url , 'Registrar Cliente');
 
 				}else if(entidad == "Proveedor"){
 
-					var url = "/peluqueria/proveedor/repetido/"+ respuesta.persona.id +"/SI";
+					var url = "/proveedor/repetido/"+ respuesta.persona.id +"/SI";
 					modal( url , 'Registrar Proveedor');
 
 				}else if(entidad == "Trabajador"){
 
-					var url = "/peluqueria/trabajador/repetido/"+ respuesta.persona.id +"/SI";
+					var url = "/trabajador/repetido/"+ respuesta.persona.id +"/SI";
 					modal( url , 'Registrar Trabajador');
 					
 				}

@@ -3,7 +3,7 @@
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 {!! $mensaje or '<blockquote><p class="text-danger">¿Esta seguro de eliminar el registro?</p></blockquote>' !!}
 <div class="form-group" style="padding: 15px;">
-	{!! Form::label('motivo', 'Motivo:')!!}
+	{!! Form::label('motivo', 'Motivo:')!!}<div class="" style="display: inline-block;color: red;">*</div>
 	<textarea class="form-control input-xs" id="motivo" cols="10" rows="5" name="motivo"></textarea>
 </div>
 <div class="form-group">

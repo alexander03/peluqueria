@@ -15,7 +15,15 @@
 			{!! Form::text('fecha', '', array('class' => 'form-control input-xs', 'id' => 'fecha', 'readOnly')) !!}
 		</div>
 	</div>
-	<div class="form-group">		
+	<div class="form-group" onload="mueveReloj()">
+		<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+			{!! Form::label('hora', 'Hora:')!!}
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+			{!! Form::text('hora', '', array('class' => 'form-control input-xs', 'id' => 'hora', 'readOnly')) !!}
+		</div>
+	</div>
+	<div class="form-group" style="display:none;">	
 		<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
 			{!! Form::label('num_caja', 'Nro:')!!}
 		</div>
@@ -23,13 +31,21 @@
 			{!! Form::text('num_caja', '', array('class' => 'form-control input-xs', 'id' => 'num_caja', 'readOnly')) !!}
 		</div>
 	</div>
-	<div class="form-group">
+	<div class="form-group" style="display:none;">	
 		<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
 			{!! Form::label('concepto', 'Concepto:')!!}
 		</div>
 		<div class="col-lg-6 col-md-6 col-sm-6">
 			{!! Form::text('concepto', '', array('class' => 'form-control input-xs', 'id' => 'concepto', 'readOnly')) !!}
 			{!! Form::hidden('concepto_id',null,array('id'=>'concepto_id')) !!}
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
+			{!! Form::label('monto', 'Monto:')!!}<div class="" style="display: inline-block;color: red;">*</div>
+		</div>
+		<div class="col-lg-6 col-md-6 col-sm-6">
+			{!! Form::text('monto', '', array('class' => 'form-control input-xs', 'id' => 'monto')) !!}
 		</div>
 	</div>
 	<div class="form-group">
@@ -84,8 +100,45 @@ $(document).ready(function() {
 	//TOTAL
 	$('#total').val(0);
 
-	$('#comentario').focus();
+	$('#monto').focus();
+
+	mueveReloj();
 
 }); 
+	
+/*Script del Reloj */
+function mueveReloj() {
+marcacion = new Date()
+Hora = marcacion.getHours()
+Minutos = marcacion.getMinutes()
+Segundos = marcacion.getSeconds()
+
+/*variable para el apóstrofe de am o pm*/
+if (Hora < 12) {
+	dn = "a.m"
+}else{
+	dn = "p.m"
+	Hora = Hora - 12
+}
+if (Hora == 0)
+Hora = 12
+
+/* Si la Hora, los Minutos o los Segundos son Menores o igual a 9, le añadimos un 0 */
+if (Hora <= 9) Hora = "0" + Hora
+if (Minutos <= 9) Minutos = "0" + Minutos
+if (Segundos <= 9) Segundos = "0" + Segundos
+/* Termina el Script del Reloj */
+
+horaImprimible = Hora + ":" + Minutos + ":" + Segundos + " " + dn
+
+$('#hora').val(horaImprimible);
+
+//La función se tendrá que llamar así misma para que sea dinámica, 
+//de esta forma:
+
+setTimeout(mueveReloj,1000)
+
+}
 </script>
+
 

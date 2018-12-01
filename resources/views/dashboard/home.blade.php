@@ -8,6 +8,8 @@ if($user->fecha_sucursal != null){
 }
 $hoy =new \Datetime();
 $hoy = $hoy->format('d-m-Y');
+//$hora =new \Datetime();
+//$hora = $hora->format('d/m/Y h:i:s a');
 $cant_sucursal = Sucursal::where('empresa_id',$user->empresa_id)->count('id');
 ?>
 @include('dashboard.header_start')

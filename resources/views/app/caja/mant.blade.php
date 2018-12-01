@@ -78,7 +78,7 @@
 		</div>
 		<div class="col-lg-4 col-md-4 col-sm-4">
 			<div class="control-label col-lg-4 col-md-4 col-sm-4" style ="padding-top: 15px">
-				{!! Form::label('total', 'Total:')!!}
+				{!! Form::label('total', 'Total:')!!}<div class="" style="display: inline-block;color: red;">*</div>
 			</div>
 			<div class="col-lg-8 col-md-8 col-sm-8">
 				{!! Form::text('total', '', array('class' => 'form-control input-xs',  'id' => 'total', 'placeholder' => '0.00' )) !!}
