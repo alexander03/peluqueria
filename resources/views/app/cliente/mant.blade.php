@@ -118,7 +118,7 @@ $departamentos = Departamento::all();
 <div class="form-group col-sm-12">
 	{!! Form::label('departamento_id', 'Departamento:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-9 col-xs-12">
-		@if(!is_null($cliente))
+		@if(!is_null($cliente) && !is_null($cliente->distrito_id))
 			<select id="departamento_id" name="departamento_id" class="form-control input-xs">
 				<option disabled>SELECCIONE DEPARTAMENTO</option>
 				@foreach ($departamentos as $departamento)
@@ -141,11 +141,10 @@ $departamentos = Departamento::all();
 	</div>
 </div>
 
-
 <div class="form-group col-sm-12">
 	{!! Form::label('provincia_id', 'Provincia:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-9 col-xs-12">
-		@if(!is_null($cliente))
+		@if(!is_null($cliente) && !is_null($cliente->distrito_id)) 
 			<select id="provincia_id" name="provincia_id" class="form-control input-xs">
 				<option disabled>SELECCIONE PROVINCIA</option>
 				@foreach ($provincias as $provincia)
@@ -168,7 +167,7 @@ $departamentos = Departamento::all();
 <div class="form-group col-sm-12">
 	{!! Form::label('distrito_id', 'Distrito:', array('class' => 'col-sm-3 col-xs-12 control-label')) !!}
 	<div class="col-sm-9 col-xs-12">
-		@if(!is_null($cliente))
+		@if(!is_null($cliente) && !is_null($cliente->distrito_id))
 			<select id="distrito_id" name="distrito_id" class="form-control input-xs">
 				<option disabled selected>SELECCIONE DISTRITO</option>
 				@foreach ($distritos as $distrito)
@@ -187,6 +186,8 @@ $departamentos = Departamento::all();
 		<i class="md md-place form-control-feedback l-h-34"></i>
 	</div>
 </div>
+
+
 
 
 <div id="comisionhtml" class="form-group col-sm-12">

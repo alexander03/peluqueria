@@ -154,7 +154,7 @@
             <div class="form-group" style="text-align: center">
                     <div class="col-md-3"></div>
                     <div class="col-md-3">
-                        <a class="btnGuardar btn btn-primary btn-custom w-md waves-effect waves-light">
+                        <a class="btnGuardar btn btn-primary btn-custom w-md waves-effect waves-light" onclick="guardarRegistro('{{ url('/registrovalidator') }}'); ">
                             Registrar
                         </a>
                     </div>
@@ -171,12 +171,11 @@
     </div>
 </div>
 
-@include('auth.footer')
 
 <script>
-$('.btnGuardar').on('click', function(){
+/*$('.btnGuardar').on('click', function(){
         guardarRegistro("{{ url('/registrovalidator') }}");    
-});
+});*/
     /*
 $('#departamento').change(function(event){
     $.get("provincias/"+event.target.value+"",function(response, departamento){
@@ -201,3 +200,5 @@ $('#provincia').change(function(event){
 */
 
 </script>
+
+@include('auth.footer')
