@@ -40,20 +40,6 @@ operaciones
 3 eliminar
 */
 ?>
-<div class="row">
-    <div class="col-sm-12">
-        <div class="page-title-box">
-            {{--
-            <ol class="breadcrumb pull-right">
-                <li><a href="#">Minton</a></li>
-                <li><a href="#">Tables</a></li>
-                <li class="active">Datatable</li>
-            </ol>
-            --}}
-            <h4 class="page-title">{{ $title }}</h4>
-        </div>
-    </div>
-</div>
 <div class="row" style="background: rgba(51,122,183,0.10);">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
@@ -63,8 +49,8 @@ operaciones
 		<h4 class="page-venta" style ="margin-top: 3px;">SELECCIONE EMPLEADO</h4><div style="width: 100%; text-align: right; margin-top: -25px;"><a type="button" id="btnMostrarEmpleados" class="btn btn-warning btn-xs glyphicon glyphicon-chevron-up" style="width: 25px; height: 23px;" value="0"></div></a>
 		<div id="empleados" style=" margin: 10px 0px; display: -webkit-inline-box; width: 100%; overflow-x: scroll; border-style: groove;">
 			@foreach($empleados  as $key => $value)
-				<div class="empleado" id="{{ $value->id}}" style="margin: 5px; width: 150px; height: 170px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181); border-radius: 10px;" >
-					<img src="assets/images/empleado.png" style="width: 120px; height: 120px">
+				<div class="empleado" id="{{ $value->id}}" style="margin: 5px; width: 120px; height: 100px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181); border-radius: 10px;" >
+					<img src="assets/images/empleado.png" style="width: 50px; height: 50px">
 					<label style="font-size: 11px;">{{ $value->razonsocial ? $value->razonsocial : $value->nombres.' '.$value->apellidos}}</label>
 				</div>
 			@endforeach
@@ -113,9 +99,9 @@ operaciones
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					<h5 align="center" class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: -10px; margin-top: 0px;">SERVICIOS FRECUENTES</h5>
-					<div id="servicios_frecuentes" class="col-lg-12 col-md-12 col-sm-12" style="margin: 10px; border-style: groove; width: 100%; height: 160px; overflow-y: scroll;">
+					<div id="servicios_frecuentes" class="col-lg-12 col-md-12 col-sm-12" style="margin: 10px; border-style: groove; width: 100%; height: 180px; overflow-y: scroll;">
 						@foreach($servicios  as $key => $value)
-							<div class="servicio_frecuente col-lg-3 col-md-3 col-sm-3" id="{{ $value->id}}"  precio="{{ $value->precio }}" descripcion="{{ $value->descripcion }}" style="margin: 5px; width: 85px; height: 65px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181); border-radius: 10px;" >
+							<div class="servicio_frecuente col-lg-3 col-md-3 col-sm-3" id="{{ $value->id}}"  precio="{{ $value->precio }}" descripcion="{{ $value->descripcion }}" style="margin: 5px; width: 85px; height: 75px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181); border-radius: 10px;" >
 								<img src="assets/images/peine_1.png" style="width: 30px; height: 30px">
 								<label style="font-size: 9.5px;">{{ $value->descripcion}}</label>
 							</div>
@@ -124,7 +110,7 @@ operaciones
 				</div>
 
 				<div class="form-group col-lg-12 col-md-12 col-sm-12">
-					<div class="col-lg-7 col-md-7 col-sm-7">
+					<div class="col-lg-9 col-md-9 col-sm-9">
 						{!! Form::label('servicio', 'Servicio/Producto:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 						{!! Form::text('servicio', '', array('class' => 'form-control input-sm', 'id' => 'servicio')) !!}
 						{!! Form::hidden('servicio_id',null,array('id'=>'servicio_id')) !!}
@@ -135,8 +121,8 @@ operaciones
 						{!! Form::label('cantidad', 'Cantidad:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 						{!! Form::number('cantidad', null, array('class' => 'form-control input-sm', 'min' => '1', 'id' => 'cantidad', 'style' => "text-align:center;")) !!}
 					</div>
-					<div class="col-lg-3 col-md-3 col-sm-3" style="margin-top:20px;">
-						{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Agregar', array('class' => 'btn btn-primary waves-effect waves-light m-l-10 btn-sm btnAgregar', 'activo' => 'si' )) !!}
+					<div class="col-lg-1 col-md-1 col-sm-1" style="margin-top:20px;">
+						{!! Form::button('<i class="glyphicon glyphicon-plus"></i>', array('class' => 'btn btn-primary waves-effect waves-light btn-sm btnAgregar', 'activo' => 'si' )) !!}
 					</div>
 					{!! Form::hidden('cant',null,array('id'=>'cant', 'value' => '0')) !!}
 					<h5 align="center" class="col-lg-12 col-md-12 col-sm-12 m-t-30">LISTA SERVICIOS/PRODUCTOS</h5>

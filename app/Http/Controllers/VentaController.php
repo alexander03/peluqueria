@@ -134,7 +134,7 @@ class VentaController extends Controller
         foreach ($list as $key => $value) {
             $data[] = array(
                 'id'    => $value->id,
-                'descripcion' => $value->descripcion,
+                'descripcion' => $value->descripcion ." - S/.". $value->precio ,
                 'precio' => $value->precio,
                 'tipo' => 'S',
             );
@@ -159,7 +159,7 @@ class VentaController extends Controller
         foreach ($list as $key => $value) {
             $data[] = array(
                 'id'    => $value->id,
-                'descripcion' => $value->descripcion,
+                'descripcion' => $value->descripcion ." - S/.". $value->precioventa ,
                 'precio' => $value->precioventa,
                 'tipo' => 'P',
             );
