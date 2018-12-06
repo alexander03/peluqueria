@@ -488,6 +488,8 @@ function permisoRegistrar(){
 				$(this).css('background', 'rgb(179,188,237)');
 				$('#empleado_id').attr('value',idempleado);
 				$("#empleado_nombre").val($(this).children('label').html());
+
+				setTimeout ("ocultarEmpleados();", 500); 
 			});
 
 			$('#divMensajeErrorVenta').html("");
@@ -496,6 +498,13 @@ function permisoRegistrar(){
 	});
 
 	return aperturaycierre;
+}
+function ocultarEmpleados(){
+	$('#btnMostrarEmpleados').attr('value','1');
+	$('#empleados').css('display','none');
+	$('#btnMostrarEmpleados').removeClass('glyphicon-chevron-up');
+	$('#btnMostrarEmpleados').addClass('glyphicon-chevron-down');
+	$('#tituloDetalle').css('margin-top','5px');
 }
 
 </script>

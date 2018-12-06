@@ -103,7 +103,6 @@ $container = "'container'";
 
 			<td align="center">{{ $fechaformato = date("d/m/Y H:i:s",strtotime($value->fecha))}}</td>
 			
-			<td align="center">{{ $value->num_caja }}</td>
 			
 			<?php
 			$concepto = Concepto::find($value->concepto_id);
@@ -120,6 +119,23 @@ $container = "'container'";
 			@else
 				<td>{{ $personamaestro_persona->razonsocial }}</td>
 			@endif
+
+			<?php
+			$venta = null;
+			$personamaestro_trabajador = null;
+			if($value->venta_id !=null){
+				$venta = Movimiento::find($value->venta_id);
+				$persona_trabajador = Persona::find($venta->trabajador_id);
+				$personamaestro_trabajador = Personamaestro::find($persona_trabajador->personamaestro_id);
+			}
+			?>
+			@if($personamaestro_trabajador != null)
+				<td>{{ $personamaestro_trabajador->nombres . ' ' .$personamaestro_trabajador->apellidos }}</td>
+			@else
+				<td align="center"> - </td>
+			@endif
+
+
 			
 			@if($concepto->tipo == 0)
 			<td align="center" style="color:green;font-weight: bold;">{{ $value->total }}</td>

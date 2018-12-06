@@ -426,9 +426,9 @@ class CajaController extends Controller
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => 'Fecha', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Nro', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Concepto', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Persona', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Trabajador', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Ingresos', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Egresos', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Pago', 'numero' => '1');
