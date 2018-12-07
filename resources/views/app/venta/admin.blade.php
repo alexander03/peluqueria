@@ -101,7 +101,7 @@ operaciones
 					<h5 align="center" class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: -10px; margin-top: 0px;">SERVICIOS FRECUENTES</h5>
 					<div id="servicios_frecuentes" class="col-lg-12 col-md-12 col-sm-12" style="margin: 10px; border-style: groove; width: 100%; height: 180px; overflow-y: scroll;">
 						@foreach($servicios  as $key => $value)
-							<div class="servicio_frecuente col-lg-3 col-md-3 col-sm-3" id="{{ $value->id}}"  precio="{{ $value->precio }}" descripcion="{{ $value->descripcion }}" style="margin: 5px; width: 85px; height: 75px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181); border-radius: 10px;" >
+							<div class="servicio_frecuente col-lg-3 col-md-3 col-sm-3" id="{{ $value->id}}"  precio="{{ $value->precio }}" descripcion="{{ $value->descripcion }}" editable="{{ $value->editable }}" style="margin: 5px; width: 85px; height: 75px; text-align: center; border-style: solid; border-color: rgb(63, 81, 181); border-radius: 10px;" >
 								<img src="assets/images/peine_1.png" style="width: 30px; height: 30px">
 								<label style="font-size: 9.5px;">{{ $value->descripcion}}</label>
 							</div>
@@ -113,9 +113,11 @@ operaciones
 					<div class="col-lg-9 col-md-9 col-sm-9">
 						{!! Form::label('servicio', 'Servicio/Producto:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
 						{!! Form::text('servicio', '', array('class' => 'form-control input-sm', 'id' => 'servicio')) !!}
+						{!! Form::hidden('servicionombre',null,array('id'=>'servicionombre')) !!}
 						{!! Form::hidden('servicio_id',null,array('id'=>'servicio_id')) !!}
 						{!! Form::hidden('tipo',null,array('id'=>'tipo')) !!}
 						{!! Form::hidden('precio',null,array('id'=>'precio')) !!}
+						{!! Form::hidden('editable',null,array('id'=>'editable')) !!}
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-2">
 						{!! Form::label('cantidad', 'Cantidad:' ,array('class' => 'input-sm', 'style' => 'margin-bottom: -30px;'))!!}
@@ -294,7 +296,8 @@ $(document).ready(function(){
 		var idservicio_frecuente = $(this).attr('id');
 		var precio = parseFloat($(this).attr('precio'));
 		var descripcion = $(this).attr('descripcion');
-		var cant = $("#cant"). val();
+		var editable = $(this).attr('editable');
+		var cant = $("#cant").val();
 
 		$(this).css('background', 'rgb(179,188,237)');
 		
@@ -305,37 +308,68 @@ $(document).ready(function(){
 				if(idservicio_frecuente == this.id){
 					if($(this).attr('class') == "DetalleServicio"){
 						var cantidadfila = parseInt($(this).attr('cantidad'));
+						var precioactual = parseFloat($(this).attr('precio'));
 						cantidadfila++;
 						$(this).attr('cantidad',cantidadfila);
-						var nuevafila = '<td>'+ descripcion +'</td><td>'+ cantidadfila +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidadfila).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+						if(editable == 0){
+							var nuevafila = '<td style="vertical-align: middle; text-align: left;">'+ descripcion +'</td><td style="vertical-align: middle;">'+ cantidadfila +'</td><td style="vertical-align: middle;">'+ (precio).toFixed(2) +'</td><td style="vertical-align: middle;">'+ (precio*cantidadfila).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+						}else if(editable == 1){
+							var nuevafila = '<td style="vertical-align: middle; text-align: left;">'+ descripcion +'</td><td style="vertical-align: middle;">'+ cantidadfila +'</td><td style="vertical-align: middle;"><input class="form-control input-xs precioeditable" style="text-align: right; width: 70px;" type="text" value="'+ (precioactual).toFixed(2) +'"></td><td class="precioacumulado" style="vertical-align: middle;">'+ (precioactual*cantidadfila).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precioactual*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+						}
 						$(this).html(nuevafila);
 						existe = true;
+						calcularTotal();
 					}
 				}
 			});
 		}
 
 		if(!existe){
-			fila =  '<tr class="DetalleServicio" id="'+ idservicio_frecuente +'" cantidad="'+ 1 +'"><td>'+ descripcion +'</td><td>'+ 1 +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+			if(editable == 0){
+				var fila =  '<tr align="center" class="DetalleServicio" id="'+ idservicio_frecuente +'" cantidad="'+ 1 +'" precio='+ (precio).toFixed(2) +'><td style="vertical-align: middle; text-align: left;">'+ descripcion +'</td><td style="vertical-align: middle;">'+ 1 +'</td><td style="vertical-align: middle;">'+ (precio).toFixed(2) +'</td><td style="vertical-align: middle;">'+ (precio).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+			}else if(editable == 1){
+				var fila =  '<tr align="center" class="DetalleServicio" id="'+ idservicio_frecuente +'" cantidad="'+ 1 +'" precio='+ (precio).toFixed(2) +'><td style="vertical-align: middle; text-align: left;">'+ descripcion +'</td><td style="vertical-align: middle;">'+ 1 +'</td><td style="vertical-align: middle;"><input class="form-control input-xs precioeditable" style="text-align: right; width: 70px;" type="text" value="'+ (precio).toFixed(2) +'"></td><td class="precioacumulado" style="vertical-align: middle;">'+ (precio).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+			}
 			$("#detalle").append(fila);
-		}
-		
-		var total = $("#total").val();
-		if(total){
-			var total = parseFloat($("#total").val());
-		}else{
-			var total = 0;
+			cant++;
+			$("#cant").val(cant);
+			calcularTotal();
 		}
 
-		total += precio;
-		$("#total").val(total.toFixed(2));
+		$(".precioeditable").blur(function() {
+			var elemento = this;
+			var precionuevo = parseFloat($(this).val());
+			if(precionuevo >= 0){
+				var tr = $(this).parent().parent();
+				var precioactual = $(tr).attr('precio');
+				var cantidad = $(tr).attr('cantidad');
+				$(tr).attr('precio',(precionuevo).toFixed(2));
+				var trprecioacumulado = $(tr).find('.precioacumulado');
+				$(trprecioacumulado).html((precionuevo*cantidad).toFixed(2));
+				var btneliminar = $(tr).find('.btnEliminar');
+				$(btneliminar).attr('precio',(precionuevo*cantidad).toFixed(2));
+				calcularTotal();
+				$("#montoefectivo").val("");
+				$("#montovisa").val("");
+				$("#montomaster").val("");
+				$("#vuelto").val((0).toFixed(2));
+				//$('#btnGuardar').prop('disabled', false);
+			}else{
+				var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+				cadenaError += '<li>Los campos de precios editables no deben ser negativos.</li></ul></div>';
+				$('#divMensajeErrorVenta').html(cadenaError);
+				$('#btnGuardar').prop('disabled', true);
+			}
+
+		});
+	
+		
 		$("#montoefectivo").val("");
 		$("#montovisa").val("");
 		$("#montomaster").val("");
 		$("#vuelto").val((0).toFixed(2));
 
-		cant++;
-		$("#cant").val(cant);
+		
 
 		if($('#montoefectivo').val() != ""){
 			var montoefectivo = parseFloat($('#montoefectivo').val());
@@ -386,30 +420,52 @@ $(document).ready(function(){
 		}else if(tipo == 3){
 			letra ="T";
 		}
-		if(!empleado || cant==0){
-			var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
-			if(!empleado){
-				cadenaError += ' <li> El campo empleado es obligatorio.</li>';
+
+
+		var negativo = false;
+		$(".precioeditable").each(function(){
+			var precioeditable = parseFloat($(this).val());
+			if(precioeditable >= 0){
+				negativo = false;
+			}else{
+				negativo = true;
 			}
-			if(cant ==0){
-				cadenaError += '<li>Debe agregar mínimo un servicio o producto.</li></ul></div>';
+		});
+		console.log("hay negativos = " + negativo);
+
+		if(!negativo){
+			if(!empleado || cant==0){
+				var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+				if(!empleado){
+					cadenaError += ' <li> El campo empleado es obligatorio.</li>';
+				}
+				if(cant ==0){
+					cadenaError += '<li>Debe agregar mínimo un servicio o producto.</li></ul></div>';
+				}
+				$('#divMensajeErrorVenta').html(cadenaError);
+			}else{
+				swal({
+					title: 'Confirmar Guardado',
+					html: "<p><label>Sucursal:  </label>  "+ sucursal.options[sucursal.selectedIndex].text +"</p><p><label>N° Venta: </label>  "+ letra+ $('#serieventa').val()+"</p><p><label>Cliente:  </label>  "+ $('#cliente').val()+"</p><p><label>Empleado:  </label>  "+ $('#empleado_nombre').val()+"</p><p><label>Total:  </label>  S/."+  total.toFixed(2) +"</p>",
+					type: 'question',
+					showCancelButton: true,
+					confirmButtonColor: '#54b359',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Guardar Venta'
+					}).then((result) => {
+						if (result.value) {
+							guardarventa();
+							setTimeout(function(){
+								cargarRutaMenu('caja', 'container', '15');
+							},1500);
+						}
+					})
 			}
-			$('#divMensajeErrorVenta').html(cadenaError);
 		}else{
-			swal({
-				title: 'Confirmar Guardado',
-				html: "<p><label>Sucursal:  </label>  "+ sucursal.options[sucursal.selectedIndex].text +"</p><p><label>N° Venta: </label>  "+ letra+ $('#serieventa').val()+"</p><p><label>Cliente:  </label>  "+ $('#cliente').val()+"</p><p><label>Empleado:  </label>  "+ $('#empleado_nombre').val()+"</p><p><label>Total:  </label>  S/."+  total.toFixed(2) +"</p>",
-				type: 'question',
-				showCancelButton: true,
-				confirmButtonColor: '#54b359',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Guardar Venta'
-				}).then((result) => {
-					if (result.value) {
-						guardarventa();
-						cargarRutaMenu('caja', 'container', '15');
-					}
-				})
+			var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+			cadenaError += '<li>Los campos de precios editables no deben ser negativos.</li></ul></div>';
+			$('#divMensajeErrorVenta').html(cadenaError);
+			$('#btnGuardar').prop('disabled', true);
 		}
 	});
 
@@ -490,6 +546,7 @@ function permisoRegistrar(){
 				$("#empleado_nombre").val($(this).children('label').html());
 
 				setTimeout ("ocultarEmpleados();", 500); 
+				$('#divMensajeErrorVenta').html("");
 			});
 
 			$('#divMensajeErrorVenta').html("");
@@ -552,9 +609,11 @@ var servicios = new Bloodhound({
                 return $.map(servicios, function (servicio) {
                     return {
 						precio: servicio.precio,
+						nombre: servicio.nombre,
                         descripcion: servicio.descripcion,
                         id: servicio.id,
 						tipo: servicio.tipo,
+						editable: servicio.editable,
                     };
                 });
             }
@@ -574,9 +633,11 @@ var productos = new Bloodhound({
                 return $.map(productos, function (producto) {
                     return {
 						precio: producto.precio,
+						nombre: producto.nombre,
                         descripcion: producto.descripcion,
                         id: producto.id,
 						tipo: producto.tipo,
+						editable: producto.editable,
                     };
                 });
             }
@@ -604,33 +665,30 @@ var productos = new Bloodhound({
 			header: '<h4 style="margin-left: 10px">PRODUCTOS</h4>'
 		}
 	}).on('typeahead:selected', function (object, datum) {
-        $('#servicio').val(datum.descripcion);
+		$('#servicio').val(datum.descripcion);
+		$('#servicionombre').val(datum.nombre);
         $('#servicio_id').val(datum.id);
 		$('#tipo').val(datum.tipo);
 		$('#precio').val(datum.precio);
+		$('#editable').val(datum.editable);
     }); 
 </script>
 
 <script>
 $(document).ready(function(){
 	$('.btnAgregar').on('click', function(){
-		var servicio = $("#servicio").val();	
+		var servicio = $("#servicionombre").val();	
 		var cantidad = parseInt($("#cantidad").val());
 		var servicio_id = $("#servicio_id").val();
-		var precio = parseFloat($("#precio").val());	
+		var precio = parseFloat($("#precio").val());
+		var editable = $("#editable").val();
 		var cant = $("#cant"). val();
-		var total = $("#total").val();
-		if(total){
-			var total = parseFloat($("#total").val());
-		}else{
-			var total = 0;
-		}
 		if(servicio && cantidad && servicio_id){
 			
 			if(cant != 0){
 				/**/	
 
-				cant++;
+				//cant++;
 
 				var existe = false;
 				
@@ -638,38 +696,47 @@ $(document).ready(function(){
 					if(servicio_id == this.id){
 						if($(this).attr('class') == "DetalleServicio" && $("#tipo").val() == 'S'){
 							var cantidadfila = parseInt($(this).attr('cantidad'));
+							var precioactual = parseFloat($(this).attr('precio'));
 							cantidadfila = cantidadfila + cantidad;
 							$(this).attr('cantidad',cantidadfila);
-							var nuevafila = '<td>'+ servicio +'</td><td>'+ cantidadfila +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidadfila).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+							if(editable == 0){
+								var nuevafila = '<td style="vertical-align: middle; text-align: left;">'+ servicio +'</td><td style="vertical-align: middle;">'+ cantidadfila +'</td><td style="vertical-align: middle;">'+ (precio).toFixed(2) +'</td><td style="vertical-align: middle;">'+ (precio*cantidadfila).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+							}else if(editable == 1){
+								var nuevafila = '<td style="vertical-align: middle; text-align: left;">'+ servicio +'</td><td style="vertical-align: middle;">'+ cantidadfila +'</td><td style="vertical-align: middle;"><input class="form-control input-xs precioeditable" style="text-align: right; width: 70px;" type="text" value="'+ (precioactual).toFixed(2) +'"></td><td class="precioacumulado" style="vertical-align: middle;">'+ (precioactual*cantidadfila).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precioactual*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+							}
 							$(this).html(nuevafila);
 							existe = true;
+							calcularTotal();
 						}else if($(this).attr('class') == "DetalleProducto" && $("#tipo").val() == 'P'){
 							var cantidadfila = parseInt($(this).attr('cantidad'));
 							cantidadfila = cantidadfila + cantidad;
 							$(this).attr('cantidad',cantidadfila);
-							var nuevafila = '<td>'+ servicio +'</td><td>'+ cantidadfila +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidadfila).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
+							var nuevafila = '<td style="vertical-align: middle; text-align: left;">'+ servicio +'</td><td style="vertical-align: middle;">'+ cantidadfila +'</td><td style="vertical-align: middle;">'+ (precio).toFixed(2) +'</td><td style="vertical-align: middle;">'+ (precio*cantidadfila).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidadfila).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td>';
 							$(this).html(nuevafila);
 							existe = true;
+							calcularTotal();
 						}
 					}
 				});
 
-				
-				$("#cant").val(cant);
 				$("#servicio").val("");
 				$("#cantidad").val("");
 				$("#servicio_id").val("");
 				$("#precio").val("");	
-
+				$("#editable").val("");
 			}
 
 			if(!existe){
 				cant++;
 				var fila = "";
 				if($("#tipo").val() == 'S'){
-					fila =  '<tr class="DetalleServicio" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+					if(editable == 0){
+						fila =  '<tr align="center" class="DetalleServicio" id="'+ servicio_id +'" cantidad="'+ cantidad +'" precio='+ (precio).toFixed(2) +'><td style="vertical-align: middle; text-align: left;">'+ servicio +'</td><td style="vertical-align: middle;">'+ cantidad +'</td><td style="vertical-align: middle;">'+ (precio).toFixed(2) +'</td><td style="vertical-align: middle;">'+ (precio*cantidad).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+					}else if(editable == 1){
+						fila =  '<tr align="center" class="DetalleServicio" id="'+ servicio_id +'" cantidad="'+ cantidad +'" precio='+ (precio).toFixed(2) +'><td style="vertical-align: middle; text-align: left;">'+ servicio +'</td><td style="vertical-align: middle;">'+ cantidad +'</td><td style="vertical-align: middle;"><input class="form-control input-xs precioeditable" style="text-align: right; width: 70px;" type="text" value="'+ (precio).toFixed(2) +'"></td><td class="precioacumulado" style="vertical-align: middle;">'+ (precio*cantidad).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+					}
 				}else{
-					fila =  '<tr class="DetalleProducto" id="'+ servicio_id +'" cantidad="'+ cantidad +'"><td>'+ servicio +'</td><td>'+ cantidad +'</td><td>'+ (precio).toFixed(2) +'</td><td>'+ (precio*cantidad).toFixed(2) +'</td><td><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
+					fila =  '<tr align="center" class="DetalleProducto" id="'+ servicio_id +'" cantidad="'+ cantidad +'" precio='+ (precio).toFixed(2) +'><td style="vertical-align: middle; text-align: left;">'+ servicio +'</td><td style="vertical-align: middle;">'+ cantidad +'</td><td style="vertical-align: middle;">'+ (precio).toFixed(2) +'</td><td style="vertical-align: middle;">'+ (precio*cantidad).toFixed(2) +'</td><td style="vertical-align: middle;"><a onclick="eliminarDetalle(this)" class="btn btn-xs btn-danger btnEliminar" precio='+ (precio*cantidad).toFixed(2) +' type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</a></td></tr>';
 				}
 				$("#detalle").append(fila);
 				$("#cant").val(cant);
@@ -677,10 +744,36 @@ $(document).ready(function(){
 				$("#cantidad").val("");
 				$("#servicio_id").val("");
 				$("#precio").val("");
+				$("#editable").val("");
+				calcularTotal();
 			}
 
-			total += (precio*cantidad);
-			$("#total").val(total.toFixed(2));
+			$(".precioeditable").blur(function() {
+				var elemento = this;
+				var precionuevo = parseFloat($(this).val());
+				if(precionuevo >= 0){
+					var tr = $(this).parent().parent();
+					var precioactual = $(tr).attr('precio');
+					var cantidad = $(tr).attr('cantidad');
+					$(tr).attr('precio',(precionuevo).toFixed(2));
+					var trprecioacumulado = $(tr).find('.precioacumulado');
+					$(trprecioacumulado).html((precionuevo*cantidad).toFixed(2));
+					var btneliminar = $(tr).find('.btnEliminar');
+					$(btneliminar).attr('precio',(precionuevo*cantidad).toFixed(2));
+					calcularTotal();
+					$("#montoefectivo").val("");
+					$("#montovisa").val("");
+					$("#montomaster").val("");
+					$("#vuelto").val((0).toFixed(2));
+					//$('#btnGuardar').prop('disabled', false);
+				}else{
+					var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Por favor corrige los siguentes errores:</strong><ul>';
+					cadenaError += '<li>Los campos de precios editables no deben ser negativos.</li></ul></div>';
+					$('#divMensajeErrorVenta').html(cadenaError);
+					$('#btnGuardar').prop('disabled', true);
+				}
+			});
+
 			$("#montoefectivo").val("");
 			$("#montovisa").val("");
 			$("#montomaster").val("");
@@ -784,9 +877,10 @@ function detalleventa(){
 		}
 		var id = element.attr('id');
 		var cantidad = element.attr('cantidad');
+		var precio = element.attr('precio');
 	
 		data.push(
-			{"tipo": tipo , "id": id , "cantidad": cantidad }
+			{"tipo": tipo , "id": id , "cantidad": cantidad, "precio": precio }
 		);
 
 	});
@@ -848,6 +942,16 @@ function detalleventa(){
 			$(".empleado").css('background', 'rgb(255,255,255)');
 		}
 	});
+}
+
+function calcularTotal(){
+	var total = 0;
+	$("#detalle tr").each(function(){
+		var cantidad = parseInt($(this).attr('cantidad'));
+		var precio = parseFloat($(this).attr('precio'));
+		total += precio*cantidad;
+	});
+	$("#total").val(total.toFixed(2));
 }
 
 </script>

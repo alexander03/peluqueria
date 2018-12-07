@@ -134,9 +134,11 @@ class VentaController extends Controller
         foreach ($list as $key => $value) {
             $data[] = array(
                 'id'    => $value->id,
+                'nombre' => $value->descripcion,
                 'descripcion' => $value->descripcion ." - S/.". $value->precio ,
                 'precio' => $value->precio,
                 'tipo' => 'S',
+                'editable' => $value->editable,
             );
         }
         return json_encode($data);
@@ -159,9 +161,11 @@ class VentaController extends Controller
         foreach ($list as $key => $value) {
             $data[] = array(
                 'id'    => $value->id,
+                'nombre' => $value->descripcion,
                 'descripcion' => $value->descripcion ." - S/.". $value->precioventa ,
                 'precio' => $value->precioventa,
                 'tipo' => 'P',
+                'editable' => 0,
             );
         }
         return json_encode($data);
@@ -267,6 +271,7 @@ class VentaController extends Controller
                     $detalleventa->producto_id  = $detalle->{"id"};
                 }
                 $detalleventa->venta_id  = $venta_id;
+                $detalleventa->precio  = $detalle->{"precio"};
                 $detalleventa->save();
             });
         }
