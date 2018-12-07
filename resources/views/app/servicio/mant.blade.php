@@ -92,6 +92,43 @@
 		</div>
 	</div>
 
+	<div class="form-group">
+		{!! Form::label('editable', 'Precio editable:', array('class' => 'col-sm-4 col-xs-12 control-label')) !!}
+		<div class="col-sm-8 col-xs-12">
+		
+		@if($servicio == null)
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="editable" id="editablesi" value="1">
+				<label class="form-check-label" for="editablesi">SI</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input checked class="form-check-input" type="radio" name="editable" id="editableno" value="0">
+				<label class="form-check-label" for="editableno">NO</label>
+			</div>
+		@else
+			@if($servicio->editable == 1)
+				<div class="form-check form-check-inline">
+					<input checked class="form-check-input" type="radio" name="editable" id="editablesi" value="1">
+					<label class="form-check-label" for="editablesi">SI</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="editable" id="editableno" value="0">
+					<label class="form-check-label" for="editableno">NO</label>
+				</div>
+			@elseif($servicio->editable == 0)
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="editable" id="editablesi" value="1">
+					<label class="form-check-label" for="editablesi">SI</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input checked class="form-check-input" type="radio" name="editable" id="editableno" value="0">
+					<label class="form-check-label" for="editableno">NO</label>
+				</div>
+			@endif
+		@endif
+		</div>
+	</div>
+
 
 	<div class="form-group">
 		<div class="col-lg-12 col-md-12 col-sm-12 text-right">

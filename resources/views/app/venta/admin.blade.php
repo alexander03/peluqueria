@@ -457,7 +457,7 @@ $(document).ready(function(){
 							guardarventa();
 							setTimeout(function(){
 								cargarRutaMenu('caja', 'container', '15');
-							},1500);
+							},3000);
 						}
 					})
 			}
